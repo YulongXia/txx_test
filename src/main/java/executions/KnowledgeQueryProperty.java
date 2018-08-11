@@ -988,11 +988,23 @@ class KnowledgeQueryProperty {
         } else {
             logger.debug("1.3. 查询到多个DP/OP时");
             String contextDatatype = (String) context.getSlots().get("contextDatatype");
+            List<String> contextEntities = (List<String>) context.getSlots().get("contextEntity");
+            if(contextEntities != null){
+                for(String contextEnitity : contextEntities ){
+                    if(entity.equals(contextEnitity)){
+                        logger.debug("add,上文的1个实体和该轮的一个实体相同时");
+                        return response.askWhichProperty(entity,datatypesOfEntityAndBN,objectsOfEntity,context);
+                    }
+                }
+            }
+
             if (contextDatatype != null && datatypesOfEntityAndBN.contains(contextDatatype)) {
                 logger.debug("1.3.1.上文中是否有相同的DP/OP，有则按识别出1个实体1个属性处理");
                 List<String> properties = Collections.singletonList(contextDatatype);
                 return singleEntityAndSingleProperty(entity, null, null, null, null, contextDatatype, properties, context);
             }
+
+
 
             if (datatypesOfEntityAndBN.size() == 0) {
                 // 1.3.2. 只有一种with_bn
@@ -1013,7 +1025,7 @@ class KnowledgeQueryProperty {
                 if (uniqueYshape != null) {
                     logger.debug("1.3.2.只有一种with_bn，查询另一个实体，上文中是否有相同实体");
                     List<String> anotherEntities = kgUtil.queryAnotherYshapeEntities(entity, uniqueYshape);
-                    List<String> contextEntities = (List<String>) context.getSlots().get("contextEntity");
+//                    List<String> contextEntities = (List<String>) context.getSlots().get("contextEntity");
                     if (contextEntities != null) {
                         for (String contextEntity : contextEntities) {
                             if (anotherEntities.contains(contextEntity)) {
