@@ -496,6 +496,8 @@ public class KnowledgeQueryResponse {
         return result;
     }
 
+
+
     public ResponseExecutionResult askWhichProperty(String entity, Collection<String> datatypes, Collection<ObjectProperty> objects, Context context) {
         context.getSlots().put("contextEntity", Collections.singletonList(entity));
         context.getSlots().put("contextBN", null);

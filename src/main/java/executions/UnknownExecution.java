@@ -34,33 +34,35 @@ public class UnknownExecution implements Execution {
             result.setResponseAct(new ResponseAct(SystemIntents.UNKNOWN));
             result.getInstructions().add(new Instruction("msginfo_more")
                     .addParam("answer", accessorRepository.getNLG().generate(result.getResponseAct())));
-//            return unknownClazz.execute(context,accessorRepository);
+            return unknownClazz.execute(context,accessorRepository);
+
+        } else{
+            FaqRankResult hit = answer.getFaqRankResponse().getHits().get(0);
+            if ("chatting".equalsIgnoreCase(hit.getCategory())) {
+                result.getInstructions().add(new Instruction("msginfo_chat")
+                        .addParam("question", hit.getQuestion())
+                        .addParam("quesId", hit.getQaid())
+                        .addParam("answer", hit.getAnswer())
+                        .addParam("ansId", hit.getQaid())
+                        .addParam("score", hit.getScore()));
+                result.setResponseAct(new ResponseAct("answer")
+                        .put("result", hit.getAnswer()));
+            } else {
+                List<String> relations = accessorRepository.getRelatedQuestionAccessor().relatedQuestionByFAQ(hit.getQaid());
+                result.setResponseAct(new ResponseAct("faq")
+                        .put("result", hit.getAnswer())
+                        .put("question", hit.getQuestion())
+                        .put("relations", relations));
+                result.getInstructions().add(new Instruction("msginfo_faq_a")
+                        .addParam("title", hit.getQuestion())
+                        .addParam("quesId", hit.getQaid())
+                        .addParam("answer", hit.getAnswer())
+                        .addParam("ansId", hit.getQaid())
+                        .addParam("score", hit.getScore())
+                        .addParam("relations", relations));
+            }
         }
 
-        FaqRankResult hit = answer.getFaqRankResponse().getHits().get(0);
-        if ("chatting".equalsIgnoreCase(hit.getCategory())) {
-            result.getInstructions().add(new Instruction("msginfo_chat")
-                    .addParam("question", hit.getQuestion())
-                    .addParam("quesId", hit.getQaid())
-                    .addParam("answer", hit.getAnswer())
-                    .addParam("ansId", hit.getQaid())
-                    .addParam("score", hit.getScore()));
-            result.setResponseAct(new ResponseAct("answer")
-                    .put("result", hit.getAnswer()));
-        } else {
-            List<String> relations = accessorRepository.getRelatedQuestionAccessor().relatedQuestionByFAQ(hit.getQaid());
-            result.setResponseAct(new ResponseAct("faq")
-                    .put("result", hit.getAnswer())
-                    .put("question", hit.getQuestion())
-                    .put("relations", relations));
-            result.getInstructions().add(new Instruction("msginfo_faq_a")
-                    .addParam("title", hit.getQuestion())
-                    .addParam("quesId", hit.getQaid())
-                    .addParam("answer", hit.getAnswer())
-                    .addParam("ansId", hit.getQaid())
-                    .addParam("score", hit.getScore())
-                    .addParam("relations", relations));
-        }
 
         return result;
     }
