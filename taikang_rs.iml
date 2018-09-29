@@ -68,6 +68,10 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.httpcomponents:httpmime:4.5.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-beanutils:commons-beanutils:1.9.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.jenetics:jenetics:4.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.huaban:jieba-analysis:1.0.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ansj:ansj_seg:5.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.nlpcn:nlp-lang:1.7.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: mysql:mysql-connector-java:5.1.42" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.25" level="project" />
   </component>

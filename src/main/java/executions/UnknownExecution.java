@@ -30,14 +30,14 @@ public class UnknownExecution implements Execution {
         result.setInstructions(new ArrayList<>());
 
         FaqAnswer answer = (FaqAnswer) context.getSlots().get("sys.faqAnswer");
-        if (answer == null || answer.getAnswer() == null || answer.getFaqRankResponse() == null) {
+        if (answer == null || answer.getAnswer() == null ) {
             result.setResponseAct(new ResponseAct(SystemIntents.UNKNOWN));
             result.getInstructions().add(new Instruction("msginfo_more")
                     .addParam("answer", accessorRepository.getNLG().generate(result.getResponseAct())));
-            return unknownClazz.execute(context,accessorRepository);
+//            return unknownClazz.execute(context,accessorRepository);
 
         } else{
-            FaqRankResult hit = answer.getFaqRankResponse().getHits().get(0);
+            FaqRankResult hit = answer.getHits().get(0);
             if ("chatting".equalsIgnoreCase(hit.getCategory())) {
                 result.getInstructions().add(new Instruction("msginfo_chat")
                         .addParam("question", hit.getQuestion())

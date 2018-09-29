@@ -118,7 +118,6 @@ class KnowledgeQueryProperty {
             entities = enabledEntities;
         }
 
-
         if (properties.size() == 0) {
             if (entities == null || entities.size() == 0) {
                 logger.debug("0. 没有识别到意图");

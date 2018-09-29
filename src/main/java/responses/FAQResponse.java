@@ -35,8 +35,8 @@ public class FAQResponse {
 
         FaqAnswer answer = (FaqAnswer) context.getSlots().get("sys.faqAnswer");
 
-        if (answer != null && answer.getFaqRankResponse() != null && answer.getFaqRankResponse().getHits() != null) {
-            for (FaqRankResult hit : answer.getFaqRankResponse().getHits()) {
+        if (answer != null && answer.getHits() != null) {
+            for (FaqRankResult hit : answer.getHits()) {
                 if (hit == null) {
                     continue;
                 }

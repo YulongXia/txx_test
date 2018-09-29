@@ -238,8 +238,20 @@ public class KnowledgeQueryResponse {
 
         Set<String> ents = entities.stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("whichEntity")
-                .put("entities", ents));
+        List<String> ents5 = LimitSub.get5(ents);
+        if(entities.size() > 5) {
+            result.setResponseAct(new ResponseAct("whichEntity")
+                    .put("entities", ents));
+        }else{
+            result.setResponseAct(new ResponseAct("whichEntity")
+                    .put("entities", entities));
+        }
+
+
+//        for (int i = 0; i < ents5.size(); i++) {
+//            result.getResponseAct().put("entity" + i, ents5.get(i));
+//        }
+
         result.setInstructions(Collections.singletonList(
                 new Instruction("suggestion_kb_ents")
                         .addParam("content", accessorRepository.getNLG().generate(result.getResponseAct()))
@@ -260,13 +272,21 @@ public class KnowledgeQueryResponse {
         context.getSlots().put("contextConditionEntity", null);
         context.getSlots().put("lastWhichEntity", entities);
 
-//        Set<String> ents = entities.stream().collect(Collectors.toSet());
+        Set<String> ents = entities.stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("whichEntity")
-                .put("entities", entities)
-                .put("property", datatype));
-//        result.setResponseAct(new ResponseAct("whichEntity")
-//                .put("property", datatype));
+        if(entities.size() > 5 ){
+            List<String> ents5 = LimitSub.get5(ents);
+
+            result.setResponseAct(new ResponseAct("whichEntity")
+                    .put("entities", ents5)
+                    .put("property", datatype));
+        }else{
+            result.setResponseAct(new ResponseAct("whichEntity")
+                    .put("entities", entities)
+                    .put("property", datatype));
+        }
+
+
 //        List<String> ents5 = LimitSub.get5(ents);
 //        for (int i = 0; i < ents5.size(); i++) {
 //            result.getResponseAct().put("entity" + i, ents5.get(i));
@@ -293,10 +313,25 @@ public class KnowledgeQueryResponse {
         context.getSlots().put("contextConditionEntity", null);
         context.getSlots().put("lastWhichEntity", entities);
 
+        Set<String> ents = entities.stream().collect(Collectors.toSet());
+        List<String> ents5 = LimitSub.get5(ents);
+
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("whichEntity")
-                .put("entities", entities)
-                .put("property", objectLabel));
+        if(entities.size() > 5){
+            result.setResponseAct(new ResponseAct("whichEntity")
+                    .put("property", objectLabel)
+                    .put("entities",ents5));
+        }else{
+            result.setResponseAct(new ResponseAct("whichEntity")
+                    .put("property", objectLabel)
+                    .put("entities",entities));
+        }
+
+
+//        for (int i = 0; i < ents5.size(); i++) {
+//            result.getResponseAct().put("entity" + i, ents5.get(i));
+//        }
+
         result.setInstructions(Collections.singletonList(
                 new Instruction("suggestion_kb_ents")
                         .addParam("content", accessorRepository.getNLG().generate(result.getResponseAct()))
@@ -482,6 +517,7 @@ public class KnowledgeQueryResponse {
 
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setResponseAct(new ResponseAct("whichDatatype")
+                .put("object",object.substring(object.indexOf("#")+1))
                 .put("datatypes",datatypes)
                 .put("entity", entity));
         result.setInstructions(Collections.singletonList(
@@ -1150,12 +1186,11 @@ public class KnowledgeQueryResponse {
         context.getSlots().put("contextConditionEntity", null);
 
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("noknowledge")
-                .put("title",
-                        accessorRepository.getNLG().generate(new ResponseAct("kg")
-                                .put("entity", entity)
-                                .put("datatype", datatype))
-                ));
+        result.setResponseAct(new ResponseAct("noknowledge"));
+//                .put("title",
+//                        accessorRepository.getNLG().generate(new ResponseAct("kg")
+//                                .put("entity", entity)
+//                                .put("datatype", datatype))
         result.setInstructions(Collections.singletonList(
                 new Instruction("msginfo_kb_na")
                         .addParam("content", accessorRepository.getNLG().generate(result.getResponseAct()))
@@ -1176,12 +1211,12 @@ public class KnowledgeQueryResponse {
 
         String objectLabel = Optional.ofNullable(kgUtil.queryObjectLabel(object)).orElse(object);
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("noknowledge")
-                .put("title",
-                        accessorRepository.getNLG().generate(new ResponseAct("kg")
-                                .put("entity", entity)
-                                .put("datatype", objectLabel))
-                ));
+        result.setResponseAct(new ResponseAct("noknowledge"));
+//                .put("title",
+//                        accessorRepository.getNLG().generate(new ResponseAct("kg")
+//                                .put("entity", entity)
+//                                .put("datatype", objectLabel))
+//                ));
         result.setInstructions(Collections.singletonList(
                 new Instruction("msginfo_kb_na")
                         .addParam("content", accessorRepository.getNLG().generate(result.getResponseAct()))
@@ -1202,9 +1237,9 @@ public class KnowledgeQueryResponse {
 
 //        String objectLabel = Optional.ofNullable(kgUtil.queryObjectLabel(object)).orElse(object);
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("noknowledge")
-                .put("title",
-                        accessorRepository.getNLG().generate(new ResponseAct("kg"))));
+        result.setResponseAct(new ResponseAct("noknowledge"));
+//                .put("title",
+//                        accessorRepository.getNLG().generate(new ResponseAct("kg"))));
         result.setInstructions(Collections.singletonList(
                 new Instruction("suggestion_unknown")
                         .addParam("clazz",clazz )));
