@@ -9,6 +9,7 @@ import ai.hual.labrador.kg.KnowledgeStatus;
 import ai.hual.labrador.nlu.constants.SystemIntents;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.*;
@@ -34,6 +35,8 @@ class KnowledgeQueryProperty {
 
     private KnowledgeQueryUtils kgUtil;
 
+    private String CONDITION_BN_IRI = "http://hual.ai/taikang/taikang_rs#condition_bn";
+
     KnowledgeQueryProperty(AccessorRepository accessorRepository) {
         this.accessorRepository = accessorRepository;
         knowledgeQueryPropertyWithBN = new KnowledgeQueryPropertyWithBN(accessorRepository);
@@ -54,20 +57,21 @@ class KnowledgeQueryProperty {
         String condition = (String) context.getSlots().get("ConditionProperty");
         String object = (String) context.getSlots().get("HualObjectProperty");
         String datatype = (String) context.getSlots().get("HualDataTypeProperty");
+        String complex = (String) context.getSlots().get("ComplexProperty");
 
         // remove bn with the same name as an entity
         bn.removeAll(entities);
 
         // return execute(context, bn, entities, mergedEntities, yshape, diffusion, condition, object, datatype);
-        return execute(context, bn, entities, entities, yshape, diffusion, condition, object, datatype);
+        return execute(context, bn, entities, entities, yshape, diffusion, condition, object, datatype, complex);
     }
 
     private ResponseExecutionResult execute(Context context, List<String> bn, List<String> entities, List<String> mergedEntities,
-                                            String yshape, String diffusion, String condition, String object, String datatype) {
-        List<String> properties = Stream.of(yshape, diffusion, condition, object, datatype)
+                                            String yshape, String diffusion, String condition, String object, String datatype, String complex) {
+        List<String> properties = Stream.of(yshape, diffusion, condition, object, datatype, complex)
                 .filter(Objects::nonNull).collect(Collectors.toList());
         // bn
-        if (bn != null && !bn.isEmpty()) {
+        if (bn != null && !bn.isEmpty() && bn.stream().allMatch(x -> x != null)) {
             ResponseExecutionResult resultWithBN = knowledgeQueryPropertyWithBN.execute(context, datatype);
             if (resultWithBN != null) {
                 return resultWithBN;
@@ -91,18 +95,18 @@ class KnowledgeQueryProperty {
 //            // has result
 //            return result;
 //        }
-        ResponseExecutionResult result = execute(entities, yshape, diffusion, condition, object, datatype, properties, context);
+        ResponseExecutionResult result = execute(entities, yshape, diffusion, condition, object, datatype, complex, properties, context);
         if (!"kg".equals(result.getResponseAct().getLabel()) && mergedEntities.size() > entities.size()) {
             // no result
             mergedEntities.removeAll(entities);
-            return execute(mergedEntities, yshape, diffusion, condition, object, datatype, properties, context);
+            return execute(mergedEntities, yshape, diffusion, condition, object, datatype, complex, properties, context);
         } else {
             // has result
             return result;
         }
     }
 
-    private ResponseExecutionResult execute(List<String> entities, String yshape, String diffusion, String condition, String object, String datatype,
+    private ResponseExecutionResult execute(List<String> entities, String yshape, String diffusion, String condition, String object, String datatype, String complex,
                                             List<String> properties, Context context) {
         // use enabled entities
         if (entities != null && !entities.isEmpty()) {
@@ -140,14 +144,17 @@ class KnowledgeQueryProperty {
                                 case CONDITION_PROPERTY:
                                     condition = contextObject;
                                     break;
+                                case COMPLEX_PROPERTY:
+                                    complex = contextObject;
+                                    break;
                             }
                         }
                     }
                     datatype = (String) context.getSlots().get("contextDatatype");
                     if (bn != null || !entities.isEmpty() ||
-                            yshape != null || diffusion != null || condition != null || datatype != null) {
+                            yshape != null || diffusion != null || condition != null || datatype != null || complex != null) {
                         return execute(context, Collections.singletonList(bn), entities, entities,
-                                yshape, diffusion, condition, object, datatype);
+                                yshape, diffusion, condition, object, datatype, complex);
                     } else {
                         return faqResponse.faq(context, true);
                     }
@@ -257,29 +264,269 @@ class KnowledgeQueryProperty {
         } else {
             if (entities == null || entities.size() == 0) {
                 logger.debug("3. 只识别到1个意图");
-                return noEntityAndSingleProperty(yshape, diffusion, condition, object, datatype, properties, context);
+                if (properties.size() > 1) {
+                    if (complex != null && datatype != null) {
+                        List<String> valid12 = kgUtil.checkCpAndDp(complex, datatype);
+                        if (valid12.size() > 0) {
+                            // cp dp 合法
+                            Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
+                            if (cpces == null || cpces.size() == 0) {
+                                return processComplexPropertyAndDatatype(complex, datatype, context);
+                            } else {
+                                List<String> valid13 = kgUtil.checkCpAndDpAndCES(complex, datatype, cpces.values().stream().collect(Collectors.toList()));
+                                if (valid13.size() > 0) {
+                                    // entity cp dp ces 合法
+                                    List<EntityAndBNAndDatatypeAndValue> datatypesOfComplexPropertyOfEntityUnderConditions = kgUtil.queryDatatypeOfComplexPropertyAndDataypeUnderConditions(complex, datatype, cpces.values().stream().collect(Collectors.toList()));
+                                    if (datatypesOfComplexPropertyOfEntityUnderConditions.size() == 0)
+                                        return response.answerNoValue(complex, datatype, cpces.values().stream().collect(Collectors.toList()), context);
+                                    else if (datatypesOfComplexPropertyOfEntityUnderConditions.size() == 1)
+                                        return response.answer(datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getEntity(), datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getDatatype(), context);
+                                    else
+                                        return response.askMultiAnswer(datatypesOfComplexPropertyOfEntityUnderConditions, cpces.values().stream().collect(Collectors.toList()), context);
+                                } else {
+                                    // entity cp dp ces 不合法
+                                    return processComplexPropertyAndDatatype(complex, datatype, context);
+                                }
+                            }
+                        } else {
+                            // cp dp 不合法
+                            return response.askWhichEntityOfCp(complex);
+                        }
+                    } else if (complex != null) {
+                        return response.askWhichEntityOfCp(complex);
+                    }
+                }
+                return noEntityAndSingleProperty(yshape, diffusion, condition, object, datatype, complex, properties, context);
             } else if (entities.size() == 1) {
                 logger.debug("4. 识别到1个实体1个意图");
                 String entity = entities.get(0);
-                return singleEntityAndSingleProperty(entity, yshape, diffusion, condition, object, datatype, properties, context);
+                if (properties.size() > 1) {
+                    if (complex != null && datatype != null) {
+                        List<String> valid5 = kgUtil.checkEntityAndCpAndDatatype(entity, datatype, complex);
+                        if (valid5.size() > 0) {
+                            Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
+                            if (cpces == null || cpces.size() == 0) {
+                                return processEntityAndComplexPropertyAndDatatype(entity, complex, datatype, context);
+                            } else {
+                                List<String> valid6 = kgUtil.checkValidationOfEntityAndObjectAndDatatypeAndCES(entity, complex, datatype, cpces.values().stream().collect(Collectors.toList()));
+                                if (valid6.size() > 0) {
+                                    // entity cp dp ces 合法
+                                    List<BNAndDatatypeAndValueAndConditions> restConds = kgUtil.queryRestCondsWithEntityAndComplexAndDatatypeUnderConditions(entity, complex, datatype, cpces);
+                                    if (restConds.size() == 0) {
+                                        List<BNAndDatatypeAndValueAndConditions> res = kgUtil.queryBNAndDatatypewithEntityAndComplexAndDatatypeUnderConditions(entity, complex, datatype, cpces);
+                                        if (res.size() == 0)
+                                            return response.answerNoValue(entity, complex, datatype, cpces.values().stream().collect(Collectors.toList()), context);
+                                        else if (res.size() == 1)
+                                            return response.answer(entity, res.get(0).getDatatypeAndValue().getDatatype(), res.get(0).getDatatypeAndValue().getValue(), context);
+                                        else
+                                            return response.askMultiAnswerWithEntityAndCpAndDpAndCEs(entity, complex, datatype, cpces, res, context);
+                                    } else {
+                                        return response.askMultiAnswer(entity, complex, datatype, cpces, restConds, context);
+                                    }
+
+                                } else {
+                                    // entity cp dp ces 不合法
+                                    // entity cp dp 合法
+                                    return processEntityAndComplexPropertyAndDatatype(entity, complex, datatype, context);
+                                }
+                            }
+                        } else {
+                            List<String> valid6 = kgUtil.checkValidationOfEntityAndObject(entity, complex);
+                            if (valid6.size() > 0) {
+                                // entity cp 合法
+                                Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
+                                if (cpces == null || cpces.size() == 0) {
+                                    List<BNAndDatatypeAndValue> datatypesOfComplexPropertyOfEntity = kgUtil.queryDatatypeOfComplexProperty(entity, complex);
+                                    if (datatypesOfComplexPropertyOfEntity.size() == 0) {
+                                        return processEntityAndDp(entity,datatype,context,yshape,diffusion,condition,object,complex,properties);
+                                    } else if (datatypesOfComplexPropertyOfEntity.size() == 1) {
+                                        return response.answer(entity, datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getValue(), context);
+                                    } else {
+                                        return response.askMultiAnswerWithEntityAndCp(entity, complex, context);
+                                    }
+                                } else {
+                                    List<String> valids2 = kgUtil.checkValidationOfEntityAndObjectAndCES(entity, complex, cpces.values().stream().collect(Collectors.toList()));
+                                    if (valids2.size() > 0) {
+                                        // entity cp ces 合法
+                                        List<BNAndDatatypeAndValueAndConditions> restConds = kgUtil.queryRestCondsWithEntityAndComplexUnderConditions(entity, complex, cpces);
+                                        if (restConds.size() == 0) {
+                                            List<BNAndDatatypeAndValueAndConditions> datatypesOfComplexPropertyOfEntityUnderConditions = kgUtil.queryBNAndDatatypewithEntityAndComplexUnderConditions(entity, complex, cpces);
+                                            if (datatypesOfComplexPropertyOfEntityUnderConditions.size() == 0)
+                                                return processEntityAndDp(entity,datatype,context,yshape,diffusion,condition,object,complex,properties);
+                                            else if (datatypesOfComplexPropertyOfEntityUnderConditions.size() == 1)
+                                                return response.answer(entity, datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getValue(), context);
+                                            else
+                                                return response.askMultiAnswerWithEntityAndCpAndCEs(entity, complex, cpces, datatypesOfComplexPropertyOfEntityUnderConditions, context);
+                                        } else {
+                                            return response.askMultiAnswer(entity, complex, cpces, restConds, context);
+
+                                        }
+
+                                    } else {
+                                        // entity cp ces 不合法
+                                        // entity cp 合法
+                                        List<BNAndDatatypeAndValue> datatypesOfComplexPropertyOfEntity = kgUtil.queryDatatypeOfComplexProperty(entity, complex);
+                                        if (datatypesOfComplexPropertyOfEntity.size() == 0) {
+                                            return processEntityAndDp(entity,datatype,context,yshape,diffusion,condition,object,complex,properties);
+                                        } else if (datatypesOfComplexPropertyOfEntity.size() == 1) {
+                                            return response.answer(entity, datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getValue(), context);
+                                        } else {
+                                            return response.askMultiAnswerWithEntityAndCp(entity, complex, context);
+                                        }
+                                    }
+                                }
+                            } else {
+                                return processEntityAndDp(entity,datatype,context,yshape,diffusion,condition,object,complex,properties);
+                            }
+
+                        }
+                    }
+                }
+                return singleEntityAndSingleProperty(entity, yshape, diffusion, condition, object, datatype, properties, context, complex);
             } else {
                 logger.debug("5.识别到多个实体1个意图");
                 logger.debug("5.1.实体两两组合查询，查询是否有with_bn");
-                List<YshapeBNAndDP> yshapeBNAndDPs = kgUtil.queryYshapeBNsWithDatatypes(entities, datatype);
-                if (yshapeBNAndDPs.size() == 1) {
-                    logger.debug("5.1.1. 只有1个withBN实体，直接回答");
-                    String result = kgUtil.queryBNDatatype(yshapeBNAndDPs.get(0).getBN(), datatype);
-                    return response.answerYshape(result, yshapeBNAndDPs.get(0), context);
-                } else if (yshapeBNAndDPs.size() > 1) {
-                    logger.debug("5.1.2.多于1个withBN实体，反问：您是想问【BNs】中哪个的【DP/OP】？");
-                    if (datatype == null) {
-                        // object
-                        return response.askWhichBNOfYshape(yshapeBNAndDPs, context);
+                List<Pair<String, String>> entitiesPairs = kgUtil.queryEntitiesPairWithYshape(entities);
+                if (entitiesPairs.size() > 0) {
+                    if (datatype != null) {
+                        //Map<Pair<String,String>,List<BNAndDatatypeAndValue>>
+                        List<Pair<String, String>> valid10 = kgUtil.checkYshapeEntitiesPairsAndDp(entitiesPairs, datatype);
+                        if (valid10.size() == 0)
+                            return response.askWhichPropertyOfEntitiesPairs(entitiesPairs);
+                        else {
+                            Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
+                            if (cpces == null || cpces.size() == 0) {
+                                return processYshapeEntitiesAndDatatype(valid10.get(0), datatype, context);
+                            } else {
+                                List<Pair<String, String>> valid11 = kgUtil.checkValidationOfEYshapeEntitiesAndDpAndCES(valid10, datatype, cpces);
+                                if (valid11.size() > 0) {
+                                    // entity1 cp bn
+                                    // entity2 cp bn
+                                    // bn ces 合法
+                                    List<YshapeBNAndDPAndValue> res = kgUtil.queryYshapeBNLabelsAndDatatypes(valid10.get(0), datatype, cpces.values().stream().collect(Collectors.toList()));
+                                    if (res.size() == 0)
+                                        return response.answerNoValueWithYshapeEntitiesPair(valid10.get(0), datatype, cpces.values().stream().collect(Collectors.toList()), context);
+                                    else if (res.size() == 1)
+                                        return response.answerWithYshapeEntitiesPair(valid10.get(0), res.get(0).getDatatype(), res.get(0).getValue(), cpces.values().stream().collect(Collectors.toList()), context);
+                                    else
+                                        return response.askMultiAnswerOfYshapeEntiesPair(valid10.get(0), res, cpces.values().stream().collect(Collectors.toList()), context);
+                                } else {
+                                    // entity1 cp bn
+                                    // entity2 cp bn
+                                    // bn ces 不合法
+                                    return processYshapeEntitiesAndDatatype(valid10.get(0), datatype, context);
+                                }
+                            }
+                        }
+//                        else {
+//                            return response.askWhichPropertyOfEntitiesPairs(entitiesPairs);
+//                        }
                     } else {
-                        // datatype
-                        return response.askWhichBNOfYshapeWithDatatype(datatype, yshapeBNAndDPs, context);
+                        return response.askWhichPropertyOfEntitiesPairs(entitiesPairs);
                     }
                 }
+//                else {
+//                    if(properties.size() == 0){
+//                        return response.askEntities(entities);
+//                    }else if( complex != null && datatype != null){
+//                        List<Pair<String,String>> valid14 = kgUtil.checkEntitiesAndCpAndDp(entities,complex,datatype);
+//                        if(valid14.size() > 0 ){
+//                            // entities至少有一个可以让entity cp dp合法
+//                            Map<String,String> cpces = (Map<String,String>)context.getSlots().get("cpContextConditionEntities");
+//                            if(cpces == null || cpces.size() == 0) {
+//                                return processEntitiesAndCpAndDp(entities,complex,datatype,context);
+//                            }else{
+//                                List<Pair<String,String>> valid15 = kgUtil.checkEntitiesAndCpAndDpUnderConditions(entities,complex,datatype,cpces.values().stream().collect(Collectors.toList()));
+//                                if(valid15.size() > 0){
+//                                    // entities至少有一个可以让entity cp dp ces合法
+//                                    List<EntityAndBNAndDatatypeAndValue> res = kgUtil.queryEntityAndBNAndDatatypeAndValueWithEntitiesAndCpAndDpUnderConditions(valid15.stream().map(x -> x.getKey()).collect(Collectors.toList()),complex,datatype,cpces.values().stream().collect(Collectors.toList()));
+//                                    if(res.size() == 0)
+//                                        return response.answerNoValue(entities,complex,datatype,cpces.values().stream().collect(Collectors.toList()),context);
+//                                    else if(res.size() == 1)
+//                                        return response.answer(res.get(0).getEntity(),res.get(0).getDatatypeAndValue().getDatatype(),res.get(0).getDatatypeAndValue().getValue(),context);
+//                                    else
+//                                        return response.askMultiAnswer(res,complex,datatype,cpces.values().stream().collect(Collectors.toList()),context);
+//                                }else{
+//                                    return processEntitiesAndCpAndDp(entities,complex,datatype,context);
+//                                }
+//                            }
+//                        }
+//
+//                    }else if (complex != null) {
+//                        List<Pair<String,String>> valid16 = kgUtil.checkEntitiesAndCp(entities,complex);
+//                        if(valid16.size() > 0 ){
+//                            // entities至少有一个可以让entity cp合法
+//                            Map<String,String> cpces = (Map<String,String>)context.getSlots().get("cpContextConditionEntities");
+//                            if(cpces == null || cpces.size() == 0) {
+//                                return processEntitiesAndCp(entities,complex,context);
+//                            }else{
+//                                List<Pair<String,String>> valid17 = kgUtil.checkEntitiesAndCpUnderConditions(entities,complex,cpces.values().stream().collect(Collectors.toList()));
+//                                if(valid17.size() > 0){
+//                                    // entities至少有一个可以让entity cp ces合法
+//                                    List<EntityAndBNAndDatatypeAndValue> res = kgUtil.queryEntityAndBNAndDatatypeAndValueWithEntitiesAndCpUnderConditions(valid17.stream().map(x -> x.getKey()).collect(Collectors.toList()),complex);
+//                                    if(res.size() == 0)
+//                                        return response.answerNoValue(entities,complex,cpces.values().stream().collect(Collectors.toList()),context);
+//                                    else if(res.size() == 1)
+//                                        return response.answer(res.get(0).getEntity(),res.get(0).getDatatypeAndValue().getDatatype(),res.get(0).getDatatypeAndValue().getValue(),context);
+//                                    else
+//                                        return response.askMultiAnswer(res,complex,cpces.values().stream().collect(Collectors.toList()),context);
+//                                }else{
+//                                    return processEntitiesAndCp(entities,complex,context);
+//                                }
+//                            }
+//                        }
+//                    }else if(datatype != null){
+//                        List<Pair<String,String>> valid17 = kgUtil.checkEntitiesAndDp(entities,datatype);
+//                        if(valid17.size() > 0){
+//                            // entities 至少有一个可以让 entity dp合法
+//                            List<Pair<String,String>> res = kgUtil.queryEntityAndDpWithEntitiesAndDp(entities,datatype);
+//                            if(res.size() == 1)
+//                            {
+//                                return response.answer(res.get(0).getKey(),datatype,res.get(0).getValue(),context);
+//                            }else if(res.size() > 1){
+//                                return response.askMultiAnswer(res,datatype,context);
+//                            }
+//                        }
+//                        List<Pair<String,String>> valid18 = kgUtil.checkEntitiesAndCpAndDp(entities,datatype);
+//                        if(valid18.size() > 0 ){
+//                            // entities至少有一个可以让entity [cp] dp合法
+//                            Map<String,String> cpces = (Map<String,String>)context.getSlots().get("cpContextConditionEntities");
+//                            if(cpces == null || cpces.size() == 0) {
+//                                return processEntitiesAndCpAndDp(entities,datatype,context);
+//                            }else{
+//                                List<Pair<String,String>> valid19 = kgUtil.checkEntitiesAndCpAndDpUnderConditions(entities,datatype,cpces.values().stream().collect(Collectors.toList()));
+//                                if(valid19.size() > 0){
+//                                    // entities至少有一个可以让entity [cp] dp ces合法
+//                                    List<EntityAndCpAndBNAndDatatypeAndValue> res = kgUtil.queryEntityAndBNAndDatatypeAndValueWithEntitiesAndCpAndDpUnderConditions(valid19.stream().map(x -> x.getKey()).collect(Collectors.toList()),datatype);
+//                                    if(res.size() == 0)
+//                                        return response.answerNoValue(entities,datatype,cpces.values().stream().collect(Collectors.toList()),context);
+//                                    else if(res.size() == 1)
+//                                        return response.answer(res.get(0).getEntity(),res.get(0).getDatatypeAndValue().getDatatype(),res.get(0).getDatatypeAndValue().getValue(),context);
+//                                    else
+//                                        return response.askMultiAnswer(res,datatype,cpces.values().stream().collect(Collectors.toList()),context);
+//                                }else{
+//                                    return processEntitiesAndCpAndDp(entities,datatype,context);
+//                                }
+//                            }
+//                        }
+//
+//                    }
+//                }
+//                List<YshapeBNAndDP> yshapeBNAndDPs = kgUtil.queryYshapeBNsWithDatatypes(entities, datatype);
+//                if (yshapeBNAndDPs.size() == 1) {
+//                    logger.debug("5.1.1. 只有1个withBN实体，直接回答");
+//                    String result = kgUtil.queryBNDatatype(yshapeBNAndDPs.get(0).getBN(), datatype);
+//                    return response.answerYshape(result, yshapeBNAndDPs.get(0), context);
+//                } else if (yshapeBNAndDPs.size() > 1) {
+//                    logger.debug("5.1.2.多于1个withBN实体，反问：您是想问【BNs】中哪个的【DP/OP】？");
+//                    if (datatype == null) {
+//                        // object
+//                        return response.askWhichBNOfYshape(yshapeBNAndDPs, context);
+//                    } else {
+//                        // datatype
+//                        return response.askWhichBNOfYshapeWithDatatype(datatype, yshapeBNAndDPs, context);
+//                    }
+//                }
 
                 logger.debug("5.2.遍历实体，查询是否有值");
                 if (datatype != null) {
@@ -487,7 +734,7 @@ class KnowledgeQueryProperty {
                     }
                 }
 
-                ResponseExecutionResult result = noEntityAndSingleProperty(yshape, diffusion, condition, object, datatype, properties, context);
+                ResponseExecutionResult result = noEntityAndSingleProperty(yshape, diffusion, condition, object, datatype, complex, properties, context);
                 if (result.getResponseAct() != null &&
                         !"faq".equals(result.getResponseAct().getLabel()) &&
                         !SystemIntents.UNKNOWN.equals(result.getResponseAct().getLabel())) {
@@ -502,7 +749,7 @@ class KnowledgeQueryProperty {
     }
 
     private ResponseExecutionResult noEntityAndSingleProperty(String yshape, String diffusion, String condition, String object, String datatype,
-                                                              List<String> properties, Context context) {
+                                                              String complex, List<String> properties, Context context) {
         if (datatype != null) {
             // datatype
             String cls = (String) context.getSlots().get("class");
@@ -535,7 +782,7 @@ class KnowledgeQueryProperty {
                 if (entity == null) {
                     entity = entitiesAndBNsOfProperty.keySet().iterator().next();
                 }
-                return singleEntityAndSingleProperty(entity, yshape, diffusion, condition, object, datatype, properties, context);
+                return singleEntityAndSingleProperty(entity, yshape, diffusion, condition, object, datatype, properties, context, complex);
             } else {
                 logger.debug("3.2.查询到多个实体时");
 
@@ -554,7 +801,7 @@ class KnowledgeQueryProperty {
                     if (contextEntities.size() == 1) {
                         String contextEntity = contextEntities.get(0);
                         logger.debug("3.2.2.上文中是否有相同的实体，有则按识别出1个实体1个属性处理");
-                        return singleEntityAndSingleProperty(contextEntity, yshape, diffusion, condition, object, datatype, properties, context);
+                        return singleEntityAndSingleProperty(contextEntity, yshape, diffusion, condition, object, datatype, properties, context, complex);
                     } else if (contextEntities.size() > 1) {
                         logger.debug("3.2.2.上文中有多个相同的BN或实体，按照相同的部分反问3.2.3.");
                         ListMultimap<String, String> oldEntitiesAndBNsOfProperty = entitiesAndBNsOfProperty;
@@ -583,7 +830,7 @@ class KnowledgeQueryProperty {
             } else if (entitiesOfProperty.size() == 1) {
                 logger.debug("3.1. 查询到只有1个实体，则按识别出1个实体1个属性处理");
                 String entityOfDatatype = entitiesOfProperty.get(0);
-                return singleEntityAndSingleProperty(entityOfDatatype, yshape, diffusion, condition, object, null, properties, context);
+                return singleEntityAndSingleProperty(entityOfDatatype, yshape, diffusion, condition, object, null, properties, context, complex);
             } else {
                 logger.debug("3.2.查询到多个实体时");
                 List<String> contextEntities = (List<String>) context.getSlots().get("contextEntity");
@@ -591,7 +838,7 @@ class KnowledgeQueryProperty {
                     for (String contextEntity : contextEntities) {
                         if (entitiesOfProperty.contains(contextEntity)) {
                             logger.debug("3.2.2.上文中是否有相同的实体，有则按识别出1个实体1个属性处理");
-                            return singleEntityAndSingleProperty(contextEntity, yshape, diffusion, condition, object, null, properties, context);
+                            return singleEntityAndSingleProperty(contextEntity, yshape, diffusion, condition, object, null, properties, context, complex);
                         }
                     }
                 }
@@ -603,8 +850,7 @@ class KnowledgeQueryProperty {
     }
 
     // 识别出1个实体1个属性处理
-    private ResponseExecutionResult singleEntityAndSingleProperty(String entity, String yshape, String diffusion, String condition, String object, String datatype,
-                                                                  List<String> properties, Context context) {
+    private ResponseExecutionResult singleEntityAndSingleProperty(String entity, String yshape, String diffusion, String condition, String object, String datatype, List<String> properties, Context context, String complex) {
         if (datatype == null) {
             logger.debug("4.0.OP，查OP接的BN实体的是否有条件，DP是1个还是多个？有1个就直接回答，有多个就反问，有条件的时候反问带有条件的");
             String propertyLabel = kgUtil.queryObjectLabel(properties.get(0));
@@ -708,6 +954,41 @@ class KnowledgeQueryProperty {
                     List<String> bnlabels = datatypesOfObjectOfEntity.stream().map(x -> x.getBn().getLabel()).distinct().collect(Collectors.toList());
                     return response.askWhichDatatypeWithEntity(entity, condition, bnlabels.size() == 1 ? bnlabels.get(0) : null, datatypeLabels, context);
                 }
+            } else if (complex != null) {
+                logger.debug("4.0.2. to_bn，查询BN实体、条件实体和后续DP");
+                List<String> valids = kgUtil.checkValidationOfEntityAndObject(entity, complex);
+                if (valids.size() > 0) {
+                    // entity cp 合法
+                    Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
+                    if (cpces == null || cpces.size() == 0) {
+                        return processEntityAndComplexProperty(entity, complex, context);
+                    } else {
+                        List<String> valids2 = kgUtil.checkValidationOfEntityAndObjectAndCES(entity, complex, cpces.values().stream().collect(Collectors.toList()));
+                        if (valids2.size() > 0) {
+                            // entity cp ces 合法
+                            List<BNAndDatatypeAndValueAndConditions> restConds = kgUtil.queryRestCondsWithEntityAndComplexUnderConditions(entity, complex, cpces);
+                            if (restConds.size() == 0) {
+                                List<BNAndDatatypeAndValueAndConditions> datatypesOfComplexPropertyOfEntityUnderConditions = kgUtil.queryBNAndDatatypewithEntityAndComplexUnderConditions(entity, complex, cpces);
+                                if (datatypesOfComplexPropertyOfEntityUnderConditions.size() == 0)
+                                    return response.answerNoValue(entity, complex, null, cpces.values().stream().collect(Collectors.toList()), context);
+                                else if (datatypesOfComplexPropertyOfEntityUnderConditions.size() == 1)
+                                    return response.answer(entity, datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getValue(), context);
+                                else
+                                    return response.askMultiAnswerWithEntityAndCpAndCEs(entity, complex, cpces, datatypesOfComplexPropertyOfEntityUnderConditions, context);
+                            } else {
+                                return response.askMultiAnswer(entity, complex, cpces, restConds, context);
+                            }
+
+                        } else {
+                            // entity cp ces 不合法
+                            // entity cp 合法
+                            return processEntityAndComplexProperty(entity, complex, context);
+                        }
+                    }
+                } else {
+                    // entity cp 不合法
+                    return noEntityAndSingleProperty(yshape, diffusion, condition, object, datatype, complex, properties, context);
+                }
             } else {
                 logger.debug("4.0.3.其余OP，查询BN实体和后续DP");
                 List<BNAndDatatypeAndValue> datatypesOfObjectOfEntity = kgUtil.queryDatatypeOfObject(entity, properties.get(0));
@@ -734,28 +1015,12 @@ class KnowledgeQueryProperty {
             }
         }
 
-        List<String> values = kgUtil.query(entity, datatype);
-        if (values.size() > 0) {
-            if(values.size() > 1){
-                logger.debug("add.查到的值大于一，反问子属性");
-                List<String> subProperty = kgUtil.querySubProperties(datatype);
-                if(subProperty.size() > 1){
-                    return response.askWhichSubProperties(entity,subProperty,context);
-                }
-              else{
-                    logger.debug("4.1.查询到值，直接回答");
-                    String value = values.size() == 1 ? values.get(0) : values.toString();
-                    return response.answer(entity, datatype, value, context);
-                }
-            }
-            else{
-                logger.debug("4.1.查询到值，直接回答");
-                String value = values.size() == 1 ? values.get(0) : values.toString();
-                return response.answer(entity, datatype, value, context);
 
-            }
-        }
+        return processEntityAndDp(entity,datatype,context,yshape,diffusion,condition,object,complex,properties);
 
+    }
+
+    private ResponseExecutionResult processEntityAndDatatype(String entity, String datatype, Context context, List<String> properties) {
         logger.debug("4.2.查询【实体】OP【BN】属性【值】");
         List<ObjectProperty> objectsOfDatatype = kgUtil.queryObjectsOfDatatype(entity, datatype);
         // filter objects or context objects
@@ -785,8 +1050,13 @@ class KnowledgeQueryProperty {
         if (objectsOfDatatype.size() > 0) {
             Map<String, String> objectIRIsAndTypes = new HashMap<>();
             for (ObjectProperty objectProperty : objectsOfDatatype) {
+                //if(!objectProperty.getUri().equals("http://hual.ai/taikang/taikang_rs#with_bn"))
                 objectIRIsAndTypes.put(objectProperty.getUri(), objectProperty.getType());
             }
+            Map<String, String> tmp = null;
+            if (objectIRIsAndTypes.size() > 1)
+                tmp = objectIRIsAndTypes.entrySet().stream().filter(entry -> entry.getKey().equals(CONDITION_BN_IRI)).collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+            objectIRIsAndTypes = tmp == null || tmp.size() == 0 ? objectIRIsAndTypes : tmp;
             if (objectIRIsAndTypes.size() == 1 && YSHAPE_PROPERTY.equals(objectIRIsAndTypes.values().iterator().next())) {
                 logger.debug("4.2.1.只存在with_bn");
                 String iri = objectIRIsAndTypes.keySet().iterator().next();
@@ -842,6 +1112,27 @@ class KnowledgeQueryProperty {
 
                 logger.debug("4.2.2.2.多于1个，反问：您是想问【实体】在什么条件【undercondition domain的类里所有condition实体】下的【DP】？");
                 return response.askWhichConditionEntityWithDatatype(entity, conditionEntitiesAndValues.stream().map(ConditionEntityAndBNAndValue::getConditionEntity).collect(Collectors.toList()), datatype, context);
+            } else if (objectIRIsAndTypes.size() == 1 && COMPLEX_PROPERTY.equals(objectIRIsAndTypes.values().iterator().next())) {
+                logger.debug("4.2.4. 存在to_bn");
+
+                String iri = objectIRIsAndTypes.keySet().iterator().next();
+                List<String> bns;
+                bns = kgUtil.queryBNswithEntityAndComplexPropertyAndDatatype(entity, iri, datatype);
+                if (bns.size() == 0) {
+                    return response.answerNoValue(entity, null, datatype, null, context);
+                } else if (bns.size() == 1) {
+                    logger.debug("4.2.4.1.只有1个，直接回答");
+                    String bn = bns.get(0);
+                    BNAndPropertyAndValue bpv = kgUtil.queryComplexPropertyAndBN(entity, bn, datatype);
+                    return response.answer(entity, datatype, bpv.getValue(), context);
+                } else {
+                    logger.debug("4.2.4.2.有多个");
+                    ConditionClassesAndValues info = kgUtil.queryConditionClassesAndValueWithBNs(bns);
+
+                    return response.askWhichClassofCpConditionEntity(entity, info, datatype, context, "random");
+                }
+
+
             } else {
                 logger.debug("4.2.3.存在OP");
                 if (objectsOfDatatype.size() == 0) {
@@ -865,21 +1156,22 @@ class KnowledgeQueryProperty {
                 }
             }
         }
-
-        logger.debug("4.5.检查实体属性的合法性");
-        List<String> validClasses = kgUtil.queryValidClassesWithEntityAndDatatype(entity, datatype);
-        if (validClasses.size() > 0) {
-            logger.debug("4.5.1.允许实体和该属性，回答：不知道【实体】的【属性】");
-            if (Objects.equals(datatype, properties.get(0))) {
-                return response.answerNoValueWithDatatype(entity, datatype, context);
-            } else {
-                return response.answerNoValueWithObject(entity, properties.get(0), context);
-            }
-        } else {
-            logger.debug("4.5.2.不合法，按只识别到1个意图处理/按只识别到1个实体处理（暂定前者）");
-            logger.debug("3. 只识别到1个意图");
-            return noEntityAndSingleProperty(yshape, diffusion, condition, object, datatype, properties, context);
-        }
+//
+//        logger.debug("4.5.检查实体属性的合法性");
+//        List<String> validClasses = kgUtil.queryValidClassesWithEntityAndDatatype(entity, datatype);
+//        if (validClasses.size() > 0) {
+//            logger.debug("4.5.1.允许实体和该属性，回答：不知道【实体】的【属性】");
+//            if (Objects.equals(datatype, properties.get(0))) {
+//                return response.answerNoValueWithDatatype(entity, datatype, context);
+//            } else {
+//                return response.answerNoValueWithObject(entity, properties.get(0), context);
+//            }
+//        } else {
+//            logger.debug("4.5.2.不合法，按只识别到1个意图处理/按只识别到1个实体处理（暂定前者）");
+//            logger.debug("3. 只识别到1个意图");
+//            return noEntityAndSingleProperty(yshape, diffusion, condition, object, datatype, complex,properties, context);
+//        }
+        return response.answerNoValue(entity, null, datatype, null, context);
     }
 
     private ResponseExecutionResult singleEntityAndNoProperty(
@@ -908,7 +1200,7 @@ class KnowledgeQueryProperty {
             logger.debug("1.1. 查询到只有1个DP的值时，当作一个实体一个属性");
             String datatype = datatypesOfEntityAndBN.iterator().next();
             List<String> properties = Collections.singletonList(datatype);
-            return singleEntityAndSingleProperty(entity, null, null, null, null, datatype, properties, context);
+            return singleEntityAndSingleProperty(entity, null, null, null, null, datatype, properties, context, null);
         } else if (datatypesOfEntityAndBN.size() == 0 && objectsOfEntity.size() == 1) {
             logger.debug("1.2. 查询到只有1个OP时");
             ObjectProperty objectOfEntity = objectsOfEntity.get(0);
@@ -961,6 +1253,9 @@ class KnowledgeQueryProperty {
                     return response.answerWithConditionWithBN(entity, objectOfEntity.getUri(), objectOfEntity.getBN(), conditionEntity, contextDatatype, result.size() == 1 ? result.get(0).getValue() : result.stream().map(BNAndValue::getValue).collect(Collectors.toSet()).toString(), context);
                 }
                 return response.askWhichDatatypeWithConditionWithBN(entity, objectOfEntity.getUri(), objectOfEntity.getBN(), conditionEntity, datatypeLabels, context);
+            } else if (COMPLEX_PROPERTY.equals(objectOfEntity.getType())) {
+                List<String> properties = Collections.singletonList(objectOfEntity.getUri());
+                return singleEntityAndSingleProperty(entity, null, null, null, null, null, properties, context, objectOfEntity.getUri());
             } else {
                 logger.debug("1.2.4.其余OP，查询BN实体和后续DP");
                 List<BNAndDatatypeAndValue> datatypesOfObjectOfEntity = kgUtil.queryDatatypeOfObject(entity, objectOfEntity.getUri());
@@ -988,11 +1283,11 @@ class KnowledgeQueryProperty {
             logger.debug("1.3. 查询到多个DP/OP时");
             String contextDatatype = (String) context.getSlots().get("contextDatatype");
             List<String> contextEntities = (List<String>) context.getSlots().get("contextEntity");
-            if(contextEntities != null){
-                for(String contextEnitity : contextEntities ){
-                    if(entity.equals(contextEnitity)){
+            if (contextEntities != null) {
+                for (String contextEnitity : contextEntities) {
+                    if (entity.equals(contextEnitity)) {
                         logger.debug("add,上文的1个实体和该轮的一个实体相同时");
-                        return response.askWhichProperty(entity,datatypesOfEntityAndBN,objectsOfEntity,context);
+                        return response.askWhichProperty(entity, datatypesOfEntityAndBN, objectsOfEntity, context);
                     }
                 }
             }
@@ -1000,9 +1295,8 @@ class KnowledgeQueryProperty {
             if (contextDatatype != null && datatypesOfEntityAndBN.contains(contextDatatype)) {
                 logger.debug("1.3.1.上文中是否有相同的DP/OP，有则按识别出1个实体1个属性处理");
                 List<String> properties = Collections.singletonList(contextDatatype);
-                return singleEntityAndSingleProperty(entity, null, null, null, null, contextDatatype, properties, context);
+                return singleEntityAndSingleProperty(entity, null, null, null, null, contextDatatype, properties, context, null);
             }
-
 
 
             if (datatypesOfEntityAndBN.size() == 0) {
@@ -1110,6 +1404,15 @@ class KnowledgeQueryProperty {
                         }
                     }
                 }
+                // 只有一种condition_bn
+                String condition_bn = null;
+                Map<String, List<ObjectProperty>> aggregate = objectsOfEntity.stream().collect(Collectors.groupingBy(x -> x.getUri(), Collectors.toList()));
+                //aggregate.remove("http://hual.ai/taikang/taikang_rs#with_bn");
+                if (aggregate.keySet().size() == 1 && COMPLEX_PROPERTY.equals(aggregate.values().iterator().next().get(0).getType())) {
+                    List<String> bns = aggregate.values().iterator().next().stream().map(x -> x.getBN().getIri()).distinct().collect(Collectors.toList());
+                    List<String> datatypes = kgUtil.queryDatatypesWithOneTypeBN(bns);
+                    return response.askWhichDatatypeOfMultiComplexProperty(entity, datatypes, context);
+                }
 
                 // 1.3.4. 只有一种普通OP
                 String uniqueObject = null;
@@ -1174,4 +1477,129 @@ class KnowledgeQueryProperty {
         }
     }
 
+    private ResponseExecutionResult processEntityAndComplexProperty(String entity, String complex, Context context) {
+        List<BNAndDatatypeAndValue> datatypesOfComplexPropertyOfEntity = kgUtil.queryDatatypeOfComplexProperty(entity, complex);
+        if (datatypesOfComplexPropertyOfEntity.size() == 0) {
+            return response.answerNoValue(entity, complex, null, null, context);
+        } else if (datatypesOfComplexPropertyOfEntity.size() == 1) {
+            return response.answer(entity, datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getValue(), context);
+        } else {
+            return response.askMultiAnswerWithEntityAndCp(entity, complex, context);
+        }
+    }
+
+
+    private ResponseExecutionResult processEntityAndComplexPropertyAndDatatype(String entity, String complex, String datatype, Context context) {
+        List<BNAndDatatypeAndValue> datatypesOfComplexPropertyOfEntity = kgUtil.queryDatatypeOfComplexPropertyAndDatatype(entity, complex, datatype);
+        if (datatypesOfComplexPropertyOfEntity.size() == 0) {
+            return response.answerNoValue(entity, complex, datatype, null, context);
+        } else if (datatypesOfComplexPropertyOfEntity.size() == 1) {
+            return response.answer(entity, datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getValue(), context);
+        } else {
+            return response.askMultiAnswerWithEntityAndCpAndDp(entity, complex, datatype, context);
+        }
+    }
+
+    private ResponseExecutionResult processYshapeEntitiesAndDatatype(Pair<String, String> entitiesPair, String datatype, Context context) {
+        List<YshapeBNAndDPAndValue> datatypesOfYshape = kgUtil.queryYshapeBNLabelsAndDatatypes(entitiesPair, datatype);
+        if (datatypesOfYshape.size() == 0) {
+            return response.answerNoValueWithYshapeEntitiesPair(entitiesPair, datatype, null, context);
+        } else if (datatypesOfYshape.size() == 1) {
+            return response.answerWithYshapeEntitiesPair(entitiesPair, datatypesOfYshape.get(0).getDatatype(), datatypesOfYshape.get(0).getValue(), null, context);
+        } else {
+            return response.askMultiAnswerOfYshapeEntiesPair(entitiesPair, datatypesOfYshape, null, context);
+        }
+    }
+
+
+    private ResponseExecutionResult processComplexPropertyAndDatatype(String complex, String datatype, Context context) {
+        List<EntityAndBNAndDatatypeAndValue> datatypesOfComplexPropertyOfEntity = kgUtil.queryDatatypeOfComplexPropertyAndDataype(complex, datatype);
+        if (datatypesOfComplexPropertyOfEntity.size() == 0)
+            return response.answerNoValue(complex, datatype, null, context);
+        else if (datatypesOfComplexPropertyOfEntity.size() == 1)
+            return response.answer(datatypesOfComplexPropertyOfEntity.get(0).getEntity(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), context);
+        else
+            return response.askMultiAnswer(datatypesOfComplexPropertyOfEntity, null, context);
+    }
+
+    private ResponseExecutionResult processEntitiesAndCpAndDp(List<String> entities, String complex, String datatype, Context context) {
+        return null;
+    }
+
+    private ResponseExecutionResult processEntityAndDp(String entity, String datatype, Context context, String yshape, String diffusion, String condition, String object, String complex, List<String> properties) {
+        logger.debug("  1.2.2.2.2   entity cp dp 不合法 entity cp 不合法  查entity、DP是否合法");
+        List<String> valid3 = kgUtil.queryValidClassesWithEntityAndDatatype(entity, datatype);
+        if (valid3.size() > 0) {
+            // entity dp 合法
+            List<String> values = kgUtil.query(entity, datatype);
+            if (values.size() > 0) {
+                if (values.size() > 1) {
+                    logger.debug("add.查到的值大于一，反问子属性");
+                    List<String> subProperty = kgUtil.querySubProperties(datatype);
+                    if (subProperty.size() > 1) {
+                        return response.askWhichSubProperties(entity, subProperty, context);
+                    } else {
+                        logger.debug("4.1.查询到值，直接回答");
+                        String value = values.size() == 1 ? values.get(0) : values.toString();
+                        return response.answer(entity, datatype, value, context);
+                    }
+                } else {
+                    logger.debug("4.1.查询到值，直接回答");
+                    String value = values.size() == 1 ? values.get(0) : values.toString();
+                    return response.answer(entity, datatype, value, context);
+
+                }
+            }
+//              else {
+//                return response.answerNoValue(entity,null,datatype,null,context);
+//            }
+        }
+        // entity dp 不合法 或 entity dp 合法但是无值
+        List<String> valid4 = kgUtil.checkEntityAndCpAndDatatype(entity, datatype);
+        if (valid4.size() > 0) {
+            // entity cp bn dp 合法
+            Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
+            if (cpces == null || cpces.size() == 0) {
+                return processEntityAndCpAndDp(entity,datatype,context);
+            } else {
+                List<String> valid5 = kgUtil.checkEntityAndCpAndDatatypeUnderConditions(entity, datatype, cpces.values().stream().collect(Collectors.toList()));
+                if (valid5.size() > 0) {
+                    // entity cp bn dp; bn ce 合法
+                    List<BNAndDatatypeAndValueAndConditions> restConds = kgUtil.queryRestCondsWithEntityAndDatatypeUnderConditions(entity, datatype, cpces);
+                    if (restConds.size() == 0) {
+                        List<BNAndDatatypeAndValueAndConditions> res = kgUtil.queryBNAndDatatypewithEntityAndDatatypeUnderConditions(entity, datatype, cpces);
+                        if (res.size() == 0) {
+                            //return response.answerNoValue(entity, null, datatype, cpces.values().stream().collect(Collectors.toList()), context);
+                            return response.askWhichProperty(entity,new ArrayList<String>(),new ArrayList<ObjectProperty>(),context);
+                        } else if (res.size() == 1) {
+                            return response.answer(entity, res.get(0).getDatatypeAndValue().getDatatype(), res.get(0).getDatatypeAndValue().getValue(), context);
+                        } else {
+                            return response.askMultiAnswerWithEntityAndDpAndCEs(entity, datatype, cpces, res, context);
+                        }
+                    } else
+                        return response.askMultiAnswerWithDp(entity, datatype, cpces, restConds, context);
+
+                } else {
+                    return processEntityAndCpAndDp(entity,datatype,context);
+                }
+            }
+        } else {
+            // entity dp 不合法
+            // entity cp bn dp 不合法
+            return response.askWhichProperty(entity,new ArrayList<String>(),new ArrayList<ObjectProperty>(),context);
+
+
+        }
+    }
+
+    private ResponseExecutionResult processEntityAndCpAndDp(String entity, String datatype, Context context){
+        List<BNAndDatatypeAndValueAndConditions> datatypesOfComplexPropertyOfEntity = kgUtil.queryBNAndDatatypewithEntityAndDatatype(entity,  datatype);
+        if (datatypesOfComplexPropertyOfEntity.size() == 0) {
+            return response.answerNoValue(entity, null, datatype, null, context);
+        } else if (datatypesOfComplexPropertyOfEntity.size() == 1) {
+            return response.answer(entity, datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getValue(), context);
+        } else {
+            return response.askMultiAnswerInEntityCpDpWithEntityAndDp(entity,datatype,datatypesOfComplexPropertyOfEntity,context);
+        }
+    }
 }

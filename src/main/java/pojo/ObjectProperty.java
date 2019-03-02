@@ -5,6 +5,7 @@ public class ObjectProperty {
     public static final String CONDITION_PROPERTY = "http://hual.ai/standard#ConditionProperty";
     public static final String YSHAPE_PROPERTY = "http://hual.ai/standard#YshapeProperty";
     public static final String DIFFUSION_PROPERTY = "http://hual.ai/standard#DiffusionProperty";
+    public static final String COMPLEX_PROPERTY = "http://hual.ai/new_standard#ComplexProperty";
 
     private String uri;
     private String label;

@@ -20,7 +20,7 @@ public class EntityUpdateStrategy implements SlotUpdateStrategy {
     public void setUp(String s, Map<String, ContextedString> map, AccessorRepository accessorRepository) {
         String query = "SELECT DISTINCT ?class_label WHERE { ?class a owl:Class; rdfs:label ?class_label . }";
         classes = Sets.newHashSet(accessorRepository.getKnowledgeAccessor().selectOneAsList(query, "class_label"));
-        String conditionEntityQuery = "SELECT DISTINCT ?class_label WHERE { ?class a owl:Class; rdfs:subClassOf* <http://hual.ai/standard#Conditionclass>; rdfs:label ?class_label . }";
+        String conditionEntityQuery = "SELECT DISTINCT ?class_label WHERE { ?class a owl:Class; rdfs:subClassOf* <http://hual.ai/taikang/taikang_rs#ConditionClass>; rdfs:label ?class_label . }";
         classes.removeAll(accessorRepository.getKnowledgeAccessor().selectOneAsList(conditionEntityQuery, "class_label"));
         String bnQuery = "SELECT DISTINCT ?class_label WHERE { ?class a owl:Class; rdfs:subClassOf* <http://hual.ai/standard#BNclass>; rdfs:label ?class_label . }";
         classes.removeAll(accessorRepository.getKnowledgeAccessor().selectOneAsList(bnQuery, "class_label"));

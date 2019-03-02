@@ -72,6 +72,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.huaban:jieba-analysis:1.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ansj:ansj_seg:5.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.nlpcn:nlp-lang:1.7.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: uk.com.robust-it:cloning:1.9.10" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.objenesis:objenesis:2.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: mysql:mysql-connector-java:5.1.42" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.25" level="project" />
   </component>

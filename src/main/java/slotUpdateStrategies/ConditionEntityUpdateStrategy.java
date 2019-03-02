@@ -19,7 +19,8 @@ public class ConditionEntityUpdateStrategy implements SlotUpdateStrategy {
 
     @Override
     public void setUp(String s, Map<String, ContextedString> map, AccessorRepository accessorRepository) {
-        String query = "SELECT DISTINCT ?class_label WHERE { ?class a owl:Class; rdfs:subClassOf* <http://hual.ai/standard#Conditionclass>; rdfs:label ?class_label . }";
+        //String query = "SELECT DISTINCT ?class_label WHERE { ?class a owl:Class; rdfs:subClassOf* <http://hual.ai/standard#Conditionclass>; rdfs:label ?class_label . }";
+        String query = "SELECT DISTINCT ?class_label WHERE { ?class a owl:Class; rdfs:subClassOf* <http://hual.ai/taikang/taikang_rs#ConditionClass>; rdfs:label ?class_label . }";
         classes = Sets.newHashSet(accessorRepository.getKnowledgeAccessor().selectOneAsList(query, "class_label"));
     }
 
@@ -30,6 +31,7 @@ public class ConditionEntityUpdateStrategy implements SlotUpdateStrategy {
                 .filter(entry -> classes.contains(entry.getKey()))
                 .findFirst()
                 .map(entry -> entry.getValue().getMatched())
-                .orElse(Optional.ofNullable((String) context.getSlots().get("contextConditionEntity")).orElse(null));
+                .orElse(Optional.ofNullable(context.getSlots().get("contextConditionEntity")).orElse(null));
+                //.orElse(Optional.ofNullable((String) context.getSlots().get("contextConditionEntity")).orElse(null));
     }
 }
