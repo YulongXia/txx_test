@@ -145,7 +145,7 @@ class KnowledgeQueryProperty {
                                     condition = contextObject;
                                     break;
                                 case COMPLEX_PROPERTY:
-                                    complex = contextObject;
+                                    complex = kgUtil.queryLabelWithIRI(contextObject);
                                     break;
                             }
                         }
@@ -278,9 +278,9 @@ class KnowledgeQueryProperty {
                                     // entity cp dp ces 合法
                                     List<EntityAndBNAndDatatypeAndValue> datatypesOfComplexPropertyOfEntityUnderConditions = kgUtil.queryDatatypeOfComplexPropertyAndDataypeUnderConditions(complex, datatype, cpces.values().stream().collect(Collectors.toList()));
                                     if (datatypesOfComplexPropertyOfEntityUnderConditions.size() == 0)
-                                        return response.answerNoValue(complex, datatype, cpces.values().stream().collect(Collectors.toList()), context);
+                                        return response.answerNoValue(null,complex, datatype, cpces.values().stream().collect(Collectors.toList()), context);
                                     else if (datatypesOfComplexPropertyOfEntityUnderConditions.size() == 1)
-                                        return response.answer(datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getEntity(), datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getDatatype(), context);
+                                        return response.answer(kgUtil.queryLabelWithIRI(datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getEntity()), datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntityUnderConditions.get(0).getDatatypeAndValue().getValue(), context);
                                     else
                                         return response.askMultiAnswer(datatypesOfComplexPropertyOfEntityUnderConditions, cpces.values().stream().collect(Collectors.toList()), context);
                                 } else {
@@ -390,31 +390,32 @@ class KnowledgeQueryProperty {
                 if (entitiesPairs.size() > 0) {
                     if (datatype != null) {
                         //Map<Pair<String,String>,List<BNAndDatatypeAndValue>>
-                        List<Pair<String, String>> valid10 = kgUtil.checkYshapeEntitiesPairsAndDp(entitiesPairs, datatype);
+                        List<Pair<String, String>> valid10 = kgUtil.checkYshapeEntitiesPairsAndDpReturnIRIs(entitiesPairs, datatype);
                         if (valid10.size() == 0)
                             return response.askWhichPropertyOfEntitiesPairs(entitiesPairs);
                         else {
                             Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
                             if (cpces == null || cpces.size() == 0) {
-                                return processYshapeEntitiesAndDatatype(valid10.get(0), datatype, context);
+                                return processYshapeEntitiesAndDatatype(valid10, datatype, context);
                             } else {
-                                List<Pair<String, String>> valid11 = kgUtil.checkValidationOfEYshapeEntitiesAndDpAndCES(valid10, datatype, cpces);
+                                List<Pair<String, String>> valid11 = kgUtil.checkValidationOfEYshapeEntitiesAndDpAndCESReturnIRI(valid10, datatype, cpces);
                                 if (valid11.size() > 0) {
                                     // entity1 cp bn
                                     // entity2 cp bn
                                     // bn ces 合法
-                                    List<YshapeBNAndDPAndValue> res = kgUtil.queryYshapeBNLabelsAndDatatypes(valid10.get(0), datatype, cpces.values().stream().collect(Collectors.toList()));
+                                    List<YshapeBNAndDPAndValue> res = kgUtil.queryYshapeBNLabelsAndDatatypesUnderConditions(valid11, datatype, cpces.values().stream().collect(Collectors.toList()));
                                     if (res.size() == 0)
-                                        return response.answerNoValueWithYshapeEntitiesPair(valid10.get(0), datatype, cpces.values().stream().collect(Collectors.toList()), context);
+                                        //return response.answerNoValueWithYshapeEntitiesPair(valid10.get(0), datatype, cpces.values().stream().collect(Collectors.toList()), context);
+                                        return processYshapeEntitiesAndDatatype(valid10, datatype, context);
                                     else if (res.size() == 1)
-                                        return response.answerWithYshapeEntitiesPair(valid10.get(0), res.get(0).getDatatype(), res.get(0).getValue(), cpces.values().stream().collect(Collectors.toList()), context);
+                                        return response.answerWithYshapeEntitiesPair(res, cpces.values().stream().collect(Collectors.toList()), context);
                                     else
-                                        return response.askMultiAnswerOfYshapeEntiesPair(valid10.get(0), res, cpces.values().stream().collect(Collectors.toList()), context);
+                                        return response.askMultiAnswerOfYshapeEntiesPair( res, cpces.values().stream().collect(Collectors.toList()), context);
                                 } else {
                                     // entity1 cp bn
                                     // entity2 cp bn
                                     // bn ces 不合法
-                                    return processYshapeEntitiesAndDatatype(valid10.get(0), datatype, context);
+                                    return processYshapeEntitiesAndDatatype(valid10, datatype, context);
                                 }
                             }
                         }
@@ -1500,14 +1501,15 @@ class KnowledgeQueryProperty {
         }
     }
 
-    private ResponseExecutionResult processYshapeEntitiesAndDatatype(Pair<String, String> entitiesPair, String datatype, Context context) {
-        List<YshapeBNAndDPAndValue> datatypesOfYshape = kgUtil.queryYshapeBNLabelsAndDatatypes(entitiesPair, datatype);
+    private ResponseExecutionResult processYshapeEntitiesAndDatatype(List<Pair<String, String>> entitiesPairs, String datatype, Context context) {
+        // entitiesPairs中每一个都和 datatype 合法
+        List<YshapeBNAndDPAndValue> datatypesOfYshape = kgUtil.queryYshapeBNLabelsAndDatatypes(entitiesPairs, datatype);
         if (datatypesOfYshape.size() == 0) {
-            return response.answerNoValueWithYshapeEntitiesPair(entitiesPair, datatype, null, context);
+            return response.answerNoValueWithYshapeEntitiesPair(entitiesPairs, datatype, null, context);
         } else if (datatypesOfYshape.size() == 1) {
-            return response.answerWithYshapeEntitiesPair(entitiesPair, datatypesOfYshape.get(0).getDatatype(), datatypesOfYshape.get(0).getValue(), null, context);
+            return response.answerWithYshapeEntitiesPair(datatypesOfYshape, null, context);
         } else {
-            return response.askMultiAnswerOfYshapeEntiesPair(entitiesPair, datatypesOfYshape, null, context);
+            return response.askMultiAnswerOfYshapeEntiesPair(datatypesOfYshape,  null, context);
         }
     }
 
@@ -1515,9 +1517,9 @@ class KnowledgeQueryProperty {
     private ResponseExecutionResult processComplexPropertyAndDatatype(String complex, String datatype, Context context) {
         List<EntityAndBNAndDatatypeAndValue> datatypesOfComplexPropertyOfEntity = kgUtil.queryDatatypeOfComplexPropertyAndDataype(complex, datatype);
         if (datatypesOfComplexPropertyOfEntity.size() == 0)
-            return response.answerNoValue(complex, datatype, null, context);
+            return response.answerNoValue(null,complex, datatype, null, context);
         else if (datatypesOfComplexPropertyOfEntity.size() == 1)
-            return response.answer(datatypesOfComplexPropertyOfEntity.get(0).getEntity(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), context);
+            return response.answer(kgUtil.queryLabelWithIRI(datatypesOfComplexPropertyOfEntity.get(0).getEntity()), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getValue(), context);
         else
             return response.askMultiAnswer(datatypesOfComplexPropertyOfEntity, null, context);
     }

@@ -968,7 +968,7 @@ public class KnowledgeQueryResponse {
                 .put("datatype", datatype)
                 .put("result", value)
                 .put("relations", relations));
-        result.setInstructions(Collections.singletonList(
+        result.setInstructions(Arrays.asList(
                 new Instruction("msginfo_kb_a")
                         .addParam("title", accessorRepository.getNLG().generate(new ResponseAct("kg")
                                 .put("entity", entity)
@@ -979,7 +979,9 @@ public class KnowledgeQueryResponse {
                         .addParam("bnlabel", null)
                         .addParam("condition", null)
                         .addParam("datatype", datatype)
-                        .addParam("relations", relations)));
+                        .addParam("relations", relations),
+                new Instruction("feedback")
+                        .addParam("display","true")));
 //        result.setInstructions(Collections.singletonList(
 //                new Instruction("recommendation")
 //                        .addParam("title", "test")
@@ -1364,7 +1366,7 @@ public class KnowledgeQueryResponse {
     public ResponseExecutionResult askWhichDatatypeOfComplexProperty(String entity, String complex, Collection<String> datatypes, Context context) {
         context.getSlots().put("contextEntity", Collections.singletonList(entity));
         context.getSlots().put("contextBN", null);
-        context.getSlots().put("contextObject", complex);
+        context.getSlots().put("contextObject", kgUtil.queryCpIRI(complex));
         context.getSlots().put("contextDatatype", null);
         context.getSlots().put("contextConditionEntity", null);
         context.getSlots().put("contextComplexProperty",complex);
@@ -1421,6 +1423,9 @@ public class KnowledgeQueryResponse {
                 ra.put(entry.getKey(),entry.getValue());
         }
         result.setResponseAct(ra);
+        result.setInstructions(Collections.singletonList(
+                new Instruction("feedback")
+                        .addParam("display", "true")));
         return result;
     }
 
@@ -1466,7 +1471,7 @@ public class KnowledgeQueryResponse {
         if(tmp.size() > 0) {
             context.getSlots().put("contextEntity", Collections.singletonList(entity));
             context.getSlots().put("contextBN", null);
-            context.getSlots().put("contextObject", complex);
+            context.getSlots().put("contextObject", kgUtil.queryCpIRI(complex));
             context.getSlots().put("contextDatatype", datatype);
             context.getSlots().put("contextConditionEntity", cpces.values().stream().collect(Collectors.toList()));
             context.getSlots().put("cpContextConditionEntities",cpces);
@@ -1496,7 +1501,7 @@ public class KnowledgeQueryResponse {
         if(tmp.size() > 0) {
             context.getSlots().put("contextEntity", Collections.singletonList(entity));
             context.getSlots().put("contextBN", null);
-            context.getSlots().put("contextObject", complex);
+            context.getSlots().put("contextObject", kgUtil.queryCpIRI(complex));
             context.getSlots().put("contextDatatype", null);
             context.getSlots().put("contextConditionEntity", cpces.values().stream().collect(Collectors.toList()));
             context.getSlots().put("cpContextConditionEntities",cpces);
@@ -1550,7 +1555,7 @@ public class KnowledgeQueryResponse {
     public ResponseExecutionResult askMultiAnswerWithEntityAndCpAndDp(String entity, String complex,String datatype, Context context) {
         context.getSlots().put("contextEntity", Collections.singletonList(entity));
         context.getSlots().put("contextBN", null);
-        context.getSlots().put("contextObject", complex);
+        context.getSlots().put("contextObject", kgUtil.queryCpIRI(complex));
         context.getSlots().put("contextDatatype", datatype);
         List<BNAndDatatypeAndValueAndConditions> res = kgUtil.queryRestCondsWithEntityAndComplexAndDatatypeUnderConditions(entity,complex,datatype,null);
         List<Map<String,String>> tmp = res.stream().map(x -> x.getConditions()).collect(Collectors.toList());
@@ -1583,9 +1588,25 @@ public class KnowledgeQueryResponse {
     public ResponseExecutionResult askMultiAnswerWithEntityAndCp(String entity, String complex, Context context) {
         context.getSlots().put("contextEntity", Collections.singletonList(entity));
         context.getSlots().put("contextBN", null);
-        context.getSlots().put("contextObject", complex);
+        context.getSlots().put("contextObject", kgUtil.queryCpIRI(complex));
         context.getSlots().put("contextDatatype", null);
         List<BNAndDatatypeAndValueAndConditions> res = kgUtil.queryRestCondsWithEntityAndComplexUnderConditions(entity,complex,null);
+        if(res.stream().filter(x -> x.getConditions().size() != 0).collect(Collectors.toList()).size() == 0){
+            List<String> datatypes = kgUtil.queryDatatypesWithBNIRI(res.stream().map(x -> x.getBn().getIri()).distinct().collect(Collectors.toList()));
+            ResponseExecutionResult result = new ResponseExecutionResult();
+            ResponseAct ra = new ResponseAct("recommendation");
+            List<String> items = new ArrayList<>();
+            for(String d: datatypes){
+                items.add(String.format("%s的%s的%s的答案是什么",entity,complex,d));
+            }
+            result.setResponseAct(ra);
+            result.setInstructions(Arrays.asList(
+                    new Instruction("recommendation")
+                            .addParam("title", String.format("更多关于%s的%s的情况",entity,complex))
+                            .addParam("items", items),
+                    new Instruction("feedback").addParam("display","true")));
+            return result;
+        }
         List<Map<String,String>> tmp = res.stream().map(x -> x.getConditions()).collect(Collectors.toList());
         Map<String,Set<String>> aggregate = new HashMap<>();
         for(Map<String,String> conditions: tmp){
@@ -1684,67 +1705,136 @@ public class KnowledgeQueryResponse {
         return result;
     }
     public ResponseExecutionResult askWhichPropertyOfEntitiesPairs(List<Pair<String,String>> entitiesPairs){
-        //List<YshapeBNAndDPAndValue> res = kgUtil.queryYshapeBNAndDPWithEntitiesPairs(entitiesPairs);
+        entitiesPairs = entitiesPairs.stream().map(x -> new Pair<>(kgUtil.queryEntityIRI(x.getKey()),kgUtil.queryEntityIRI(x.getValue()))).collect(Collectors.toList());
+        List<YshapeBNAndDPAndValue> res = kgUtil.queryYshapeBNAndDPWithEntitiesPairs(entitiesPairs);
+        List<String> items = new ArrayList<>();
+        for(YshapeBNAndDPAndValue r : res){
+            items.add(String.format("%s和%s的%s的答案是什么?\n",kgUtil.queryLabelWithIRI(r.getEntity1()),kgUtil.queryLabelWithIRI(r.getEntity2()),r.getDatatype()));
+        }
+
         ResponseExecutionResult result = new ResponseExecutionResult();
-        ResponseAct ra = new ResponseAct("temporary");
+        ResponseAct ra = new ResponseAct("askWhichDpOfYshape");
         result.setResponseAct(ra);
+        result.setInstructions(Arrays.asList(new Instruction("recommendation")
+                        .addParam("title", "更多相关问题")
+                        .addParam("items", items),
+                new Instruction("feedback").addParam("display","true")));
         return result;
     }
 
 
 
 
-    public ResponseExecutionResult answerNoValueWithYshapeEntitiesPair(Pair<String,String> entitiesPair,String datatype,List<String> ces,Context context){
+    public ResponseExecutionResult answerNoValueWithYshapeEntitiesPair(List<Pair<String,String>> entitiesPairs,String datatype,List<String> ces,Context context){
         // if ces else
-                ResponseExecutionResult result = new ResponseExecutionResult();
-        ResponseAct ra = new ResponseAct("temporary");
+        StringBuilder sentences = new StringBuilder();
+        if (ces != null){
+            for(Pair<String,String> entitiesPair:entitiesPairs){
+                sentences.append(String.format("%s和%s的%s在%s下没有值。\n",kgUtil.queryLabelWithIRI(entitiesPair.getKey()),kgUtil.queryLabelWithIRI(entitiesPair.getValue()),datatype,String.join(",",ces)));
+            }
+        }else{
+            for(Pair<String,String> entitiesPair:entitiesPairs){
+                sentences.append(String.format("%s和%s的%s没有值。\n",kgUtil.queryLabelWithIRI(entitiesPair.getKey()),kgUtil.queryLabelWithIRI(entitiesPair.getValue()),datatype));
+            }
+        }
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        ResponseAct ra = new ResponseAct("answerNoValueYshape");
+        ra.put("sentences",sentences);
         result.setResponseAct(ra);
+        result.setInstructions(Arrays.asList(
+                new Instruction("feedback").addParam("display","true")));
         return result;
     }
 
 
-    public ResponseExecutionResult answerWithYshapeEntitiesPair(Pair<String,String> entitiesPair,String datatype,String value,List<String> ces,Context context){
-        // if ces else
-                ResponseExecutionResult result = new ResponseExecutionResult();
-        ResponseAct ra = new ResponseAct("temporary");
+    public ResponseExecutionResult answerWithYshapeEntitiesPair(List<YshapeBNAndDPAndValue> res,List<String> ces,Context context){
+        // if ces
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        ResponseAct ra = new ResponseAct("answerYshape");
+        ra.put("entity1",kgUtil.queryLabelWithIRI(res.get(0).getEntity1()))
+                .put("entity2",kgUtil.queryLabelWithIRI(res.get(0).getEntity2()))
+                .put("datatype",res.get(0).getDatatype())
+                .put("value",res.get(0).getValue());
+        if(ces != null && ces.size() != 0){
+            ra.put("ces",String.join(",",ces));
+        }
         result.setResponseAct(ra);
+        result.setInstructions(Arrays.asList(
+                new Instruction("feedback").addParam("display","true")));
         return result;
     }
 
-    public ResponseExecutionResult askMultiAnswerOfYshapeEntiesPair(Pair<String,String> entitiesPair,List<YshapeBNAndDPAndValue> res,List<String> ces, Context context){
+    public ResponseExecutionResult askMultiAnswerOfYshapeEntiesPair(List<YshapeBNAndDPAndValue> res,List<String> ces, Context context){
         // if ces else
-                ResponseExecutionResult result = new ResponseExecutionResult();
-        ResponseAct ra = new ResponseAct("temporary");
+        List<String> items = new ArrayList<>();
+        if(ces == null || ces.size() == 0){
+            for(YshapeBNAndDPAndValue r : res){
+                items.add(String.format("%s和%s的%s的答案是什么?\n",kgUtil.queryLabelWithIRI(r.getEntity1()),kgUtil.queryLabelWithIRI(r.getEntity2()),r.getDatatype()));
+            }
+        }else{
+            for(YshapeBNAndDPAndValue r : res){
+                items.add(String.format("%s和%s的%s在%s下的答案是什么?\n",kgUtil.queryLabelWithIRI(r.getEntity1()),kgUtil.queryLabelWithIRI(r.getEntity2()),r.getDatatype(),String.join(",",ces)));
+            }
+        }
+
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        ResponseAct ra = new ResponseAct("askWhichDpOfYshape");
         result.setResponseAct(ra);
+        result.setInstructions(Arrays.asList(new Instruction("recommendation")
+                        .addParam("title", "更多相关问题")
+                        .addParam("items", items),
+                new Instruction("feedback").addParam("display","true")));
         return result;
     }
 
 
     public ResponseExecutionResult answerNoValue(String complex, String datatype, List<String> ces, Context context){
         // if ces else
-                ResponseExecutionResult result = new ResponseExecutionResult();
+        ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("temporary");
         result.setResponseAct(ra);
         return result;
     }
 
     public ResponseExecutionResult askMultiAnswer(List<EntityAndBNAndDatatypeAndValue> res,List<String> ces,Context context){
-        // if ces else
-                ResponseExecutionResult result = new ResponseExecutionResult();
-        ResponseAct ra = new ResponseAct("temporary");
+        List<String> items = new ArrayList<>();
+        if (ces != null){
+            for(EntityAndBNAndDatatypeAndValue r:res){
+                items.add(String.format("%s在%s下的%s的答案是什么?",kgUtil.queryLabelWithIRI(r.getEntity()),String.join(",",ces),r.getDatatypeAndValue().getDatatype()));
+            }
+        }else{
+            for(EntityAndBNAndDatatypeAndValue r:res){
+                items.add(String.format("%s的%s的答案是什么?",kgUtil.queryLabelWithIRI(r.getEntity()),r.getDatatypeAndValue().getDatatype()));
+            }
+        }
+
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
+        result.setInstructions(Arrays.asList(new Instruction("recommendation")
+                        .addParam("title", "更多相关问题")
+                        .addParam("items", items),
+                new Instruction("feedback").addParam("display","true")));
         return result;
     }
 
+
     public ResponseExecutionResult askWhichEntityOfCp(String complex) {
-                ResponseExecutionResult result = new ResponseExecutionResult();
-        ResponseAct ra = new ResponseAct("temporary");
+        List<String> entities = kgUtil.queryEntityWithObject(kgUtil.queryCpIRI(complex));
+        Map<String,List<String>> items = new HashMap<>();
+        items.put("实体",entities);
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        ResponseAct ra = new ResponseAct("MultiConditionTable");
         result.setResponseAct(ra);
+        result.setInstructions(Arrays.asList(new Instruction("multiple_condition")
+                        .addParam("title", String.format("需要您更多关于%s的信息",complex))
+                        .addParam("items", items),
+                new Instruction("feedback").addParam("display","true")));
         return result;
     }
 
     public ResponseExecutionResult askEntities(List<String> entities) {
-                ResponseExecutionResult result = new ResponseExecutionResult();
+        ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("temporary");
         result.setResponseAct(ra);
         return result;
