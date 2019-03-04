@@ -1556,7 +1556,7 @@ class KnowledgeQueryProperty {
                         List<BNAndDatatypeAndValueAndConditions> res = kgUtil.queryBNAndDatatypewithEntityAndDatatypeUnderConditions(entity, datatype, cpces);
                         if (res.size() == 0) {
                             //return response.answerNoValue(entity, null, datatype, cpces.keySet().stream().collect(Collectors.toList()), context);
-                            return response.askWhichProperty(entity,new ArrayList<String>(),new ArrayList<ObjectProperty>(),context);
+                            return response.answerNoValue(entity,null,datatype,cpces.keySet().stream().collect(Collectors.toList()), context);
                         } else if (res.size() == 1) {
                             String cp = kgUtil.queryCpWithEntityAndBN(entity,res.get(0).getBn().getIri());
                             if(cp == null)
@@ -1577,7 +1577,8 @@ class KnowledgeQueryProperty {
         } else {
             // entity dp 不合法
             // entity cp bn dp 不合法
-            return response.askWhichProperty(entity,new ArrayList<String>(),new ArrayList<ObjectProperty>(),context);
+            //return response.askWhichProperty(entity,new ArrayList<String>(),new ArrayList<ObjectProperty>(),context);
+            return response.answerNoValue(entity,null,datatype,null,context);
 
 
         }
