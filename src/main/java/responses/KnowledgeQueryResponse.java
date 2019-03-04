@@ -6,9 +6,7 @@ import ai.hual.labrador.dm.Instruction;
 import ai.hual.labrador.dm.ResponseExecutionResult;
 import ai.hual.labrador.kg.KnowledgeStatus;
 import ai.hual.labrador.nlg.ResponseAct;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.*;
 import javafx.util.Pair;
 import pojo.*;
 import utils.KnowledgeQueryUtils;
@@ -1560,11 +1558,18 @@ public class KnowledgeQueryResponse {
             context.getSlots().put("contextDatatype", datatype);
             context.getSlots().put("contextConditionEntity", cpces.keySet().stream().collect(Collectors.toList()));
             context.getSlots().put("cpContextConditionEntities",cpces);
-            Map<String,List<Map<String,String>>> aggregate = tmp.stream().collect(Collectors.groupingBy(x -> x.values().iterator().next(),Collectors.toList()));
             Map<String,List<String>> items = new HashMap<>();
-            for(Map.Entry<String,List<Map<String,String>>> entry:aggregate.entrySet()){
-                List<String> contents = entry.getValue().stream().map(x -> x.keySet().iterator().next()).collect(Collectors.toList());
-                items.put(entry.getKey(),contents);
+            for(Map<String,String> m:tmp){
+                for(Map.Entry<String,String> entry : m.entrySet()){
+                    if(entry.getKey() != null) {
+                        if(items.containsKey(entry.getValue())){
+                            if( !items.get(entry.getValue()).contains(entry.getKey()))
+                                items.get(entry.getValue()).add(entry.getKey());
+                        }
+                        else
+                            items.put(entry.getValue(),new ArrayList<String>() {{ add(entry.getKey()); }});
+                    }
+                }
             }
             ResponseExecutionResult result = new ResponseExecutionResult();
             ResponseAct ra = new ResponseAct("MultiConditionTable");
@@ -1596,11 +1601,19 @@ public class KnowledgeQueryResponse {
             context.getSlots().put("contextDatatype", datatype);
             context.getSlots().put("contextConditionEntity", cpces.keySet().stream().collect(Collectors.toList()));
             context.getSlots().put("cpContextConditionEntities",cpces);
-            Map<String,List<Map<String,String>>> aggregate = tmp.stream().collect(Collectors.groupingBy(x -> x.values().iterator().next(),Collectors.toList()));
+            //Map<String,List<Map<String,String>>> aggregate = tmp.stream().filter(x -> x.values() != null && x.values().size() != 0).collect(Collectors.groupingBy(x -> x.values().iterator().next(),Collectors.toList()));
             Map<String,List<String>> items = new HashMap<>();
-            for(Map.Entry<String,List<Map<String,String>>> entry:aggregate.entrySet()){
-                List<String> contents = entry.getValue().stream().map(x -> x.keySet().iterator().next()).collect(Collectors.toList());
-                items.put(entry.getKey(),contents);
+            for(Map<String,String> m:tmp){
+                for(Map.Entry<String,String> entry : m.entrySet()){
+                    if(entry.getKey() != null) {
+                        if(items.containsKey(entry.getValue())){
+                            if( !items.get(entry.getValue()).contains(entry.getKey()))
+                                items.get(entry.getValue()).add(entry.getKey());
+                        }
+                        else
+                            items.put(entry.getValue(),new ArrayList<String>() {{ add(entry.getKey()); }});
+                    }
+                }
             }
             ResponseExecutionResult result = new ResponseExecutionResult();
             ResponseAct ra = new ResponseAct("MultiConditionTable");
@@ -1633,11 +1646,19 @@ public class KnowledgeQueryResponse {
             context.getSlots().put("contextDatatype", null);
             context.getSlots().put("contextConditionEntity", cpces.keySet().stream().collect(Collectors.toList()));
             context.getSlots().put("cpContextConditionEntities",cpces);
-            Map<String,List<Map<String,String>>> aggregate = tmp.stream().collect(Collectors.groupingBy(x -> x.values().iterator().next(),Collectors.toList()));
+            //Map<String,List<Map<String,String>>> aggregate = tmp.stream().filter(x -> x.values() != null && x.values().size() != 0).collect(Collectors.groupingBy(x -> x.values().iterator().next(),Collectors.toList()));
             Map<String,List<String>> items = new HashMap<>();
-            for(Map.Entry<String,List<Map<String,String>>> entry:aggregate.entrySet()){
-                List<String> contents = entry.getValue().stream().map(x -> x.keySet().iterator().next()).collect(Collectors.toList());
-                items.put(entry.getKey(),contents);
+            for(Map<String,String> m:tmp){
+                for(Map.Entry<String,String> entry : m.entrySet()){
+                    if(entry.getKey() != null) {
+                        if(items.containsKey(entry.getValue())){
+                            if( !items.get(entry.getValue()).contains(entry.getKey()))
+                                items.get(entry.getValue()).add(entry.getKey());
+                        }
+                        else
+                            items.put(entry.getValue(),new ArrayList<String>() {{ add(entry.getKey()); }});
+                    }
+                }
             }
             ResponseExecutionResult result = new ResponseExecutionResult();
             ResponseAct ra = new ResponseAct("MultiConditionTable");
@@ -1819,12 +1840,20 @@ public class KnowledgeQueryResponse {
             context.getSlots().put("contextBN", null);
             context.getSlots().put("contextObject", null);
             context.getSlots().put("contextDatatype", datatype);
-            Map<String,List<Map<String,String>>> aggregate = tmp.stream().collect(Collectors.groupingBy(x -> x.values().iterator().next(),Collectors.toList()));
             Map<String,List<String>> items = new HashMap<>();
-            for(Map.Entry<String,List<Map<String,String>>> entry:aggregate.entrySet()){
-                List<String> contents = entry.getValue().stream().map(x -> x.keySet().iterator().next()).collect(Collectors.toList());
-                items.put(entry.getKey(),contents);
+            for(Map<String,String> m:tmp){
+                for(Map.Entry<String,String> entry : m.entrySet()){
+                    if(entry.getKey() != null) {
+                        if(items.containsKey(entry.getValue())){
+                            if( !items.get(entry.getValue()).contains(entry.getKey()))
+                                items.get(entry.getValue()).add(entry.getKey());
+                        }
+                        else
+                            items.put(entry.getValue(),new ArrayList<String>() {{ add(entry.getKey()); }});
+                    }
+                }
             }
+            //Map<String,List<Map<String,String>>> aggregate = tmp.stream().filter(x -> x.values() != null && x.values().size() != 0).collect(Collectors.groupingBy(x -> x.values().iterator().next(),Collectors.toList()));
             ResponseExecutionResult result = new ResponseExecutionResult();
             ResponseAct ra = new ResponseAct("MultiConditionTable");
             result.setResponseAct(ra);

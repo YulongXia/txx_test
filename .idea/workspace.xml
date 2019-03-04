@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca06feca-fcc5-4a0f-8513-b675fab1c706" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -40,8 +36,8 @@
       <file leaf-file-name="KnowledgeQueryProperty.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="1597" selection-start-line="1597" selection-end-line="1597" />
+            <state relative-caret-position="109">
+              <caret line="125" selection-start-line="125" selection-end-line="125" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -70,7 +66,7 @@
       <file leaf-file-name="KnowledgeQueryUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
+            <state relative-caret-position="109">
               <caret line="1521" selection-start-line="1521" selection-end-line="1521" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -82,8 +78,17 @@
       <file leaf-file-name="KnowledgeQueryResponse.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="1554" column="9" selection-start-line="1554" selection-start-column="9" selection-end-line="1554" selection-end-column="9" />
+            <state relative-caret-position="109">
+              <caret line="1653" column="62" selection-start-line="1653" selection-start-column="27" selection-end-line="1653" selection-end-column="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Simulator.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="241">
+              <caret line="90" selection-start-line="90" selection-end-line="90" />
             </state>
           </provider>
         </entry>
@@ -99,12 +104,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>SetMultimap&lt;String,String&gt; cpces</find>
-      <find>SetMultimap&lt;String, String&gt;</find>
-      <find>setmultimap</find>
-      <find>cpces.va</find>
-      <find>multiple_condition</find>
-      <find>tmp.size() &gt; 0</find>
       <find>recommend</find>
       <find>cpces.values</find>
       <find>datatypeLabel</find>
@@ -127,8 +126,14 @@
       <find>checkEntitiesAndCpUnderConditions</find>
       <find>recomm</find>
       <find>tmp.size</find>
-      <find>?entity {</find>
+      <find>Map&lt;String,List&lt;Map&lt;String,String&gt;&gt;&gt; aggregate = tmp.stream().</find>
+      <find>List&lt;String&gt; contents = entry.getValue().stream().map(x -&gt; x.keySet().iterator().next())</find>
+      <find>Map&lt;String,List&lt;Map&lt;String,String&gt;&gt;&gt; aggregate = tmp.stream().filter(x -&gt; x.values() != null &amp;&amp; x.values().size() != 0).collect(Collectors.groupingBy(x -&gt; x.values().iterator().next(),Collectors.toList()));</find>
+      <find>if(!items.containsKey(entry.getValue())){</find>
+      <find>items.get(entry.getValue()).contains(entry.getKey())</find>
       <find>response.answer(</find>
+      <find>?entity {</find>
+      <find>items.containsKey(entry.getValue())</find>
     </findStrings>
     <replaceStrings>
       <replace>e.getKey() != null</replace>
@@ -221,7 +226,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="561" />
     <option name="y" value="62" />
     <option name="width" value="1936" />
@@ -476,12 +481,12 @@
       <workItem from="1551594927171" duration="14490000" />
       <workItem from="1551609586547" duration="1058000" />
       <workItem from="1551610916630" duration="12132000" />
-      <workItem from="1551665948187" duration="42099000" />
+      <workItem from="1551665948187" duration="46965000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="466944000" />
+    <option name="totallyTimeSpent" value="471810000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -494,7 +499,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="5" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.32997763" />
@@ -503,10 +507,10 @@
       <window_info id="Image Layers" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="0" side_tool="true" />
-      <window_info anchor="right" x="651" y="73" width="617" height="894" id="Maven Projects" order="0" weight="0.32889125" />
+      <window_info anchor="right" x="651" y="73" width="617" height="894" id="Maven Projects" order="0" visible="true" weight="0.32889125" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="3" weight="0.32997763" />
-      <window_info anchor="bottom" id="Run" order="8" weight="0.57941836" />
+      <window_info active="true" anchor="bottom" id="Run" order="8" visible="true" weight="0.6017897" />
       <window_info anchor="bottom" id="Spring" order="2" />
       <window_info anchor="bottom" id="Terminal" order="4" weight="0.07606264" />
       <window_info id="Capture Tool" order="0" />
@@ -519,7 +523,7 @@
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="4" />
       <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Debug" order="12" visible="true" weight="0.50894856" />
+      <window_info anchor="bottom" id="Debug" order="12" weight="0.54362416" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="right" id="Commander" order="6" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
@@ -569,7 +573,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>977</line>
+          <line>975</line>
           <properties />
           <option name="timeStamp" value="326" />
         </line-breakpoint>
@@ -587,13 +591,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1555</line>
+          <line>1553</line>
           <properties />
           <option name="timeStamp" value="330" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1797</line>
+          <line>1818</line>
           <properties />
           <option name="timeStamp" value="331" />
         </line-breakpoint>
@@ -661,7 +665,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>550</line>
+          <line>548</line>
           <properties />
           <option name="timeStamp" value="343" />
         </line-breakpoint>
@@ -679,7 +683,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>2062</line>
+          <line>2091</line>
           <properties />
           <option name="timeStamp" value="347" />
         </line-breakpoint>
@@ -697,27 +701,53 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1867</line>
+          <line>1896</line>
           <properties />
           <option name="timeStamp" value="350" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1816</line>
+          <line>1837</line>
           <properties />
           <option name="timeStamp" value="351" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1812</line>
+          <line>1833</line>
           <properties />
           <option name="timeStamp" value="352" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>1492</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="353" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
+          <line>1831</line>
+          <properties />
+          <option name="timeStamp" value="356" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
+          <line>1846</line>
+          <properties />
+          <option name="timeStamp" value="357" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
+          <line>1847</line>
+          <properties />
+          <option name="timeStamp" value="358" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="353" />
+      <option name="time" value="359" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -1025,13 +1055,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2475">
-          <caret line="90" selection-start-line="90" selection-end-line="90" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="528">
@@ -1090,20 +1113,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="1521" selection-start-line="1521" selection-end-line="1521" />
+        <state relative-caret-position="241">
+          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="125" selection-start-line="125" selection-end-line="125" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="1597" selection-start-line="1597" selection-end-line="1597" />
+        <state relative-caret-position="109">
+          <caret line="1521" selection-start-line="1521" selection-end-line="1521" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1112,8 +1142,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="1554" column="9" selection-start-line="1554" selection-start-column="9" selection-end-line="1554" selection-end-column="9" />
+        <state relative-caret-position="109">
+          <caret line="1653" column="62" selection-start-line="1653" selection-start-column="27" selection-end-line="1653" selection-end-column="62" />
         </state>
       </provider>
     </entry>
