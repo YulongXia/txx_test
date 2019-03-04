@@ -3,6 +3,8 @@ package utils;
 import ai.hual.labrador.kg.*;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.SetMultimap;
+import com.sun.org.apache.bcel.internal.generic.Select;
 import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +124,7 @@ public class KnowledgeQueryUtils {
     public EntitiesAndTheirProperties queryProperties(String entity) {
         String queryString = "SELECT DISTINCT ?entity ?datatype ?datatypeLabel ?object ?objectLabel ?objectType ?bn ?bnlabel WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
-                "{ ?entity ?datatype ?value . ?datatype rdf:type owl:DatatypeProperty . ?datatype rdfs:label ?datatypeLabel .} UNION " +
+                "{ ?entity ?datatype ?value . ?datatype rdf:type/rdfs:subClassOf* owl:DatatypeProperty . ?datatype rdfs:label ?datatypeLabel .} UNION " +
                 "{\n" +
                 "VALUES ?objectType { <" + YSHAPE_PROPERTY + "> <" + DIFFUSION_PROPERTY + "> <" + CONDITION_PROPERTY + "> <" + COMPLEX_PROPERTY + "> }\n" +
                 "?entity ?object ?bn. ?object a/rdfs:subPropertyOf* ?objectType.\n" +
@@ -130,6 +132,17 @@ public class KnowledgeQueryUtils {
                 "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
                 "}\n" +
                 "}";
+
+//        String queryString = "SELECT DISTINCT ?entity ?datatype ?datatypeLabel ?object ?objectLabel ?objectType ?bn ?bnlabel WHERE {\n" +
+//                String.format("?entity rdfs:label '%s' .\n", entity) +
+//                "{ ?entity ?datatype ?value . ?datatype rdf:type owl:DatatypeProperty . ?datatype rdfs:label ?datatypeLabel .} UNION " +
+//                "{\n" +
+//                "VALUES ?objectType { <" + YSHAPE_PROPERTY + "> <" + DIFFUSION_PROPERTY + "> <" + CONDITION_PROPERTY + "> <" + COMPLEX_PROPERTY + "> }\n" +
+//                "?entity ?object ?bn. ?object a/rdfs:subPropertyOf* ?objectType.\n" +
+//                "OPTIONAL { ?object rdfs:label ?objectLabel. }\n" +
+//                "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
+//                "}\n" +
+//                "}";
 
         logger.debug("SPARQL {}", queryString);
         SelectResult result = knowledge.select(queryString);
@@ -1088,53 +1101,87 @@ public class KnowledgeQueryUtils {
     }
 
     public List<BNAndDatatypeAndValue> queryDatatypeOfComplexPropertyAndDatatype(String entity, String complex,String datatype) {
-        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?datatypeLabel ?value WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?value WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
                 String.format("?entity ?cp ?bn . ?cp rdfs:label '%s'.\n", complex) +
-                "?datatype rdfs:label ?datatypeLabel ; rdf:type ?type. ?type rdfs:subClassOf owl:DatatypeProperty .\n" +
+                "?datatype rdf:type ?type. ?type rdfs:subClassOf owl:DatatypeProperty .\n" +
                 "?bn ?datatype ?value .\n" +
                 String.format("?datatype rdfs:label '%s'.\n",datatype) +
                 "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
                 "}";
         return queryAndCheckStatus(queryString, b -> new BNAndDatatypeAndValue(
                         new BlankNode(b.value("bn"), b.value("bnlabel")),
-                        new DatatypeAndValue(b.value("datatypeLabel"), b.value("value"))),
+                        new DatatypeAndValue(datatype, b.value("value"))),
                 instanceEnabled("bn"),
                 propertyEnabled(b -> b.value("bn"), b -> b.value("datatype")))
                 .stream().distinct().collect(Collectors.toList());
     }
     public List<BNAndDatatypeAndValue> queryDatatypeOfComplexPropertyAndDatatype(String entity, String datatype) {
-        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?datatypeLabel ?value WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?value WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
                 "?entity ?cp ?bn . " +
-                "?datatype rdfs:label ?datatypeLabel ; rdf:type ?type. ?type rdfs:subClassOf owl:DatatypeProperty .\n" +
+                "?datatype rdf:type ?type. ?type rdfs:subClassOf owl:DatatypeProperty .\n" +
                 "?bn ?datatype ?value .\n" +
                 String.format("?datatype rdfs:label '%s'.\n",datatype) +
                 "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
                 "}";
         return queryAndCheckStatus(queryString, b -> new BNAndDatatypeAndValue(
                         new BlankNode(b.value("bn"), b.value("bnlabel")),
-                        new DatatypeAndValue(b.value("datatypeLabel"), b.value("value"))),
+                        new DatatypeAndValue(datatype, b.value("value"))),
                 instanceEnabled("bn"),
                 propertyEnabled(b -> b.value("bn"), b -> b.value("datatype")))
                 .stream().distinct().collect(Collectors.toList());
     }
 
-    public List<String> queryDatatypesWithOneTypeBN(List<String> bns){
+    public List<Pair<String,String>> queryDatatypesWithOneTypeBN(List<String> bns){
         StringBuilder bnsclause = new StringBuilder();
         for(String bn:bns){
             bnsclause.append(String.format("<%s>",bn));
         }
-        String queryString = "select distinct ?dpLabel \n" +
+        String queryString = "select distinct ?cpLabel ?dpLabel \n" +
                 "where { \n" +
                 String.format("values ?bn {%s}\n",bnsclause.toString()) +
                 "?s ?cp ?bn.\n" +
+                "?cp rdfs:label ?cpLabel" +
                 "?cp rdf:type/rdfs:subPropertyOf* <http://hual.ai/new_standard#ComplexProperty>.\n" +
                 "?bn ?dp ?value.\n" +
                 "?dp rdf:type/rdfs:subClassOf  owl:DatatypeProperty.\n" +
                 "?dp rdfs:label ?dpLabel" +
                 "}";
-        List<String> result = knowledge.selectOneAsList(queryString,"dpLabel");
+        SelectResult res = knowledge.select(queryString);
+        List<Pair<String,String>> result = new ArrayList<>();
+        for(Binding b:res.getBindings()){
+            result.add(new Pair<>(b.value("cpLabel"),b.value("dpLabel")));
+        }
+        return result;
+    }
+
+    public List<Pair<String,String>> queryDatatypesWithOneTypeBN(List<String> bns,Map<String,String> cpces){
+        StringBuilder cesclause = new StringBuilder();
+        List<String> ces = cpces.keySet().stream().collect(Collectors.toList());
+        for(Integer i = 0; i<ces.size();++i){
+            cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label '%s'. ?op_%s rdf:type  <http://hual.ai/new_standard#ObjectProperty>.\n",i.toString(),i.toString(),i.toString(),ces.get(i),i.toString()));
+        }
+        StringBuilder bnsclause = new StringBuilder();
+        for(String bn:bns){
+            bnsclause.append(String.format("<%s>",bn));
+        }
+        String queryString = "select distinct ?cpLabel ?dpLabel \n" +
+                "where { \n" +
+                String.format("values ?bn {%s}\n",bnsclause.toString()) +
+                "?s ?cp ?bn.\n" +
+                "?cp rdfs:label ?cpLabel" +
+                "?cp rdf:type/rdfs:subPropertyOf* <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                "?bn ?dp ?value.\n" +
+                "?dp rdf:type/rdfs:subClassOf  owl:DatatypeProperty.\n" +
+                "?dp rdfs:label ?dpLabel" +
+                cesclause.toString() +
+                "}";
+        SelectResult res = knowledge.select(queryString);
+        List<Pair<String,String>> result = new ArrayList<>();
+        for(Binding b:res.getBindings()){
+            result.add(new Pair<>(b.value("cpLabel"),b.value("dpLabel")));
+        }
         return result;
     }
 
@@ -1271,7 +1318,7 @@ public class KnowledgeQueryUtils {
         for(Integer i = 0; i<ces.size();++i){
             cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label %s.\n",i.toString(),i.toString(),i.toString(),ces.get(i)));
         }
-        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?datatypeLabel ?value WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?value WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
                 String.format("?entity ?cp ?bn . ?cp rdfs:label '%s'.\n", complex) +
                 "?datatype rdf:type ?type. ?type rdfs:subClassOf* owl:DatatypeProperty .\n" +
@@ -1282,7 +1329,7 @@ public class KnowledgeQueryUtils {
                 "}";
         return queryAndCheckStatus(queryString, b -> new BNAndDatatypeAndValue(
                         new BlankNode(b.value("bn"), b.value("bnlabel")),
-                        new DatatypeAndValue(b.value("datatypeLabel"), b.value("value"))),
+                        new DatatypeAndValue(datatype, b.value("value"))),
                 instanceEnabled("bn"),
                 propertyEnabled(b -> b.value("bn"), b -> b.value("datatype")))
                 .stream().distinct().collect(Collectors.toList());
@@ -1311,7 +1358,7 @@ public class KnowledgeQueryUtils {
     }
 
     public List<BNAndDatatypeAndValueAndConditions> queryBNAndDatatypewithEntityAndDatatypeUnderConditions(String entity,String datatype,Map<String,String> cpces){
-        List<String> ces = cpces.values().stream().collect(Collectors.toList());
+        List<String> ces = cpces.keySet().stream().collect(Collectors.toList());
         StringBuilder cesclause = new StringBuilder();
         for(Integer i = 0; i<ces.size();++i){
             cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label '%s'. ?op_%s rdf:type  <http://hual.ai/new_standard#ObjectProperty>.\n",i.toString(),i.toString(),i.toString(),ces.get(i),i.toString()));
@@ -1327,7 +1374,7 @@ public class KnowledgeQueryUtils {
                     "}\n";
             Map<String,String> conds = new HashMap<>();
             for(Map.Entry<String,String> e: cpces.entrySet()) {
-                conds.put(e.getValue(), e.getKey());
+                conds.put(e.getKey(), e.getValue());
             }
             List<BNAndDatatypeAndValueAndConditions> result =  queryAndCheckStatus(queryString1, b -> new BNAndDatatypeAndValueAndConditions(
                             new BlankNode(b.value("bn"), b.value("bnlabel")),
@@ -1340,17 +1387,50 @@ public class KnowledgeQueryUtils {
 
     }
 
-    public List<BNAndDatatypeAndValueAndConditions> queryRestCondsWithEntityAndDatatypeUnderConditions(String entity,String datatype,Map<String,String> cpces){
+
+    public List<BNAndDatatypeAndValueAndConditions> queryBNAndDatatypewithEntityAndDatatypeUnderConditions(String entity,String complex,String datatype,Map<String,String> cpces){
+        List<String> ces = cpces.keySet().stream().collect(Collectors.toList());
+        StringBuilder cesclause = new StringBuilder();
+        for(Integer i = 0; i<ces.size();++i){
+            cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label '%s'. ?op_%s rdf:type  <http://hual.ai/new_standard#ObjectProperty>.\n",i.toString(),i.toString(),i.toString(),ces.get(i),i.toString()));
+        }
+        String queryString1 = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?value WHERE {\n" +
+                String.format("?entity rdfs:label '%s' .\n", entity) +
+                "?entity ?cp ?bn .\n" +
+                String.format("?cp rdfs:label '%s.\n'",complex) +
+                "?datatype rdf:type ?type. ?type rdfs:subClassOf owl:DatatypeProperty .\n" +
+                "?bn ?datatype ?value .\n" +
+                String.format("?datatype rdfs:label '%s'.\n",datatype) +
+                "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
+                cesclause.toString() +
+                "}\n";
+        Map<String,String> conds = new HashMap<>();
+        for(Map.Entry<String,String> e: cpces.entrySet()) {
+            conds.put(e.getKey(), e.getValue());
+        }
+        List<BNAndDatatypeAndValueAndConditions> result =  queryAndCheckStatus(queryString1, b -> new BNAndDatatypeAndValueAndConditions(
+                        new BlankNode(b.value("bn"), b.value("bnlabel")),
+                        new DatatypeAndValue(datatype, b.value("value")),
+                        conds),
+                instanceEnabled("bn"),
+                propertyEnabled(b -> b.value("bn"), b -> b.value("datatype")))
+                .stream().distinct().collect(Collectors.toList());
+        return result;
+
+    }
+
+
+    public List<BNAndDatatypeAndValueAndConditions> queryRestCondsWithEntityAndDatatypeUnderConditions(String entity,String datatype,Map<String, String> cpces){
         List<String> ces = new ArrayList<>();
         if(cpces != null)
-            ces = cpces.values().stream().collect(Collectors.toList());
+            ces = cpces.keySet().stream().collect(Collectors.toList());
         StringBuilder cesclause = new StringBuilder();
         List<String> ceswithquotationmark = new ArrayList<>();
         for(Integer i = 0; i<ces.size();++i){
             cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label '%s'. ?op_%s rdf:type  <http://hual.ai/new_standard#ObjectProperty>.\n",i.toString(),i.toString(),i.toString(),ces.get(i),i.toString()));
             ceswithquotationmark.add(String.format("'%s'",ces.get(i)));
         }
-        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?datatypeLabel ?value ?condition_label ?conditionClassLabel WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?value ?condition_label ?conditionClassLabel WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
                 "?entity ?cp ?bn .\n" +
                 "?datatype rdf:type ?type. ?type rdfs:subClassOf owl:DatatypeProperty .\n" +
@@ -1368,7 +1448,7 @@ public class KnowledgeQueryUtils {
 
         List<BNAndDatatypeAndValueAndConditions> tmp = queryAndCheckStatus(queryString, b -> new BNAndDatatypeAndValueAndConditions(
                         new BlankNode(b.value("bn"), b.value("bnlabel")),
-                        new DatatypeAndValue(b.value("datatypeLabel"), b.value("value")),
+                        new DatatypeAndValue(datatype, b.value("value")),
                         new HashMap<String,String>(){{put(b.value("condition_label"),b.value("conditionClassLabel"));}}),
                 instanceEnabled("bn"),
                 propertyEnabled(b -> b.value("bn"), b -> b.value("datatype")))
@@ -1407,8 +1487,9 @@ public class KnowledgeQueryUtils {
                 "?bn ?datatype ?value .\n" +
                 String.format("?datatype rdfs:label '%s'.\n",datatype) +
                 "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
-                "?bn ?op ?condition.?condition rdfs:label ?condition_label.?condition a ?conditionClass. ?conditionClass rdfs:label ?conditionClassLabel.?op a <http://hual.ai/new_standard#ObjectProperty>.\n" +
+                "optional {?bn ?op ?condition.?condition rdfs:label ?condition_label.?condition a ?conditionClass. ?conditionClass rdfs:label ?conditionClassLabel.?op a <http://hual.ai/new_standard#ObjectProperty>.}\n" +
                 "}";
+        logger.debug("SPARQL {}", queryString);
         List<BNAndDatatypeAndValueAndConditions> tmp = queryAndCheckStatus(queryString, b -> new BNAndDatatypeAndValueAndConditions(
                         new BlankNode(b.value("bn"), b.value("bnlabel")),
                         new DatatypeAndValue(datatype, b.value("value")),
@@ -1442,16 +1523,16 @@ public class KnowledgeQueryUtils {
 
     }
 
-    public List<BNAndDatatypeAndValueAndConditions> queryBNAndDatatypewithEntityAndComplexAndDatatypeUnderConditions(String entity,String complex,String datatype,Map<String,String> cpces){
+    public List<BNAndDatatypeAndValueAndConditions> queryBNAndDatatypewithEntityAndComplexAndDatatypeUnderConditions(String entity,String complex,String datatype,Map<String, String> cpces){
         List<String> ces = new ArrayList<>();
         if(cpces != null)
-            ces = cpces.values().stream().collect(Collectors.toList());
+            ces = cpces.keySet().stream().collect(Collectors.toList());
         StringBuilder cesclause = new StringBuilder();
         for(Integer i = 0; i<ces.size();++i){
             cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label '%s'. ?op_%s rdf:type  <http://hual.ai/new_standard#ObjectProperty>.\n",i.toString(),i.toString(),i.toString(),ces.get(i),i.toString()));
         }
 
-            String queryString1 = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?datatypeLabel ?value  WHERE {\n" +
+            String queryString1 = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?value  WHERE {\n" +
                     String.format("?entity rdfs:label '%s' .\n", entity) +
                     "?entity ?cp ?bn .\n" +
                     String.format("?cp rdfs:label '%s'.\n",complex) +
@@ -1463,11 +1544,11 @@ public class KnowledgeQueryUtils {
                     "}\n";
             Map<String,String> conds = new HashMap<>();
             for(Map.Entry<String,String> e: cpces.entrySet()){
-                conds.put(e.getValue(),e.getKey());
+                conds.put(e.getKey(),e.getValue());
             }
             List<BNAndDatatypeAndValueAndConditions> result =  queryAndCheckStatus(queryString1, b -> new BNAndDatatypeAndValueAndConditions(
                             new BlankNode(b.value("bn"), b.value("bnlabel")),
-                            new DatatypeAndValue(b.value("datatypeLabel"), b.value("value")),
+                            new DatatypeAndValue(datatype, b.value("value")),
                             conds),
                     instanceEnabled("bn"),
                     propertyEnabled(b -> b.value("bn"), b -> b.value("datatype")))
@@ -1476,17 +1557,17 @@ public class KnowledgeQueryUtils {
     }
 
 
-    public List<BNAndDatatypeAndValueAndConditions> queryRestCondsWithEntityAndComplexAndDatatypeUnderConditions(String entity,String complex,String datatype,Map<String,String> cpces){
+    public List<BNAndDatatypeAndValueAndConditions> queryRestCondsWithEntityAndComplexAndDatatypeUnderConditions(String entity,String complex,String datatype,Map<String, String> cpces){
         List<String> ces = new ArrayList<>();
         if(cpces != null)
-            ces = cpces.values().stream().collect(Collectors.toList());
+            ces = cpces.keySet().stream().collect(Collectors.toList());
         StringBuilder cesclause = new StringBuilder();
         List<String> ceswithquotationmark = new ArrayList<>();
         for(Integer i = 0; i<ces.size();++i){
             cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label '%s'. ?op_%s rdf:type  <http://hual.ai/new_standard#ObjectProperty>.\n",i.toString(),i.toString(),i.toString(),ces.get(i),i.toString()));
             ceswithquotationmark.add(String.format("'%s'",ces.get(i)));
         }
-        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?datatypeLabel ?value ?condition_label ?conditionClassLabel WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?value ?condition_label ?conditionClassLabel WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n",entity) +
                 "?entity ?cp ?bn .\n" +
                 String.format("?cp rdfs:label '%s'.\n",complex) +
@@ -1501,7 +1582,7 @@ public class KnowledgeQueryUtils {
 
         List<BNAndDatatypeAndValueAndConditions> tmp = queryAndCheckStatus(queryString, b -> new BNAndDatatypeAndValueAndConditions(
                         new BlankNode(b.value("bn"), b.value("bnlabel")),
-                        new DatatypeAndValue(b.value("datatypeLabel"), b.value("value")),
+                        new DatatypeAndValue(datatype, b.value("value")),
                         new HashMap<String,String>(){{put(b.value("condition_label"),b.value("conditionClassLabel"));}}),
                 instanceEnabled("bn"),
                 propertyEnabled(b -> b.value("bn"), b -> b.value("datatype")))
@@ -1532,10 +1613,10 @@ public class KnowledgeQueryUtils {
     }
 
 
-    public List<BNAndDatatypeAndValueAndConditions> queryBNAndDatatypewithEntityAndComplexUnderConditions(String entity,String complex,Map<String,String> cpces){
+    public List<BNAndDatatypeAndValueAndConditions> queryBNAndDatatypewithEntityAndComplexUnderConditions(String entity,String complex,Map<String, String> cpces){
         List<String> ces = new ArrayList<>();
         if(cpces != null)
-            ces = cpces.values().stream().collect(Collectors.toList());
+            ces = cpces.keySet().stream().collect(Collectors.toList());
         StringBuilder cesclause = new StringBuilder();
         for(Integer i = 0; i<ces.size();++i){
             cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label '%s'. ?op_%s rdf:type  <http://hual.ai/new_standard#ObjectProperty>.\n",i.toString(),i.toString(),i.toString(),ces.get(i),i.toString()));
@@ -1564,10 +1645,10 @@ public class KnowledgeQueryUtils {
         return result;
     }
 
-    public List<BNAndDatatypeAndValueAndConditions> queryRestCondsWithEntityAndComplexUnderConditions(String entity,String complex,Map<String,String> cpces){
+    public List<BNAndDatatypeAndValueAndConditions> queryRestCondsWithEntityAndComplexUnderConditions(String entity,String complex,Map<String, String> cpces){
         List<String> ces = new ArrayList<>();
         if(cpces != null)
-            ces = cpces.values().stream().collect(Collectors.toList());
+            ces = cpces.keySet().stream().collect(Collectors.toList());
         StringBuilder cesclause = new StringBuilder();
         List<String> ceswithquotationmark = new ArrayList<>();
         for(Integer i = 0; i<ces.size();++i){
@@ -1622,7 +1703,10 @@ public class KnowledgeQueryUtils {
     public List<String> checkEntityAndCpAndDatatype(String entity, String datatype) {
         String queryString = "SELECT DISTINCT ?class WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
-                "?entity ?cp ?bn.\n" +
+                "?cp rdfs:domain ?cpdomain.\n" +
+                "?entity a/rdfs:subClassOf* ?cpdomain.\n" +
+                "?cp rdfs:range ?cprange.\n" +
+                "?class rdfs:subClassOf ?cprange.\n" +
                 "?bn a ?class.\n" +
                 String.format("?dp rdfs:domain ?clazz. ?dp rdfs:label '%s'.\n", datatype) +
                 "?class rdfs:subClassOf* ?clazz.\n" +
@@ -1633,11 +1717,14 @@ public class KnowledgeQueryUtils {
     public List<String> checkEntityAndCpAndDatatype(String entity, String datatype,String complex) {
         String queryString = "SELECT DISTINCT ?class WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
-                "?entity ?cp ?bn.\n" +
+                "?cp rdfs:domain ?cpdomain.\n" +
+                "?entity a/rdfs:subClassOf* ?cpdomain.\n" +
+                "?cp rdfs:range ?cprange.\n" +
+                "?class rdfs:subClassOf* ?cprange.\n" +
                 String.format("?cp rdfs:label '%s'.\n",complex) +
                 "?bn a ?class.\n" +
                 String.format("?dp rdfs:domain ?clazz. ?dp rdfs:label '%s'.\n", datatype) +
-                "?class rdfs:subClassOf ?clazz.\n" +
+                "?class rdfs:subClassOf* ?clazz.\n" +
                 "}";
         return queryAndCheckStatus(queryString, b -> b.value("class"));
     }
@@ -1651,15 +1738,65 @@ public class KnowledgeQueryUtils {
         String queryString = "SELECT DISTINCT ?class ?ceLabel WHERE {\n" +
                 "VALUES ?ceLabel {" + ceLabels.toString() + "}\n" +
                 String.format("?entity rdfs:label '%s' .\n",entity) +
-                "?entity ?cp ?bn.\n" +
-                "?bn ?dp ?value.\n" +
+                "?cp rdfs:domain ?cpdomain.\n" +
+                "?cp rdfs:range ?cprange.\n" +
+                "?entity a/rdfs:subClassOf* ?cpdomain.\n" +
+                "?class rdfs:subClassof* ?cprange.\n" +
                 "?bn a ?class.\n" +
                 String.format("?dp rdfs:label '%s'.\n",datatype) +
                 "?ce rdfs:label ?ceLabel.\n" +
                 "?ce a ?cClass.\n" +
-                "?underCondition rdfs:domain ?bnClass.\n" +
-                "?class rdfs:subClassOf* ?bnClass.\n" +
-                "?underCondition rdfs:range ?cClass.\n" +
+                "?dp rdfs:domain ?dpdomain.\n" +
+                "?class rdfs:subClassOf* ?dpdomain.\n" +
+                "?underconditon rdfs:domain ?underconditiondomain.\n" +
+                "?underconditon rdfs:range ?underconditionrange.\n" +
+                "?class rdfs:subClassOf* ?underconditiondomain.\n" +
+                "?cClass rdfs:subClassOf* ?underconditionrange.\n" +
+                "}";
+        return queryAndCheckStatus(queryString, b -> b.value("class"));
+    }
+
+
+    public List<String> checkEntityAndCpUnderConditions(String entity,String complex,List<String> ces){
+        StringBuilder ceLabels = new StringBuilder();
+        for(Integer i=0;i<ces.size();++i){
+            ceLabels.append(String.format("'%s' ",ces.get(i)));
+        }
+        String queryString = "SELECT DISTINCT ?class ?ceLabel WHERE {\n" +
+                "VALUES ?ceLabel {" + ceLabels.toString() + "}\n" +
+                String.format("?entity rdfs:label '%s' .\n",entity) +
+                "?cp rdfs:domain ?cpdomain.\n" +
+                "?cp rdfs:range ?cprange.\n" +
+                String.format("?cp rdfs:label '%s'.\n",complex) +
+                "?entity a/rdfs:subClassOf* ?cpdomain.\n" +
+                "}";
+        return queryAndCheckStatus(queryString, b -> b.value("class"));
+    }
+
+
+    public List<String> checkEntityAndCpAndDatatypeUnderConditions(String entity,String complex,String datatype,List<String> ces){
+        StringBuilder ceLabels = new StringBuilder();
+        for(Integer i=0;i<ces.size();++i){
+            ceLabels.append(String.format("'%s' ",ces.get(i)));
+        }
+        String queryString = "SELECT DISTINCT ?class ?ceLabel WHERE {\n" +
+                "VALUES ?ceLabel {" + ceLabels.toString() + "}\n" +
+                String.format("?entity rdfs:label '%s' .\n",entity) +
+                "?cp rdfs:domain ?cpdomain.\n" +
+                "?cp rdfs:range ?cprange.\n" +
+                String.format("?cp rdfs:label '%s'.\n",complex) +
+                "?entity a/rdfs:subClassOf* ?cpdomain.\n" +
+                "?class rdfs:subClassof* ?cprange.\n" +
+                "?bn a ?class.\n" +
+                String.format("?dp rdfs:label '%s'.\n",datatype) +
+                "?ce rdfs:label ?ceLabel.\n" +
+                "?ce a ?cClass.\n" +
+                "?dp rdfs:domain ?dpdomain.\n" +
+                "?class rdfs:subClassOf* ?dpdomain.\n" +
+                "?underconditon rdfs:domain ?underconditiondomain.\n" +
+                "?underconditon rdfs:range ?underconditionrange.\n" +
+                "?class rdfs:subClassOf* ?underconditiondomain.\n" +
+                "?cClass rdfs:subClassOf* ?underconditionrange.\n" +
                 "}";
         return queryAndCheckStatus(queryString, b -> b.value("class"));
     }
@@ -1745,8 +1882,8 @@ public class KnowledgeQueryUtils {
                 propertyEnabled(b -> b.value("bn"), b -> b.value("dp")));
     }
 
-    public List<Pair<String,String>>  checkValidationOfEYshapeEntitiesAndDpAndCESReturnIRI(List<Pair<String,String>> entitiesPairs,String datatype,Map<String,String> cpces) {
-        List<String> ces = cpces.values().stream().collect(Collectors.toList());
+    public List<Pair<String,String>>  checkValidationOfEYshapeEntitiesAndDpAndCESReturnIRI(List<Pair<String,String>> entitiesPairs,String datatype,Map<String, String> cpces) {
+        List<String> ces = cpces.keySet().stream().collect(Collectors.toList());
         StringBuilder entitiesPairsAndcelabelclause = new StringBuilder();
         for (Pair<String, String> entitiesPair : entitiesPairs) {
             for (Integer i = 0; i < ces.size(); ++i) {
@@ -1838,19 +1975,85 @@ public class KnowledgeQueryUtils {
 
     public List<EntityAndBNAndDatatypeAndValue> queryDatatypeOfComplexPropertyAndDataype(String complex,String datatype) {
 
-        String queryString = "SELECT DISTINCT ?entity ?bn ?bnlabel ?datatype ?datatypeLabel ?value WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?entity ?bn ?bnlabel ?datatype ?value WHERE {\n" +
                 String.format("?entity ?cp ?bn . ?cp rdfs:label '%s'.\n", complex) +
-                "?datatype rdfs:label ?datatypeLabel ; rdf:type ?type. ?type rdfs:subClassOf* owl:DatatypeProperty .\n" +
+                "?datatype rdf:type ?type. ?type rdfs:subClassOf* owl:DatatypeProperty .\n" +
                 "?bn ?datatype ?value .\n" +
                 String.format("?datatype rdfs:label '%s'.\n",datatype)+
                 "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
                 "}";
         return queryAndCheckStatus(queryString, b -> new EntityAndBNAndDatatypeAndValue(b.value("entity"),
                         new BlankNode(b.value("bn"), b.value("bnlabel")),
-                        new DatatypeAndValue(b.value("datatypeLabel"), b.value("value"))),
+                        new DatatypeAndValue(datatype, b.value("value"))),
                 instanceEnabled("bn"),
                 propertyEnabled(b -> b.value("bn"), b -> b.value("datatype")))
                 .stream().distinct().collect(Collectors.toList());
+    }
+
+    public List<Pair<String,String>> checkEntitiesAndCp(List<String> entities,String complex){
+        StringBuilder entityValues = new StringBuilder();
+        for(String entity:entities){
+            entityValues.append(String.format("'%s' ",entity));
+        }
+
+        String queryString = "SELECT DISTINCT ?entity ?class WHERE {\n" +
+                "VALUES ?elabel {" +
+                entityValues.toString() +
+                "}\n" +
+                "?entity a ?class.\n" +
+                "?entity rdfs:label ?elabel.\n"+
+                "?cp rdfs:domain ?domain_cp.\n" +
+                "?class rdfs:subClassOf* ?domain_cp.\n" +
+                String.format("?cp a/rdfs:subClassOf* <%s>.\n",COMPLEX_PROPERTY) +
+                String.format("?cp rdfs:label '%s'.\n", complex) +
+                "}";
+        SelectResult result = knowledge.select(queryString);
+        List<Binding> bindings = result.getBindings();
+        List<Pair<String,String>> ret = new ArrayList<>();
+        for(Binding binding:bindings){
+            ret.add(new Pair<>(binding.value("entity"),binding.value("class")));
+        }
+        return ret;
+    }
+
+
+    public List<Pair<String,String>> checkEntitiesAndDp(List<String> entities,String datatype){
+        StringBuilder entityValues = new StringBuilder();
+        for(String entity:entities){
+            entityValues.append(String.format("'%s' ",entity));
+        }
+
+        String queryString = "SELECT DISTINCT ?entity ?class WHERE {\n" +
+                "VALUES ?elabel {" +
+                entityValues.toString() +
+                "}\n" +
+                "?entity rdfs:label ?elabel.\n"+
+                "?entity a ?class.\n" +
+                "{\n" +
+                "?dp rdfs:domain ?domain_dp.\n" +
+                "?class rdfs:subClassOf* ?domain_dp.\n" +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                String.format("?dp rdfs:label '%s'.\n", datatype) +
+                "} UNION {\n" +
+                "?cp rdfs:domain ?domain_cp.\n" +
+                "?class rdfs:subClassOf* ?domain_cp.\n" +
+                String.format("?cp a/rdfs:subClassOf* <%s>.\n",COMPLEX_PROPERTY) +
+                "?datatype rdf:type ?type. ?type rdfs:subClassOf* owl:DatatypeProperty .\n" +
+                "?cp rdfs:range ?range_cp.\n" +
+                "?bn a ?bnclass .\n" +
+                "?bnclass rdfs:subClassOf* ?range_cp.\n" +
+                "?datatype rdfs:domain ?domain_dp.\n" +
+                "?bnclass rdfs:subClassOf* ?domain_dp.\n" +
+                String.format("?datatype rdfs:label '%s'.\n",datatype)+
+                "}\n" +
+                "}";
+        SelectResult result = knowledge.select(queryString);
+        List<Binding> bindings = result.getBindings();
+        List<Pair<String,String>> ret = new ArrayList<>();
+        for(Binding binding:bindings){
+            ret.add(new Pair<>(binding.value("entity"),binding.value("class")));
+        }
+        return ret;
     }
 
     public List<Pair<String,String>> checkEntitiesAndCpAndDp(List<String> entities,String complex,String datatype){
@@ -1860,14 +2063,15 @@ public class KnowledgeQueryUtils {
         }
 
         String queryString = "SELECT DISTINCT ?entity ?class WHERE {\n" +
-                "VALUES ?entity {" +
+                "VALUES ?elabel {" +
                 entityValues.toString() +
                 "}\n" +
                 "?entity a ?class.\n" +
+                "?entity rdfs:label ?elabel." +
                 "?cp rdfs:domain ?domain_cp.\n" +
                 "?class rdfs:subClassOf* ?domain_cp.\n" +
                 String.format("?cp rdfs:label '%s'.\n", complex) +
-                "?datatype rdfs:label ?datatypeLabel ; rdf:type ?type. ?type rdfs:subClassOf* owl:DatatypeProperty .\n" +
+                "?datatype rdf:type ?type. ?type rdfs:subClassOf* owl:DatatypeProperty .\n" +
                 "?cp rdfs:range ?range_cp.\n" +
                 "?bn a ?bnclass .\n" +
                 "?bnclass rdfs:subClassOf* ?range_cp.\n" +
@@ -1875,45 +2079,6 @@ public class KnowledgeQueryUtils {
                 "?bnclass rdfs:subClassOf* ?domain_dp.\n" +
                 String.format("?datatype rdfs:label '%s'.\n",datatype)+
                 "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
-                "}";
-        SelectResult result = knowledge.select(queryString);
-        List<Binding> bindings = result.getBindings();
-        List<Pair<String,String>> ret = new ArrayList<>();
-        for(Binding binding:bindings){
-            ret.add(new Pair<>(binding.value("entity"),binding.value("class")));
-        }
-        return ret;
-    }
-    public List<Pair<String,String>> checkEntitiesAndCpAndDpUnderConditions(List<String> entities,String complex,String datatype,List<String> ces){
-        StringBuilder entityValues = new StringBuilder();
-        for(String entity:entities){
-            entityValues.append(String.format("'%s' ",entity));
-        }
-        StringBuilder cevliadClause = new StringBuilder();
-        for(Integer i=0;i<ces.size();++i){
-            cevliadClause.append(String.format("?op_%s rdfs:domain ?domain_op_%s.\n",i.toString(),i.toString()))
-                    .append(String.format("  {?bn rdf:type ?domain_op_%s.} UNION {?bn rdf:type ?bnClass. ?bnClass rdfs:subClassOf* ?domain_op_%s.}\n",i.toString(),i.toString()))
-                    .append(String.format("?op_%s rdfs:range ?range_op_%s.\n",i.toString(),i.toString()))
-                    .append(String.format("?ce_%s rdfs:label %s.\n",i.toString(),ces.get(i)))
-                    .append(String.format("{?ce_%s rdf:type ?range_op_%s.} UNION {?ce_%s rdf:type ?Class_ce_%s. ?Class_ce_%s rdfs:subClassOf* ?range_op_%s.}\n",i.toString(),i.toString(),i.toString(),i.toString(),i.toString(),i.toString()));
-        }
-        String queryString = "SELECT DISTINCT ?entity ?class WHERE {\n" +
-                "VALUES ?entity {" +
-                entityValues.toString() +
-                "}\n" +
-                "?entity a ?class.\n" +
-                "?cp rdfs:domain ?domain_cp.\n" +
-                "?class rdfs:subClassOf* ?domain_cp.\n" +
-                String.format("?cp rdfs:label '%s'.\n", complex) +
-                "?datatype rdfs:label ?datatypeLabel ; rdf:type ?type. ?type rdfs:subClassOf* owl:DatatypeProperty .\n" +
-                "?cp rdfs:range ?range_cp.\n" +
-                "?bn a ?bnclass .\n" +
-                "?bnclass rdfs:subClassOf* ?range_cp.\n" +
-                "?datatype rdfs:domain ?domain_dp.\n" +
-                "?bnclass rdfs:subClassOf* ?domain_dp.\n" +
-                String.format("?datatype rdfs:label '%s'.\n",datatype)+
-                "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
-                cevliadClause.toString() +
                 "}";
         SelectResult result = knowledge.select(queryString);
         List<Binding> bindings = result.getBindings();
@@ -1924,9 +2089,6 @@ public class KnowledgeQueryUtils {
         return ret;
     }
 
-    public List<EntityAndBNAndDatatypeAndValue> queryEntityAndBNAndDatatypeAndValueWithEntitiesAndCpAndDpUnderConditions(List<String> entities,String complex,String datatype,List<String> ces){
-        return null;
-    }
 
     public String queryCpWithEntityAndBN(String entity,String bn){
         String queryString = "SELECT DISTINCT ?cp ?cplabel WHERE {\n" +
@@ -1985,5 +2147,53 @@ public class KnowledgeQueryUtils {
             result_set.addAll(knowledge.selectOneAsList(queryString,"dpLabel"));
         }
         return result_set.stream().collect(Collectors.toList());
+    }
+
+    public List<String> queryValuewithEntityAndDatatype(String entity,String datatype){
+        String queryString = "SELECT DISTINCT  ?value WHERE {\n" +
+                String.format("?entity rdfs:label '%s' .\n",entity) +
+                "?entity ?dp ?value.\n" +
+                String.format("?dp rdfs:label '%s'.\n" ,datatype)+
+                "\n" +
+                "}";
+        logger.debug("query: {}",queryString);
+        return knowledge.selectOneAsList(queryString,"value");
+    }
+
+    public List<String> querydatatypeofBNWithCp(String entity,String cpiri){
+        String queryString = "SELECT DISTINCT  ?dpLabel WHERE {\n" +
+                String.format("?entity <%s> ?bn. ?entity rdfs:label '%s'.\n",cpiri,entity) +
+                "?bn ?dp ?value.\n" +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                "}";
+        logger.debug("query: {}",queryString);
+        return knowledge.selectOneAsList(queryString,"dpLabel");
+    }
+
+    public ListMultimap<String,String> checkEntitiesAndCpAndDpUnderConditions(List<String> entities,String complex,String datatype,List<String> ces){
+        ListMultimap<String,String> res = ArrayListMultimap.create();
+        for(String entity:entities){
+            List<String> tmp = checkEntityAndCpAndDatatypeUnderConditions(entity,complex,datatype,ces);
+            if(tmp != null && tmp.size() != 0){
+                for(String t: tmp){
+                    res.put(entity,t);
+                }
+            }
+        }
+        return res;
+    }
+
+    public ListMultimap<String,String> checkEntitiesAndCpUnderConditions(List<String> entities,String complex,List<String> ces){
+        ListMultimap<String,String> res = ArrayListMultimap.create();
+        for(String entity:entities){
+            List<String> tmp = checkEntityAndCpUnderConditions(entity,complex,ces);
+            if(tmp != null && tmp.size() != 0){
+                for(String t: tmp){
+                    res.put(entity,t);
+                }
+            }
+        }
+        return res;
     }
 }

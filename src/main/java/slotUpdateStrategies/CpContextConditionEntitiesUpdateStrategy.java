@@ -6,8 +6,7 @@ import ai.hual.labrador.dm.ContextedString;
 import ai.hual.labrador.dm.SlotUpdateStrategy;
 import ai.hual.labrador.nlu.QueryAct;
 import ai.hual.labrador.nlu.SlotValue;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,13 +33,13 @@ public class CpContextConditionEntitiesUpdateStrategy implements SlotUpdateStrat
         ListMultimap<String, SlotValue> slots = queryAct.getSlots();
         Object a = slots.entries().stream()
                 .filter(entry -> classes.contains(entry.getKey()))
-                .collect(Collectors.toMap(entry -> entry.getKey(),entry -> entry.getValue().getMatched()));
+                .collect(Collectors.toMap(entry -> entry.getValue().getMatched(),entry -> entry.getKey()));
         Map<String,String> result = (Map<String,String>) a;
         if(result.size() == 0)
             return o;
         if(o != null) {
-            for (Map.Entry<String, String> res : result.entrySet()) {
-                ((Map<String, String>) o).put(res.getKey(), res.getValue());
+            for (Map.Entry<String, String> entry : result.entrySet()) {
+                ((Map<String,String>) o).put(entry.getKey(), entry.getValue());
             }
             return o;
         } else
