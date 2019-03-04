@@ -2171,6 +2171,56 @@ public class KnowledgeQueryUtils {
         return knowledge.selectOneAsList(queryString,"dpLabel");
     }
 
+    public List<String> queryAllProperties(List<String> entities) {
+        StringBuilder entityValues = new StringBuilder();
+        for(String entity:entities){
+            entityValues.append(String.format("'%s' ",entity));
+        }
+        String queryDpString = "select distinct ?sLabel ?dpLabel\n" +
+                "where{\n" +
+                "VALUES ?sLabel {" +
+                entityValues.toString() +
+                "}\n" +
+                "?s rdfs:label ?sLabel.\n"+
+                "?s a ?class.\n" +
+                "?class rdfs:subClassOf* owl:Thing.\n" +
+                "?s ?dp ?value.\n" +
+                "?dp a ?pType.\n" +
+                "?pType rdfs:subClassOf owl:DatatypeProperty.\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                "}";
+
+        String queryOpString = "select distinct ?sLabel ?cpLabel ?dpLabel\n" +
+                "where{\n" +
+                "VALUES ?sLabel {" +
+                entityValues.toString() +
+                "}\n" +
+                "?s rdfs:label ?sLabel.\n"+
+                "?dp a ?pType.\n" +
+                "?pType rdfs:subClassOf owl:DatatypeProperty.\n" +
+                "?s ?cp ?bn.\n" +
+                "?bn ?dp ?value.\n" +
+                "?cp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                "optional{?cp rdfs:label ?cpLabel.}\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                "}";
+        logger.debug("SPARQL {}", queryDpString);
+        List<String> combineQuerys = new ArrayList<>();
+        for(Binding binding: knowledge.select(queryOpString).getBindings()){
+            String entity = binding.value("sLabel");
+            String cp = binding.value("cpLabel");
+            String dp = binding.value("dpLabel");
+            combineQuerys.add(String.format("%s%s的%s",entity,cp,dp));
+        }
+        for(Binding binding: knowledge.select(queryDpString).getBindings()){
+            String entity = binding.value("sLabel");
+            String dp = binding.value("dpLabel");
+            combineQuerys.add(String.format("%s的%s",entity,dp));
+        }
+
+        return combineQuerys;
+    }
+
     public ListMultimap<String,String> checkEntitiesAndCpAndDpUnderConditions(List<String> entities,String complex,String datatype,List<String> ces){
         ListMultimap<String,String> res = ArrayListMultimap.create();
         for(String entity:entities){
