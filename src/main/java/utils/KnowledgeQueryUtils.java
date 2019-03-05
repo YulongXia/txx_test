@@ -1221,14 +1221,16 @@ public class KnowledgeQueryUtils {
         String queryString = "SELECT DISTINCT ?class ?ceLabel WHERE {\n" +
                 "VALUES ?ceLabel {" + ceLabels.toString() + "}\n" +
                 String.format("?entity rdfs:label '%s' .\n",entity) +
-                "?entity ?cp ?bn.\n" +
+                "?entity a/rdfs:subClassOf* ?cpdomain.\n" +
+                "?cp rdfs:domain ?cpdomain.\n" +
+                "?cp rdfs:range ?cprange.\n" +
+                "?class rdfs:subClassOf* ?cprange.\n" +
                 "?bn a ?class.\n" +
                 String.format("?cp rdfs:label '%s'.\n",object) +
                 "?ce rdfs:label ?ceLabel.\n" +
                 "?ce a ?cClass.\n" +
-                "?underCondition rdfs:domain ?bnClass.\n" +
-                "?class rdfs:subClassOf* ?bnClass.\n" +
-                "?underCondition rdfs:range ?cClass.\n" +
+                "?underCondition rdfs:domain ?ceClass.\n" +
+                "?class rdfs:subClassOf* ?ceClass.\n" +
                 "}";
 
         List<String> result = knowledge.selectOneAsList(queryString,"class");
@@ -1633,7 +1635,7 @@ public class KnowledgeQueryUtils {
                 "}\n";
         Map<String,String> conds = new HashMap<>();
         for(Map.Entry<String,String> e: cpces.entrySet()){
-            conds.put(e.getValue(),e.getKey());
+            conds.put(e.getKey(),e.getValue());
         }
         List<BNAndDatatypeAndValueAndConditions> result =  queryAndCheckStatus(queryString1, b -> new BNAndDatatypeAndValueAndConditions(
                         new BlankNode(b.value("bn"), b.value("bnlabel")),
@@ -1996,7 +1998,7 @@ public class KnowledgeQueryUtils {
             entityValues.append(String.format("'%s' ",entity));
         }
 
-        String queryString = "SELECT DISTINCT ?entity ?class WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?elabel ?class WHERE {\n" +
                 "VALUES ?elabel {" +
                 entityValues.toString() +
                 "}\n" +
@@ -2011,7 +2013,7 @@ public class KnowledgeQueryUtils {
         List<Binding> bindings = result.getBindings();
         List<Pair<String,String>> ret = new ArrayList<>();
         for(Binding binding:bindings){
-            ret.add(new Pair<>(binding.value("entity"),binding.value("class")));
+            ret.add(new Pair<>(binding.value("elabel"),binding.value("class")));
         }
         return ret;
     }
@@ -2023,7 +2025,7 @@ public class KnowledgeQueryUtils {
             entityValues.append(String.format("'%s' ",entity));
         }
 
-        String queryString = "SELECT DISTINCT ?entity ?class WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?elabel ?class WHERE {\n" +
                 "VALUES ?elabel {" +
                 entityValues.toString() +
                 "}\n" +
@@ -2051,7 +2053,7 @@ public class KnowledgeQueryUtils {
         List<Binding> bindings = result.getBindings();
         List<Pair<String,String>> ret = new ArrayList<>();
         for(Binding binding:bindings){
-            ret.add(new Pair<>(binding.value("entity"),binding.value("class")));
+            ret.add(new Pair<>(binding.value("elabel"),binding.value("class")));
         }
         return ret;
     }
@@ -2062,7 +2064,7 @@ public class KnowledgeQueryUtils {
             entityValues.append(String.format("'%s' ",entity));
         }
 
-        String queryString = "SELECT DISTINCT ?entity ?class WHERE {\n" +
+        String queryString = "SELECT DISTINCT ?elabel ?class WHERE {\n" +
                 "VALUES ?elabel {" +
                 entityValues.toString() +
                 "}\n" +
@@ -2084,7 +2086,7 @@ public class KnowledgeQueryUtils {
         List<Binding> bindings = result.getBindings();
         List<Pair<String,String>> ret = new ArrayList<>();
         for(Binding binding:bindings){
-            ret.add(new Pair<>(binding.value("entity"),binding.value("class")));
+            ret.add(new Pair<>(binding.value("elabel"),binding.value("class")));
         }
         return ret;
     }
@@ -2169,6 +2171,56 @@ public class KnowledgeQueryUtils {
                 "}";
         logger.debug("query: {}",queryString);
         return knowledge.selectOneAsList(queryString,"dpLabel");
+    }
+
+    public List<String> queryAllProperties(List<String> entities) {
+        StringBuilder entityValues = new StringBuilder();
+        for(String entity:entities){
+            entityValues.append(String.format("'%s' ",entity));
+        }
+        String queryDpString = "select distinct ?sLabel ?dpLabel\n" +
+                "where{\n" +
+                "VALUES ?sLabel {" +
+                entityValues.toString() +
+                "}\n" +
+                "?s rdfs:label ?sLabel.\n"+
+                "?s a ?class.\n" +
+                "?class rdfs:subClassOf* owl:Thing.\n" +
+                "?s ?dp ?value.\n" +
+                "?dp a ?pType.\n" +
+                "?pType rdfs:subClassOf owl:DatatypeProperty.\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                "}";
+
+        String queryOpString = "select distinct ?sLabel ?cpLabel ?dpLabel\n" +
+                "where{\n" +
+                "VALUES ?sLabel {" +
+                entityValues.toString() +
+                "}\n" +
+                "?s rdfs:label ?sLabel.\n"+
+                "?dp a ?pType.\n" +
+                "?pType rdfs:subClassOf owl:DatatypeProperty.\n" +
+                "?s ?cp ?bn.\n" +
+                "?bn ?dp ?value.\n" +
+                "?cp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                "optional{?cp rdfs:label ?cpLabel.}\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                "}";
+        logger.debug("SPARQL {}", queryDpString);
+        List<String> combineQuerys = new ArrayList<>();
+        for(Binding binding: knowledge.select(queryOpString).getBindings()){
+            String entity = binding.value("sLabel");
+            String cp = binding.value("cpLabel");
+            String dp = binding.value("dpLabel");
+            combineQuerys.add(String.format("%s%s的%s",entity,cp,dp));
+        }
+        for(Binding binding: knowledge.select(queryDpString).getBindings()){
+            String entity = binding.value("sLabel");
+            String dp = binding.value("dpLabel");
+            combineQuerys.add(String.format("%s的%s",entity,dp));
+        }
+
+        return combineQuerys;
     }
 
     public ListMultimap<String,String> checkEntitiesAndCpAndDpUnderConditions(List<String> entities,String complex,String datatype,List<String> ces){

@@ -61,7 +61,8 @@ class KnowledgeQueryProperty {
         String complex = (String) context.getSlots().get("ComplexProperty");
 
         // remove bn with the same name as an entity
-        bn.removeAll(entities);
+        if(bn != null && bn.size() > 0)
+            bn.removeAll(entities);
 
         // return execute(context, bn, entities, mergedEntities, yshape, diffusion, condition, object, datatype);
         return execute(context, bn, entities, entities, yshape, diffusion, condition, object, datatype, complex);
@@ -97,7 +98,7 @@ class KnowledgeQueryProperty {
 //            return result;
 //        }
         ResponseExecutionResult result = execute(entities, yshape, diffusion, condition, object, datatype, complex, properties, context);
-        if (!"kg".equals(result.getResponseAct().getLabel()) && mergedEntities.size() > entities.size()) {
+        if (!"kg".equals(result.getResponseAct().getLabel()) && mergedEntities != null && mergedEntities.size() > entities.size()) {
             // no result
             mergedEntities.removeAll(entities);
             return execute(mergedEntities, yshape, diffusion, condition, object, datatype, complex, properties, context);
@@ -469,7 +470,7 @@ class KnowledgeQueryProperty {
                         if (valid17.size() > 0) {
                             //Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
                             //if (cpces == null || cpces.size() == 0) {
-                            return processEntitiesAndDp(entities, valid17, complex, context);
+                            return processEntitiesAndDp(entities, valid17, datatype, context);
                             // entities 至少有一个可以让 entity dp合法
 //                                List<Pair<String, String>> res = kgUtil.queryEntityAndDpWithEntitiesAndDp(entities, datatype);
 //                                if (res.size() == 1) {
@@ -794,7 +795,8 @@ class KnowledgeQueryProperty {
             List<String> entitiesOfProperty = kgUtil.queryEntityWithObject(property);
             if (entitiesOfProperty.size() == 0) {
                 logger.debug("3.3. 没有查询到实体时，转FAQ");
-                return faqResponse.faq(context, false);
+                //return faqResponse.faq(context, false);
+                return response.askEntitiesWithCp(kgUtil.queryEntityWithObject(kgUtil.queryCpIRI(complex)),complex,null,context);
             } else if (entitiesOfProperty.size() == 1) {
                 logger.debug("3.1. 查询到只有1个实体，则按识别出1个实体1个属性处理");
                 String entityOfDatatype = entitiesOfProperty.get(0);

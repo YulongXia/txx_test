@@ -1,0 +1,1199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ca06feca-fcc5-4a0f-8513-b675fab1c706" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pojo/EntitiesAndTheirProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pojo/EntitiesAndTheirProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/taikang_rs.iml" beforeDir="false" afterPath="$PROJECT_DIR$/taikang_rs.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/FAQExecution$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/FAQExecution$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/FAQExecution.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryExecution$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryExecution$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryExecution.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryInstances.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryProperty.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryPropertyWithBN.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQuerySubclasses.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/MCSExecution.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/UnknownClazz.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/executions/UnknownExecution.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BNAndDatatypeAndValue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BNAndDatatypeAndValueAndConditions.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BNAndPropertyAndValue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BNAndValue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BlankNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ComplexPropertiesAndValues.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionAndDatatypeValue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionClassesAndValues.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionEntityAndBN.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionEntityAndBNAndValue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/DatatypeAndValue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/EntitiesAndTheirProperties.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/EntityAndBNAndDatatypeAndValue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ObjectProperty.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/YshapeBNAndDP.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pojo/YshapeBNAndDPAndValue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/FAQResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$7.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/simplelogger.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/AlternativeSuggestionUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/BNUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/ConditionEntityUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/ConfirmationUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/DayUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/EntityUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/InitWithListStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/MergedEntityUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/MonthUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/YearUpdateStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$InstanceStatusChecker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$PropertyStatusChecker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$StatusChecker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/LimitSub.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/taikang_rs-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/Main.class" beforeDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/taikang_rs$Main.ic" NAME="Main Coverage Results" MODIFIED="1551281689033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/taikang_rs$Main.coverage" NAME="Main Coverage Results" MODIFIED="1528089186769" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
+      <file leaf-file-name="KnowledgeQueryProperty.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="413">
+              <caret line="63" selection-start-line="63" selection-end-line="63" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BNAndDatatypeAndValueAndConditions.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValueAndConditions.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="726">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#595#596#0" expanded="true" />
+                <element signature="e#620#621#0" expanded="true" />
+                <element signature="e#779#780#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KnowledgeQueryExecution.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="269">
+              <caret line="209" column="37" lean-forward="true" selection-start-line="209" selection-start-column="37" selection-end-line="209" selection-end-column="37" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CpContextConditionEntitiesUpdateStrategy.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConditionEntityUpdateStrategy.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="281">
+              <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KnowledgeQueryUtils.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="172">
+              <caret line="459" selection-start-line="459" selection-end-line="459" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KnowledgeQueryResponse.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="118">
+              <caret line="2132" column="35" selection-start-line="2132" selection-start-column="35" selection-end-line="2132" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LimitSub.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/utils/LimitSub.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="957">
+              <caret line="29" column="28" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Simulator.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="33">
+              <caret line="91" selection-start-line="91" selection-end-line="91" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>restCond</find>
+      <find>BN</find>
+      <find>BNAnd</find>
+      <find>BNAndDatatypeAndValue</find>
+      <find>singleenti</find>
+      <find>BNAndDatatypeAndValueAndConditions</find>
+      <find>checkEntityAndCpAnddatatype(String entity, String</find>
+      <find>checkEntityAndCpAndDatatypeUnderConditions</find>
+      <find>checkEntitiesAndCpAndDp</find>
+      <find>processEntitiesAndCp</find>
+      <find>singleEntityAndSingleProperty</find>
+      <find>checkEntitiesAndCpUnderConditions</find>
+      <find>recomm</find>
+      <find>tmp.size</find>
+      <find>Map&lt;String,List&lt;Map&lt;String,String&gt;&gt;&gt; aggregate = tmp.stream().</find>
+      <find>List&lt;String&gt; contents = entry.getValue().stream().map(x -&gt; x.keySet().iterator().next())</find>
+      <find>Map&lt;String,List&lt;Map&lt;String,String&gt;&gt;&gt; aggregate = tmp.stream().filter(x -&gt; x.values() != null &amp;&amp; x.values().size() != 0).collect(Collectors.groupingBy(x -&gt; x.values().iterator().next(),Collectors.toList()));</find>
+      <find>if(!items.containsKey(entry.getValue())){</find>
+      <find>items.get(entry.getValue()).contains(entry.getKey())</find>
+      <find>?entity {</find>
+      <find>response.answer(</find>
+      <find>items.containsKey(entry.getValue())</find>
+      <find>response.askWhichProperty(</find>
+      <find>askMultiAnswerWithEntityAndDp</find>
+      <find>conditions</find>
+      <find>String.format(</find>
+      <find>conds.put(e.get</find>
+      <find>items</find>
+      <find>List&lt;String&gt; items</find>
+      <find>&gt; rdfs:label ?label.</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>e.getKey() != null</replace>
+      <replace>cpces.keySet</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>D:\development\Work\taikang_rs</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/BnEntityUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryPropertyWithBN.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/ConditionEntityAndBNAndValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/responses/COOBResponse.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/BNUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/MergedEntityUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/slotUpdateStrategies/ConditionEntityUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/UnknownKgClazz.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/pojo/ConditionEntityAndBN.java" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/MCSExecution.java" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/UnknownClazz.java" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryInstances.java" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQuerySubclasses.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/UnknownExecution.java" />
+        <option value="$PROJECT_DIR$/src/main/java/responses/FAQResponse.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/ObjectProperty.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/ConditionEntitiesAndBNAndValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/ConditionEntityAndValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/BNAndPropertyAndValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/ConditionEntitiesAndBNAnddpAndValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/ComplexPropertiesAndValues.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/contextConditionsUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/cpContextConditionsUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/EntityUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionsUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/ConditionClassesAndValues.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/YshapeBNAndDPAndValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/EntityAndBNAndDatatypeAndValue.java" />
+        <option value="$PROJECT_DIR$/labrador.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValueAndConditions.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/test/java/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="Profiles" type="6783ec58:MavenProjectsStructure$ProfilesNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="taikang_rs" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="taikang_rs" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+      </expand>
+      <select />
+    </treeState>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-13" />
+    <option name="y" value="-17" />
+    <option name="width" value="1936" />
+    <option name="height" value="1008" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="executions" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="responses" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="slotUpdateStrategies" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="BNAndDatatypeAndValueAndConditions&#9;null&#9;null&#10;nlgimp&#9;FILE&#9;jar://C:/Users/Administrator/.m2/repository/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/nlg/NLGImpl.class&#10;nlg&#9;PSI&#9;JAVA://ai.hual.labrador.nlg.NLGImpl" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../labrador_algo" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="pojo" />
+      <recent name="slotUpdateStrategies" />
+      <recent name="executions" />
+      <recent name="utils" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\LL\hual\taikang_rs\src\main\java" />
+      <recent name="D:\LL\hual\taikang_rs\src\main\java\pojo" />
+      <recent name="D:\LL\hual\taikang_rs\src\main\java\executions" />
+      <recent name="D:\LL\hual\taikang_rs\src\main\java\slotUpdateStrategies" />
+      <recent name="D:\LL\hual\taikang_rs\src\main\java\responses" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="taikang_rs" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <properties />
+      <listeners />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ca06feca-fcc5-4a0f-8513-b675fab1c706" name="Default" comment="" />
+      <created>1521698391931</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1521698391931</updated>
+      <workItem from="1521698399018" duration="5736000" />
+      <workItem from="1525239381583" duration="6054000" />
+      <workItem from="1526545807714" duration="1238000" />
+      <workItem from="1528081178489" duration="8203000" />
+      <workItem from="1528184483078" duration="28695000" />
+      <workItem from="1530163271423" duration="7020000" />
+      <workItem from="1530245298330" duration="6772000" />
+      <workItem from="1531374917590" duration="7127000" />
+      <workItem from="1532071982487" duration="3041000" />
+      <workItem from="1533453704989" duration="1668000" />
+      <workItem from="1533954120862" duration="1560000" />
+      <workItem from="1533956636843" duration="939000" />
+      <workItem from="1534240872015" duration="10612000" />
+      <workItem from="1534299059231" duration="1288000" />
+      <workItem from="1534305171346" duration="6586000" />
+      <workItem from="1534508773976" duration="3314000" />
+      <workItem from="1534729681478" duration="5937000" />
+      <workItem from="1535338635417" duration="591000" />
+      <workItem from="1535508966415" duration="12000" />
+      <workItem from="1538207695034" duration="1147000" />
+      <workItem from="1550473495693" duration="7682000" />
+      <workItem from="1550542211669" duration="3603000" />
+      <workItem from="1550632004692" duration="27271000" />
+      <workItem from="1550713975044" duration="38615000" />
+      <workItem from="1550800286401" duration="1402000" />
+      <workItem from="1550801944807" duration="27165000" />
+      <workItem from="1550904846373" duration="623000" />
+      <workItem from="1550992606665" duration="13028000" />
+      <workItem from="1551019412426" duration="390000" />
+      <workItem from="1551065460184" duration="22973000" />
+      <workItem from="1551148063845" duration="10885000" />
+      <workItem from="1551232033102" duration="46524000" />
+      <workItem from="1551319484282" duration="13445000" />
+      <workItem from="1551338532316" duration="16847000" />
+      <workItem from="1551368079250" duration="86000" />
+      <workItem from="1551406160431" duration="28131000" />
+      <workItem from="1551495815805" duration="30955000" />
+      <workItem from="1551594927171" duration="14490000" />
+      <workItem from="1551609586547" duration="1058000" />
+      <workItem from="1551610916630" duration="12132000" />
+      <workItem from="1551665948187" duration="49253000" />
+      <workItem from="1551756649134" duration="1313000" />
+      <workItem from="1551778567907" duration="8466000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="499240000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <layout>
+      <window_info anchor="right" id="Palette" order="5" />
+      <window_info anchor="bottom" id="TODO" order="7" weight="0.32997763" />
+      <window_info anchor="bottom" id="Messages" order="1" weight="0.20134228" />
+      <window_info anchor="right" id="Palette&#9;" order="1" />
+      <window_info id="Image Layers" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="0" side_tool="true" />
+      <window_info anchor="right" x="651" y="73" width="617" height="894" id="Maven Projects" order="0" weight="0.32889125" />
+      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="3" weight="0.32997763" />
+      <window_info anchor="bottom" id="Run" order="8" weight="0.50223714" />
+      <window_info anchor="bottom" id="Spring" order="2" />
+      <window_info anchor="bottom" id="Terminal" order="4" weight="0.07606264" />
+      <window_info id="Capture Tool" order="0" />
+      <window_info id="Designer" order="1" />
+      <window_info content_ui="combo" id="Project" order="4" visible="true" weight="0.19296375" />
+      <window_info anchor="right" id="Database" order="2" weight="0.32995737" />
+      <window_info id="Structure" order="5" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="8" weight="0.25" />
+      <window_info id="UI Designer" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="4" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Debug" order="12" visible="true" weight="0.55369127" />
+      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="6" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
+      <window_info anchor="right" id="Coverage" order="7" side_tool="true" weight="0.32995737" />
+      <window_info anchor="bottom" id="Message" order="5" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="9" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="6" weight="0.32997763" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>798</line>
+          <properties />
+          <option name="timeStamp" value="385" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>459</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="386" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>52</line>
+          <properties />
+          <option name="timeStamp" value="387" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>63</line>
+          <properties />
+          <option name="timeStamp" value="388" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>67</line>
+          <properties />
+          <option name="timeStamp" value="389" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>72</line>
+          <properties />
+          <option name="timeStamp" value="390" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>99</line>
+          <properties />
+          <option name="timeStamp" value="391" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>113</line>
+          <properties />
+          <option name="timeStamp" value="392" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>126</line>
+          <properties />
+          <option name="timeStamp" value="393" />
+        </line-breakpoint>
+      </breakpoints>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="394" />
+    </breakpoint-manager>
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>queryAct.getSlots().entries().stream().filter(slot -&gt; classes.contains(slot.getKey())).map(slot -&gt; slot.getValue().getMatched()).distinct().collect(Collectors.toList())</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>context.getSlots().get(&quot;contextObject&quot;)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>aggregate.keySet()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>findEntities(queryAct)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>queryAct.getSlots().entries()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>queryAct.getSlots()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryPropertyWithBN.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="627">
+          <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/MCSExecution.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="19" column="32" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionEntityAndBN.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionAndDatatypeValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/kg/Binding.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/remote/RemoteKnowledgeAccessor.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/remote/KnowledgeGraphDAO.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/remote/VirtuosoHTTPKnowledgeGraphDAO.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/kg/SelectResult.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1122">
+          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/kg/KnowledgeAccessor.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionEntitiesAndBNAnddpAndValue.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionEntityAndBNAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="8" column="47" selection-start-line="8" selection-start-column="47" selection-end-line="8" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/DayUpdateStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConfirmationUpdateStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="13" column="69" selection-start-line="13" selection-start-column="51" selection-end-line="13" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="528">
+          <caret line="20" column="18" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/simplelogger.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/taikang_rs.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/java/HSMPolicyManager.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ComplexPropertiesAndValues.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="29" lean-forward="true" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndPropertyAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="8" column="32" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionClassesAndValues.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="25" column="34" lean-forward="true" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/nlg/NLGImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="94" column="44" lean-forward="true" selection-start-line="94" selection-start-column="44" selection-end-line="94" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/Context.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="819">
+          <caret line="89" selection-start-line="89" selection-end-line="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/BNUpdateStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/AlternativeSuggestionUpdateStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-99">
+          <caret line="32" column="51" selection-start-line="32" selection-start-column="51" selection-end-line="32" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/stream/Stream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="934" column="16" selection-start-line="934" selection-start-column="16" selection-end-line="934" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="395" column="10" selection-start-line="395" selection-start-column="10" selection-end-line="395" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ObjectProperty.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/nlu/SlotValue.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="33">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryInstances.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="14" column="6" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BlankNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/YshapeBNAndDP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="3" selection-start-line="3" selection-end-line="56" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/EntityAndBNAndDatatypeAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="2" column="43" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labrador.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="11" column="61" lean-forward="true" selection-start-line="11" selection-start-column="61" selection-end-line="11" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/EntityUpdateStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="44" selection-start-line="44" selection-end-line="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/YshapeBNAndDPAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="33">
+          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/DatatypeAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="e#297#298#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/EntitiesAndTheirProperties.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="957">
+          <caret line="29" column="28" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValueAndConditions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="726">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#595#596#0" expanded="true" />
+            <element signature="e#620#621#0" expanded="true" />
+            <element signature="e#779#780#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/LimitSub.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="33">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="2132" column="35" selection-start-line="2132" selection-start-column="35" selection-end-line="2132" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="459" selection-start-line="459" selection-end-line="459" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="209" column="37" lean-forward="true" selection-start-line="209" selection-start-column="37" selection-end-line="209" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="413">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Spring</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>taikang_rs</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: ai.hual:labrador_algo:1.0.0-SNAPSHOT</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

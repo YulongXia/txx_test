@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 .idea/*.xml
+.idea/*.xml~.*
 # Compiled class file
 *.class
 
 
+=======
+# Compiled class file
+*.class
+
+>>>>>>> c63ea30a7e108f11ccc55cb265911e12ac9af894
 # Log file
 *.log
 
@@ -13,10 +20,17 @@
 .mtj.tmp/
 
 # Package Files #
+<<<<<<< HEAD
 # *.jar
 *.war
 *.ear
 # *.zip
+=======
+*.jar
+*.war
+*.ear
+*.zip
+>>>>>>> c63ea30a7e108f11ccc55cb265911e12ac9af894
 *.tar.gz
 *.rar
 
@@ -40,6 +54,7 @@ hs_err_pid*
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
+<<<<<<< HEAD
 .idea/modules.xml
 .idea/codeStyleSettings.xml
 .idea/codeStyles/
@@ -48,6 +63,8 @@ hs_err_pid*
 .classpath
 .project
 .settings/
+=======
+>>>>>>> c63ea30a7e108f11ccc55cb265911e12ac9af894
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
@@ -57,7 +74,10 @@ hs_err_pid*
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
+<<<<<<< HEAD
 .idea/misc.xml
+=======
+>>>>>>> c63ea30a7e108f11ccc55cb265911e12ac9af894
 
 # Gradle:
 .idea/**/gradle.xml
@@ -105,6 +125,7 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/intellij
+<<<<<<< HEAD
 
 # Local test file
 /src/test/java/ai/hual/labrador/nlu/annotators/PinyinDictFileTest.java
@@ -127,3 +148,5 @@ fabric.properties
 
 # logger config
 simplelogger.properties
+=======
+>>>>>>> c63ea30a7e108f11ccc55cb265911e12ac9af894

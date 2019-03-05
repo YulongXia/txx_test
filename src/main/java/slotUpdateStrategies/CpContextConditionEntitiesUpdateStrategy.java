@@ -31,10 +31,20 @@ public class CpContextConditionEntitiesUpdateStrategy implements SlotUpdateStrat
     @Override
     public Object update(QueryAct queryAct, Object o, Context context) {
         ListMultimap<String, SlotValue> slots = queryAct.getSlots();
-        Object a = slots.entries().stream()
-                .filter(entry -> classes.contains(entry.getKey()))
-                .collect(Collectors.toMap(entry -> entry.getValue().getMatched(),entry -> entry.getKey()));
-        Map<String,String> result = (Map<String,String>) a;
+//        Object a = slots.entries().stream()
+//                .filter(entry -> classes.contains(entry.getKey()))
+//                .collect(Collectors.toMap(entry -> entry.getValue().getMatched(),entry -> entry.getKey()));
+        Map<String,String> result = new HashMap<>();
+        Iterator it = slots.keySet().iterator();
+        while(it.hasNext()){
+            String key = (String) it.next();
+            if(classes.contains(key)){
+                List<SlotValue> value = slots.get(key);
+                for(SlotValue sv: value){
+                    result.put((String)sv.getMatched(),key);
+                }
+            }
+        }
         if(result.size() == 0)
             return o;
         if(o != null) {

@@ -4,9 +4,11 @@ import ai.hual.labrador.dialog.AccessorRepository;
 import ai.hual.labrador.dialog.AccessorRepositoryImpl;
 import ai.hual.labrador.dialog.accessors.RelatedQuestionAccessor;
 import ai.hual.labrador.dm.*;
+import ai.hual.labrador.dm.java.DialogConfig;
 import ai.hual.labrador.kg.KnowledgeStatus;
 import ai.hual.labrador.kg.KnowledgeStatusAccessor;
 import ai.hual.labrador.nlg.ResponseAct;
+import ai.hual.labrador.nlu.NLUResult;
 import ai.hual.labrador.nlu.constants.SystemIntents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +65,60 @@ public class KnowledgeQueryExecution implements Execution {
 
     @Override
     public ExecutionResult execute(Context context) {
+        String chosenMatcher = context.<NLUResult>get(DialogConfig.SYSTEM_NLU_RESULT_NAME).getChosenMatcher();
+        Double chosenScore = context.<NLUResult>get(DialogConfig.SYSTEM_NLU_RESULT_NAME).getChosenScore();
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        if (chosenMatcher.equals("ClassifierIntentMatcher") && chosenScore < 0.3) {
+            result = (ResponseExecutionResult) askProperty.execute(context);
+            if(!result.getResponseAct().getSlots().get("result").isEmpty()) {
+                List<String> entities = (List<String>)context.getSlots().get("entity");
+                String cp = (String) context.getSlots().get("ComplexProperty");
+                String dp = (String) context.getSlots().get("datatype");
+                if(entities.size() > 0){
+                    List<String> allQuerys = new KnowledgeQueryUtils(accessorRepository.getKnowledgeAccessor(), accessorRepository.getKnowledgeStatusAccessor()).queryAllProperties(entities);
+                    entities.forEach(x -> String.format("%s%s的%s",x,cp,dp));
+                    allQuerys.retainAll(entities);
+                    if(allQuerys.size() > 0){
+                        result.setInstructions(Arrays.asList(new Instruction("recommendation")
+                                        .addParam("title", "您想了解的可能是以下内容")
+                                        .addParam("items", allQuerys),
+                                new Instruction("feedback").addParam("display","true")));
+                        return result;
+                    }
+                }
+                result.setResponseAct(new ResponseAct(SystemIntents.UNKNOWN));
+                result.setInstructions(null);
+                return result;
+            }else{
+                return result;
+            }
+        }
+        else if(chosenMatcher.equals("ClassifierIntentMatcher") && chosenScore >= 0.3 && chosenScore < 0.8){
+            result = (ResponseExecutionResult) askProperty.execute(context);
+            if(!result.getResponseAct().getSlots().get("result").isEmpty()) {
+                List<String> entities = (List<String>)context.getSlots().get("entity");
+                String cp = (String) context.getSlots().get("ComplexProperty");
+                String dp = (String) context.getSlots().get("datatype");
+                if(entities.size() > 0){
+                    List<String> allQuerys = new KnowledgeQueryUtils(accessorRepository.getKnowledgeAccessor(), accessorRepository.getKnowledgeStatusAccessor()).queryAllProperties(entities);
+                    entities.forEach(x -> String.format("%s%s的%s",x,cp,dp));
+                    allQuerys.retainAll(entities);
+                    if(allQuerys.size() > 0){
+                        result.setInstructions(Arrays.asList(new Instruction("recommendation")
+                                        .addParam("title", "您想了解的可能是以下内容")
+                                        .addParam("items", allQuerys),
+                                new Instruction("feedback").addParam("display","true")));
+                        return result;
+                    }else{
+                        context.getSlots().remove("entity");
+                        return askProperty.execute(context);
+                    }
+                }
+                return result;
+            }else{
+                return result;
+            }
+        }
         if (Optional.ofNullable(context.getSlots().get("反问被否认")).map(x -> (boolean) x).orElse(false)) {
             logger.debug("Suggest alternatives");
             return suggestAlternatives(context);
@@ -92,8 +148,7 @@ public class KnowledgeQueryExecution implements Execution {
                 sb.append(alternative.get(0));
             }
             if (alternative.get(1) != null) {
-                String object = new KnowledgeQueryUtils(accessorRepository.getKnowledgeAccessor(), accessorRepository.getKnowledgeStatusAccessor())
-                        .queryObjectLabel(alternative.get(1));
+                String object = new KnowledgeQueryUtils(accessorRepository.getKnowledgeAccessor(), accessorRepository.getKnowledgeStatusAccessor()).queryObjectLabel(alternative.get(1));
                 if (object != null) {
                     sb.append(object);
                 }
