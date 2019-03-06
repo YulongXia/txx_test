@@ -2,83 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca06feca-fcc5-4a0f-8513-b675fab1c706" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pojo/EntitiesAndTheirProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pojo/EntitiesAndTheirProperties.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/taikang_rs.iml" beforeDir="false" afterPath="$PROJECT_DIR$/taikang_rs.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/FAQExecution$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/FAQExecution$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/FAQExecution.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryExecution$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryExecution$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryExecution.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryInstances.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryProperty.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryPropertyWithBN.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQuerySubclasses.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/KnowledgeQueryType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/MCSExecution.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/UnknownClazz.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/executions/UnknownExecution.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BNAndDatatypeAndValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BNAndDatatypeAndValueAndConditions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BNAndPropertyAndValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BNAndValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/BlankNode.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ComplexPropertiesAndValues.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionAndDatatypeValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionClassesAndValues.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionEntity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionEntityAndBN.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ConditionEntityAndBNAndValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/DatatypeAndValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/EntitiesAndTheirProperties.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/EntityAndBNAndDatatypeAndValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/ObjectProperty.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/YshapeBNAndDP.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pojo/YshapeBNAndDPAndValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/FAQResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$6.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse$7.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/responses/KnowledgeQueryResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/simplelogger.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/AlternativeSuggestionUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/BNUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/ConditionEntityUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/ConfirmationUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/DayUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/EntityUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/InitWithListStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/MergedEntityUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/MonthUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/slotUpdateStrategies/YearUpdateStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$InstanceStatusChecker.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$PropertyStatusChecker.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils$StatusChecker.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/KnowledgeQueryUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/LimitSub.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/taikang_rs-1.0-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/Main.class" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -112,8 +39,8 @@
       <file leaf-file-name="KnowledgeQueryProperty.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="63" selection-start-line="63" selection-end-line="63" />
+            <state relative-caret-position="-418">
+              <caret line="305" column="62" lean-forward="true" selection-start-line="305" selection-start-column="62" selection-end-line="305" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -139,8 +66,8 @@
       <file leaf-file-name="KnowledgeQueryExecution.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="209" column="37" lean-forward="true" selection-start-line="209" selection-start-column="37" selection-end-line="209" selection-end-column="37" />
+            <state relative-caret-position="295">
+              <caret line="209" column="40" selection-start-line="209" selection-start-column="40" selection-end-line="209" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -151,7 +78,7 @@
       <file leaf-file-name="CpContextConditionEntitiesUpdateStrategy.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
+            <state relative-caret-position="759">
               <caret line="32" selection-start-line="32" selection-end-line="32" />
             </state>
           </provider>
@@ -161,7 +88,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="281">
-              <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+              <caret line="31" column="28" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -169,11 +96,8 @@
       <file leaf-file-name="KnowledgeQueryUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="459" selection-start-line="459" selection-end-line="459" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="417">
+              <caret line="1638" column="67" selection-start-line="1638" selection-start-column="54" selection-end-line="1638" selection-end-column="67" />
             </state>
           </provider>
         </entry>
@@ -181,8 +105,8 @@
       <file leaf-file-name="KnowledgeQueryResponse.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="2132" column="35" selection-start-line="2132" selection-start-column="35" selection-end-line="2132" selection-end-column="35" />
+            <state relative-caret-position="968">
+              <caret line="1909" column="58" lean-forward="true" selection-start-line="1909" selection-start-column="58" selection-end-line="1909" selection-end-column="58" />
             </state>
           </provider>
         </entry>
@@ -190,7 +114,7 @@
       <file leaf-file-name="LimitSub.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/utils/LimitSub.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
+            <state relative-caret-position="132">
               <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
             </state>
           </provider>
@@ -208,7 +132,7 @@
       <file leaf-file-name="Simulator.class" pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="33">
+            <state relative-caret-position="2508">
               <caret line="91" selection-start-line="91" selection-end-line="91" />
             </state>
           </provider>
@@ -225,13 +149,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>restCond</find>
-      <find>BN</find>
-      <find>BNAnd</find>
-      <find>BNAndDatatypeAndValue</find>
-      <find>singleenti</find>
-      <find>BNAndDatatypeAndValueAndConditions</find>
-      <find>checkEntityAndCpAnddatatype(String entity, String</find>
       <find>checkEntityAndCpAndDatatypeUnderConditions</find>
       <find>checkEntitiesAndCpAndDp</find>
       <find>processEntitiesAndCp</find>
@@ -255,6 +172,13 @@
       <find>items</find>
       <find>List&lt;String&gt; items</find>
       <find>&gt; rdfs:label ?label.</find>
+      <find>conditions:</find>
+      <find>map(x -&gt; x.getConditions())</find>
+      <find>reswith</find>
+      <find>StringBuilder conditionSentence = new StringBuilder();</find>
+      <find>conditionClasses</find>
+      <find>tmp.size() &gt; 3 &amp;&amp; conditionClasses.size() &gt; 1</find>
+      <find>processEntityAndC</find>
     </findStrings>
     <replaceStrings>
       <replace>e.getKey() != null</replace>
@@ -304,9 +228,9 @@
         <option value="$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValueAndConditions.java" />
         <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java" />
         <option value="$PROJECT_DIR$/src/test/java/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" />
         <option value="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" />
-        <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" />
         <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" />
       </list>
     </option>
@@ -348,8 +272,8 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-13" />
-    <option name="y" value="-17" />
+    <option name="x" value="561" />
+    <option name="y" value="62" />
     <option name="width" value="1936" />
     <option name="height" value="1008" />
   </component>
@@ -445,9 +369,9 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -596,12 +520,13 @@
       <workItem from="1551610916630" duration="12132000" />
       <workItem from="1551665948187" duration="49253000" />
       <workItem from="1551756649134" duration="1313000" />
-      <workItem from="1551778567907" duration="8466000" />
+      <workItem from="1551778567907" duration="8707000" />
+      <workItem from="1551839186136" duration="19169000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="499240000" />
+    <option name="totallyTimeSpent" value="518650000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -614,6 +539,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="5" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.32997763" />
@@ -625,19 +551,19 @@
       <window_info anchor="right" x="651" y="73" width="617" height="894" id="Maven Projects" order="0" weight="0.32889125" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="3" weight="0.32997763" />
-      <window_info anchor="bottom" id="Run" order="8" weight="0.50223714" />
+      <window_info anchor="bottom" id="Run" order="8" visible="true" weight="0.2080537" />
       <window_info anchor="bottom" id="Spring" order="2" />
       <window_info anchor="bottom" id="Terminal" order="4" weight="0.07606264" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="1" />
-      <window_info content_ui="combo" id="Project" order="4" visible="true" weight="0.19296375" />
+      <window_info active="true" content_ui="combo" id="Project" order="4" visible="true" weight="0.19509594" />
       <window_info anchor="right" id="Database" order="2" weight="0.32995737" />
       <window_info id="Structure" order="5" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="8" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="4" />
       <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Debug" order="12" visible="true" weight="0.55369127" />
+      <window_info anchor="bottom" id="Debug" order="12" weight="0.4787472" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="right" id="Commander" order="6" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
@@ -658,7 +584,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>798</line>
+          <line>786</line>
           <properties />
           <option name="timeStamp" value="385" />
         </line-breakpoint>
@@ -712,11 +638,109 @@
           <properties />
           <option name="timeStamp" value="393" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>1142</line>
+          <properties />
+          <option name="timeStamp" value="395" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>1157</line>
+          <properties />
+          <option name="timeStamp" value="396" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>1370</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="397" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>1147</line>
+          <properties />
+          <option name="timeStamp" value="398" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>1152</line>
+          <properties />
+          <option name="timeStamp" value="399" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
+          <line>574</line>
+          <properties />
+          <option name="timeStamp" value="400" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>1153</line>
+          <properties />
+          <option name="timeStamp" value="402" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java</url>
+          <line>70</line>
+          <properties />
+          <option name="timeStamp" value="403" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java</url>
+          <line>72</line>
+          <properties />
+          <option name="timeStamp" value="404" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>723</line>
+          <properties />
+          <option name="timeStamp" value="405" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>777</line>
+          <properties />
+          <option name="timeStamp" value="406" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>1111</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="407" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>1581</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="408" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>1610</line>
+          <properties />
+          <option name="timeStamp" value="409" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>1588</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="410" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="394" />
+      <option name="time" value="411" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -1056,53 +1080,50 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/utils/LimitSub.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
+        <state relative-caret-position="132">
           <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="33">
+        <state relative-caret-position="2508">
           <caret line="91" selection-start-line="91" selection-end-line="91" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
+        <state relative-caret-position="759">
           <caret line="32" selection-start-line="32" selection-end-line="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="2132" column="35" selection-start-line="2132" selection-start-column="35" selection-end-line="2132" selection-end-column="35" />
+        <state relative-caret-position="281">
+          <caret line="31" column="28" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="459" selection-start-line="459" selection-end-line="459" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="417">
+          <caret line="1638" column="67" selection-start-line="1638" selection-start-column="54" selection-end-line="1638" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="968">
+          <caret line="1909" column="58" lean-forward="true" selection-start-line="1909" selection-start-column="58" selection-end-line="1909" selection-end-column="58" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="209" column="37" lean-forward="true" selection-start-line="209" selection-start-column="37" selection-end-line="209" selection-end-column="37" />
+        <state relative-caret-position="295">
+          <caret line="209" column="40" selection-start-line="209" selection-start-column="40" selection-end-line="209" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1111,8 +1132,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="63" selection-start-line="63" selection-end-line="63" />
+        <state relative-caret-position="-418">
+          <caret line="305" column="62" lean-forward="true" selection-start-line="305" selection-start-column="62" selection-end-line="305" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

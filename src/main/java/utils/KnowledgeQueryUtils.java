@@ -1134,26 +1134,23 @@ public class KnowledgeQueryUtils {
     }
 
     public List<Pair<String,String>> queryDatatypesWithOneTypeBN(List<String> bns){
-        StringBuilder bnsclause = new StringBuilder();
+        Set<Pair<String,String>> result = new HashSet<>();
         for(String bn:bns){
-            bnsclause.append(String.format("<%s>",bn));
+            String queryString = "select distinct ?cpLabel ?dpLabel \n" +
+                    "where { \n" +
+                    String.format("?s ?cp <%s>.\n",bn) +
+                    "?cp rdfs:label ?cpLabel.\n " +
+                    "?cp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                    String.format("<%s> ?dp ?value.\n",bn) +
+                    "?dp rdf:type/rdfs:subClassOf  owl:DatatypeProperty.\n" +
+                    "?dp rdfs:label ?dpLabel.\n" +
+                    "}";
+            SelectResult res = knowledge.select(queryString);
+            for(Binding b:res.getBindings()){
+                result.add(new Pair<>(b.value("cpLabel"),b.value("dpLabel")));
+            }
         }
-        String queryString = "select distinct ?cpLabel ?dpLabel \n" +
-                "where { \n" +
-                String.format("values ?bn {%s}\n",bnsclause.toString()) +
-                "?s ?cp ?bn.\n" +
-                "?cp rdfs:label ?cpLabel" +
-                "?cp rdf:type/rdfs:subPropertyOf* <http://hual.ai/new_standard#ComplexProperty>.\n" +
-                "?bn ?dp ?value.\n" +
-                "?dp rdf:type/rdfs:subClassOf  owl:DatatypeProperty.\n" +
-                "?dp rdfs:label ?dpLabel" +
-                "}";
-        SelectResult res = knowledge.select(queryString);
-        List<Pair<String,String>> result = new ArrayList<>();
-        for(Binding b:res.getBindings()){
-            result.add(new Pair<>(b.value("cpLabel"),b.value("dpLabel")));
-        }
-        return result;
+        return result.stream().collect(Collectors.toList());
     }
 
     public List<Pair<String,String>> queryDatatypesWithOneTypeBN(List<String> bns,Map<String,String> cpces){
@@ -1162,27 +1159,27 @@ public class KnowledgeQueryUtils {
         for(Integer i = 0; i<ces.size();++i){
             cesclause.append(String.format("?bn ?op_%s ?ce_%s.?ce_%s rdfs:label '%s'. ?op_%s rdf:type  <http://hual.ai/new_standard#ObjectProperty>.\n",i.toString(),i.toString(),i.toString(),ces.get(i),i.toString()));
         }
+        Set<Pair<String,String>> result = new HashSet<>();
         StringBuilder bnsclause = new StringBuilder();
         for(String bn:bns){
-            bnsclause.append(String.format("<%s>",bn));
+            String queryString = "select distinct ?cpLabel ?dpLabel \n" +
+                    "where { \n" +
+                    String.format("values ?bn {%s}\n",bnsclause.toString()) +
+                    "?s ?cp ?bn.\n" +
+                    "?cp rdfs:label ?cpLabel." +
+                    "?cp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                    "?bn ?dp ?value.\n" +
+                    "?dp rdf:type/rdfs:subClassOf  owl:DatatypeProperty.\n" +
+                    "?dp rdfs:label ?dpLabel." +
+                    cesclause.toString() +
+                    "}";
+            SelectResult res = knowledge.select(queryString);
+            for(Binding b:res.getBindings()){
+                result.add(new Pair<>(b.value("cpLabel"),b.value("dpLabel")));
+            }
         }
-        String queryString = "select distinct ?cpLabel ?dpLabel \n" +
-                "where { \n" +
-                String.format("values ?bn {%s}\n",bnsclause.toString()) +
-                "?s ?cp ?bn.\n" +
-                "?cp rdfs:label ?cpLabel" +
-                "?cp rdf:type/rdfs:subPropertyOf* <http://hual.ai/new_standard#ComplexProperty>.\n" +
-                "?bn ?dp ?value.\n" +
-                "?dp rdf:type/rdfs:subClassOf  owl:DatatypeProperty.\n" +
-                "?dp rdfs:label ?dpLabel" +
-                cesclause.toString() +
-                "}";
-        SelectResult res = knowledge.select(queryString);
-        List<Pair<String,String>> result = new ArrayList<>();
-        for(Binding b:res.getBindings()){
-            result.add(new Pair<>(b.value("cpLabel"),b.value("dpLabel")));
-        }
-        return result;
+
+        return result.stream().collect(Collectors.toList());
     }
 
 //    public String queryAnotherEntityLabelOfwithbnByOneEntityAndBn(String entity,String bn){
@@ -1578,7 +1575,7 @@ public class KnowledgeQueryUtils {
                 String.format("?datatype rdfs:label '%s'.\n",datatype) +
                 "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
                 cesclause.toString() +
-                "?bn ?op ?condition.?condition rdfs:label ?condition_label.?condition a ?conditionClass. ?conditionClass rdfs:label ?conditionClassLabel.?op a <http://hual.ai/new_standard#ObjectProperty>.\n" +
+                "optional {?bn ?op ?condition.?condition rdfs:label ?condition_label.?condition a ?conditionClass. ?conditionClass rdfs:label ?conditionClassLabel.?op a <http://hual.ai/new_standard#ObjectProperty>.}\n" +
                 String.format("FILTER (?condition_label NOT IN (%s))",String.join(",",ceswithquotationmark)) +
                 "}";
 
