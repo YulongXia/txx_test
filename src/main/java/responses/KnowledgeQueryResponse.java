@@ -566,7 +566,7 @@ public class KnowledgeQueryResponse {
             List<String> datatypesofbn = kgUtil.querydatatypeofBNWithCp(entity, object.getUri());
             for (String datatypeofbn : datatypesofbn) {
                 sentences.add(String.format("%s%s的%s", entity
-                        , object.getBN().getLabel() == null || object.getBN().getLabel().length() == 0 ? String.format("的%s", object.getLabel()) : String.format("的%s", object.getBN().getLabel())
+                        , object.getLabel() != null && object.getLabel().length() != 0 ? String.format("的%s", object.getLabel()) : object.getBN().getLabel() == null || object.getBN().getLabel().length() == 0 ? "" : String.format("的%s", object.getBN().getLabel())
                         , datatypeofbn
                 ));
             }
