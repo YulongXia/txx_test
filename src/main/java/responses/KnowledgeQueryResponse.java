@@ -1764,13 +1764,13 @@ public class KnowledgeQueryResponse {
             if (r.getConditions().isEmpty())
                 sentence = String.format("%s的%s的%s"
                         , entity
-                        , kgUtil.queryCpWithEntityAndBN(entity, reswithoutConds.get(0).getBn().getIri())
+                        , kgUtil.queryCpWithEntityAndBN(entity, r.getBn().getIri())
                         , r.getDatatypeAndValue().getDatatype());
             else
-                sentence = String.format("%s在%s下的%s的%s"
+                sentence = String.format("%s%s的%s的%s"
                         , entity
-                        , kgUtil.queryCpWithEntityAndBN(entity, reswithoutConds.get(0).getBn().getIri())
                         , String.join(",", r.getConditions().keySet())
+                        , kgUtil.queryCpWithEntityAndBN(entity, r.getBn().getIri())
                         , r.getDatatypeAndValue().getDatatype());
             items.add(sentence);
         }
@@ -1832,13 +1832,13 @@ public class KnowledgeQueryResponse {
             if (r.getConditions().isEmpty())
                 sentence = String.format("%s的%s的%s"
                         , entity
-                        , kgUtil.queryCpWithEntityAndBN(entity, reswithoutConds.get(0).getBn().getIri())
+                        , kgUtil.queryCpWithEntityAndBN(entity, r.getBn().getIri())
                         , r.getDatatypeAndValue().getDatatype());
             else
-                sentence = String.format("%s在%s下的%s的%s"
+                sentence = String.format("%s%s的%s的%s"
                         , entity
-                        , kgUtil.queryCpWithEntityAndBN(entity, reswithoutConds.get(0).getBn().getIri())
                         , String.join(",", r.getConditions().keySet())
+                        , kgUtil.queryCpWithEntityAndBN(entity, r.getBn().getIri())
                         , r.getDatatypeAndValue().getDatatype());
             items.add(sentence);
         }
