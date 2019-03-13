@@ -1084,6 +1084,48 @@ public class KnowledgeQueryResponse {
         return result;
     }
 
+    public ResponseExecutionResult answer(String entity, String complex, String datatype, String value, Map<String,String> cpces,Context context) {
+        ResponseExecutionResult disabled = checkDisabled(entity, datatype);
+        if (disabled != null) {
+            return disabled;
+        }
+
+//        context.getSlots().put("contextEntity", Collections.singletonList(entity));
+//        context.getSlots().put("contextBN", null);
+//        context.getSlots().put("contextObject", null);
+//        context.getSlots().put("contextDatatype", datatype);
+//        context.getSlots().put("contextConditionEntity", null);
+
+        context.getSlots().put("contextEntity", null);
+        context.getSlots().put("contextBN", null);
+        context.getSlots().put("contextObject", null);
+        context.getSlots().put("contextDatatype", null);
+        context.getSlots().put("contextConditionEntity", null);
+        context.getSlots().put("cpContextConditionEntities", null);
+
+
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        result.setResponseAct(new ResponseAct("kg")
+                .put("entity", String.format("%s%s",entity,String.join(",",cpces.keySet())))
+                .put("complex", complex)
+                .put("datatype", datatype)
+                .put("result", value));
+        result.setInstructions(Arrays.asList(
+                new Instruction("feedback")
+                        .addParam("display", "true")));
+//        result.setInstructions(Collections.singletonList(
+//                new Instruction("recommendation")
+//                        .addParam("title", "test")
+//                        .addParam("result", value)
+//                        .addParam("entities", Collections.singletonList(entity))
+//                        .addParam("object", null)
+//                        .addParam("bnlabel", null)
+//                        .addParam("condition", null)
+//                        .addParam("datatype", datatype)
+//                        .addParam("relations", relations)));
+        return result;
+    }
+
     public ResponseExecutionResult answerWithBN(BlankNode bn, String datatype, String value, Context context) {
         ResponseExecutionResult disabled = checkDisabled(bn, datatype);
         if (disabled != null) {
@@ -2164,6 +2206,52 @@ public class KnowledgeQueryResponse {
             }
         }
         return conditionSentence;
+    }
+
+
+    public ResponseExecutionResult askWhichSubPropertiesOfCp(String entity, String complex, Collection<String> subProperties, Context context) {
+        context.getSlots().put("contextEntity", Collections.singletonList(entity));
+        context.getSlots().put("contextBN", null);
+        context.getSlots().put("contextObject", null);
+        context.getSlots().put("contextDatatype", null);
+        context.getSlots().put("contextConditionEntity", null);
+
+        List<String> items = new ArrayList<>();
+        for(String subProperty:subProperties){
+            items.add(String.format("%s%s",entity,subProperty));
+        }
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        result.setResponseAct(new ResponseAct("recommendation"));
+        result.setInstructions(Arrays.asList(
+                new Instruction("recommendation")
+                        .addParam("title",String.format("更多关于%s%s的问题",entity,complex))
+                        .addParam("items",items),
+                new Instruction("feedback").addParam("display","true")
+        ));
+        return result;
+    }
+
+
+    public ResponseExecutionResult askWhichSubPropertiesOfCp(String entity, String complex,String datatype, Collection<String> subProperties, Context context) {
+        context.getSlots().put("contextEntity", Collections.singletonList(entity));
+        context.getSlots().put("contextBN", null);
+        context.getSlots().put("contextObject", null);
+        context.getSlots().put("contextDatatype", datatype);
+        context.getSlots().put("contextConditionEntity", null);
+
+        List<String> items = new ArrayList<>();
+        for(String subProperty:subProperties){
+            items.add(String.format("%s%s的%s",entity,subProperty,datatype));
+        }
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        result.setResponseAct(new ResponseAct("recommendation"));
+        result.setInstructions(Arrays.asList(
+                new Instruction("recommendation")
+                        .addParam("title",String.format("更多关于%s%s的%s的问题",entity,complex,datatype))
+                        .addParam("items",items),
+                new Instruction("feedback").addParam("display","true")
+        ));
+        return result;
     }
 
 }

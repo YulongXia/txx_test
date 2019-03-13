@@ -1087,7 +1087,7 @@ public class KnowledgeQueryUtils {
     public List<BNAndDatatypeAndValue> queryDatatypeOfComplexProperty(String entity, String complex) {
         String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?datatypeLabel ?value WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
-                String.format("?entity ?cp ?bn . ?cp rdfs:label '%s'.\n", complex) +
+                String.format("?entity ?cp ?bn . ?cp rdfs:subPropertyOf*/rdfs:label '%s'.\n", complex) +
                 "?datatype rdfs:label ?datatypeLabel ; rdf:type ?type. ?type rdfs:subClassOf* owl:DatatypeProperty .\n" +
                 "?bn ?datatype ?value .\n" +
                 "OPTIONAL { ?bn <http://hual.ai/special#bnlabel> ?bnlabel. }\n" +
@@ -1103,7 +1103,7 @@ public class KnowledgeQueryUtils {
     public List<BNAndDatatypeAndValue> queryDatatypeOfComplexPropertyAndDatatype(String entity, String complex,String datatype) {
         String queryString = "SELECT DISTINCT ?bn ?bnlabel ?datatype ?value WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
-                String.format("?entity ?cp ?bn . ?cp rdfs:label '%s'.\n", complex) +
+                String.format("?entity ?cp ?bn . ?cp rdfs:subPropertyOf*/rdfs:label '%s'.\n", complex) +
                 "?datatype rdf:type ?type. ?type rdfs:subClassOf owl:DatatypeProperty .\n" +
                 "?bn ?datatype ?value .\n" +
                 String.format("?datatype rdfs:label '%s'.\n",datatype) +
@@ -2244,5 +2244,24 @@ public class KnowledgeQueryUtils {
             }
         }
         return res;
+    }
+
+
+    public List<String> queryCpSubProperties(String complex) {
+        String queryString = "SELECT DISTINCT ?subPropertyLabel WHERE {\n" +
+                String.format("?p rdfs:label '%s' .\n", complex) +
+                "?subProperty rdfs:subPropertyOf ?p.\n"+
+                "?subProperty rdfs:label ?subPropertyLabel.\n"+
+                "}";
+        return queryAndCheckStatus(queryString, b -> b.value("subPropertyLabel"));
+    }
+
+    public List<String> isEnumProperty(String datatype){
+        String queryString = "SELECT DISTINCT ?p where {\n" +
+                "?s ?p ?o.\n" +
+                String.format("?p rdfs:label '%s' ; a <http://hual.ai/new_standard#EnumProperty>.\n",datatype) +
+                "}";
+        logger.debug("SPARQL {}", queryString);
+        return knowledge.selectOneAsList(queryString,"p");
     }
 }

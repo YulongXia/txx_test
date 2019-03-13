@@ -320,8 +320,12 @@ class KnowledgeQueryProperty {
                                             return response.answerNoValue(entity, complex, datatype, cpces.keySet().stream().collect(Collectors.toList()), context);
                                         else if (res.size() == 1)
                                             return response.answer(entity, complex,res.get(0).getDatatypeAndValue().getDatatype(), res.get(0).getDatatypeAndValue().getValue(), context);
-                                        else
+                                        else {
+                                            // 首先处理枚举型答案
+                                            if(res.stream().map(x -> x.getDatatypeAndValue().getDatatype()).collect(Collectors.toSet()).size() == 1 && res.stream().map(x -> x.getConditions()).collect(Collectors.toSet()).size() == 1 && kgUtil.isEnumProperty(datatype).size() > 0)
+                                                return response.answer(entity,complex,datatype,String.join(",",res.stream().map(x -> x.getDatatypeAndValue().getValue()).collect(Collectors.toSet())),cpces,context);
                                             return response.askMultiAnswer(entity, complex, datatype, cpces, res, context);
+                                        }
                                     } else {
                                         return response.askMultiAnswer(entity, complex, datatype, cpces, restConds, context);
                                     }
@@ -1462,6 +1466,10 @@ class KnowledgeQueryProperty {
         } else if (datatypesOfComplexPropertyOfEntity.size() == 1) {
             return response.answer(entity, complex,datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getValue(), context);
         } else {
+            List<String> cpsubproperties = kgUtil.queryCpSubProperties(complex);
+            if(cpsubproperties.size() > 0){
+                return response.askWhichSubPropertiesOfCp(entity,complex,cpsubproperties,context);
+            }
             return response.askMultiAnswerWithEntityAndCp(entity, complex, context);
         }
     }
@@ -1474,6 +1482,10 @@ class KnowledgeQueryProperty {
         } else if (datatypesOfComplexPropertyOfEntity.size() == 1) {
             return response.answer(entity, complex,datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getDatatype(), datatypesOfComplexPropertyOfEntity.get(0).getDatatypeAndValue().getValue(), context);
         } else {
+            List<String> subpropertiesofcp = kgUtil.queryCpSubProperties(complex);
+            if(subpropertiesofcp.size() > 0){
+                return response.askWhichSubPropertiesOfCp(entity,complex,datatype,subpropertiesofcp,context);
+            }
             return response.askMultiAnswerWithEntityAndCpAndDp(entity, complex, datatype, context);
         }
     }
