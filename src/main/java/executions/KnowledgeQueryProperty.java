@@ -162,6 +162,10 @@ class KnowledgeQueryProperty {
                     }
                 } else {
                     logger.debug("0.2. 没有条件实体，faq");
+                    String clazz = (String) context.getSlots().get("class");
+                    if(clazz != null && clazz.length() != 0) {
+                        return response.askWhichEntityAndCpAndDp(clazz,context);
+                    }
                     return faqResponse.faq(context, true);
                 }
             } else if (entities.size() == 1) {

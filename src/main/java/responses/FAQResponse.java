@@ -8,17 +8,38 @@ import ai.hual.labrador.faq.FaqAnswer;
 import ai.hual.labrador.faq.FaqRankResult;
 import ai.hual.labrador.nlg.ResponseAct;
 import ai.hual.labrador.nlu.constants.SystemIntents;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.jena.atlas.json.JSON;
+import org.apache.jena.atlas.json.JsonArray;
+import org.apache.jena.atlas.json.JsonObject;
+import org.apache.jena.atlas.json.JsonValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class FAQResponse {
 
     private static Logger logger = LoggerFactory.getLogger(FAQResponse.class);
 
     private AccessorRepository accessorRepository;
+
+    private final static List<String> DEFAULT_RECOMMEND = Arrays.asList("公积金提取的条件","门禁卡办理的操作方式","打卡查询的操作方式");
+
+    private final static int MAX_RECOMMENDS = 3;
 
     public FAQResponse(AccessorRepository accessorRepository) {
         this.accessorRepository = accessorRepository;
@@ -30,6 +51,7 @@ public class FAQResponse {
 
     public ResponseExecutionResult faq(Context context, boolean useChatting) {
         logger.debug("FAQ response. useChatting: {}", useChatting);
+        List<String> recommends = getRecommendations();
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setInstructions(new ArrayList<>());
 
@@ -43,12 +65,18 @@ public class FAQResponse {
                 boolean chatting = "chatting".equals(hit.getCategory());
                 if (useChatting || !chatting) {
                     if (chatting) {
-                        result.getInstructions().add(new Instruction("msginfo_chat")
-                                .addParam("question", hit.getQuestion())
-                                .addParam("quesId", hit.getQaid())
-                                .addParam("answer", hit.getAnswer())
-                                .addParam("ansId", hit.getQaid())
-                                .addParam("score", hit.getScore()));
+//                        result.getInstructions().add(new Instruction("msginfo_chat")
+//                                .addParam("question", hit.getQuestion())
+//                                .addParam("quesId", hit.getQaid())
+//                                .addParam("answer", hit.getAnswer())
+//                                .addParam("ansId", hit.getQaid())
+//                                .addParam("score", hit.getScore()));
+
+                        result.getInstructions().add(new Instruction("recommendation")
+                                .addParam("title", "下列问题可能对您有帮助")
+                                .addParam("items", recommends));
+                        result.getInstructions().add(new Instruction("input_button")
+                                .addParam("buttons", Arrays.asList("热门问题")));
                         result.setResponseAct(new ResponseAct("answer")
                                 .put("result", hit.getAnswer()));
                     } else {
@@ -75,6 +103,72 @@ public class FAQResponse {
         result.getInstructions().add(new Instruction("msginfo_more")
                 .addParam("answer", accessorRepository.getNLG().generate(result.getResponseAct())));
         return result;
+    }
+
+    public static List<String> getRecommendations(){
+        Properties prop = getProperties();
+        String recommend_url = (String)prop.get("recommend_url");
+        if(recommend_url == null){
+            return DEFAULT_RECOMMEND;
+        }
+        HttpPost post = null;
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+
+            post = new HttpPost(recommend_url);
+            // 构造消息头
+            post.setHeader("Content-type", "application/json; charset=utf-8");
+
+            // 构建消息实体
+            JsonObject jsonobj = new JsonObject();
+            jsonobj.put("botName" ,"taikang_rs_dev");
+            StringEntity entity = new StringEntity(jsonobj.toString(), Charset.forName("UTF-8"));
+            entity.setContentEncoding("UTF-8");
+            // 发送Json格式的数据请求
+            entity.setContentType("application/json");
+            post.setEntity(entity);
+
+            HttpResponse response = httpClient.execute(post);
+
+            // 检验返回码
+            int statusCode = response.getStatusLine().getStatusCode();
+            if(statusCode == HttpStatus.SC_OK){
+                InputStream content = response.getEntity().getContent();
+                JsonObject json_content = JSON.parse(content);
+                JsonArray ja = json_content.get("msg").getAsObject().get("recommend").getAsArray();
+                List<String> recommends = ja.stream().map(x -> x.getAsString().value()).collect(Collectors.toList());
+                if(recommends.size() > MAX_RECOMMENDS)
+                {
+                    int i = 0;
+                    List<String> randoms = new ArrayList<>();
+                    while(i < MAX_RECOMMENDS){
+                        Random rand =new Random();
+                        int j = rand.nextInt(recommends.size());
+                        randoms.add(recommends.remove(j));
+                        i++;
+                    }
+                    return randoms;
+                }
+                return recommends;
+            }
+        } catch(Exception e) {
+            return DEFAULT_RECOMMEND;
+        }
+        return DEFAULT_RECOMMEND;
+    }
+
+    public static Properties getProperties() {
+        final String CONFIG_FILE_PATH = "remoteapiconfig.properties";
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        Properties prop = new Properties();
+        try (InputStreamReader input = new InputStreamReader(
+                loader.getResourceAsStream(CONFIG_FILE_PATH), StandardCharsets.UTF_8)) {
+            prop.load(input);
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+            System.out.println("Could not find file " + CONFIG_FILE_PATH);
+        }
+        return prop;
     }
 
 }

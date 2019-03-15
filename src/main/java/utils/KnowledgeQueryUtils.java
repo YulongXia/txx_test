@@ -454,7 +454,7 @@ public class KnowledgeQueryUtils {
      */
     public List<String> queryEntityWithObject(String object) {
         String queryString = "SELECT DISTINCT ?entity ?entityLabel WHERE {\n" +
-                String.format("?entity <%s> ?o .\n", object) +
+                String.format("?entity <%s> ?o .\n", queryCpIRI(object)) +
                 "?entity rdfs:label ?entityLabel .\n" +
                 "}";
         return queryAndCheckStatus(queryString, b -> b.value("entityLabel"),
@@ -1703,14 +1703,16 @@ public class KnowledgeQueryUtils {
         String queryString = "SELECT DISTINCT ?class WHERE {\n" +
                 String.format("?entity rdfs:label '%s' .\n", entity) +
                 "?cp rdfs:domain ?cpdomain.\n" +
-                "?entity a/rdfs:subClassOf* ?cpdomain.\n" +
+                "?cp a <http://hual.ai/new_standard#ComplexProperty>." +
+                "?entity a ?eclass." +
+                "?eclass rdfs:subClassOf* ?cpdomain.\n" +
                 "?cp rdfs:range ?cprange.\n" +
                 "?class rdfs:subClassOf ?cprange.\n" +
                 "?bn a ?class.\n" +
                 String.format("?dp rdfs:domain ?clazz. ?dp rdfs:label '%s'.\n", datatype) +
                 "?class rdfs:subClassOf* ?clazz.\n" +
                 "}";
-        return queryAndCheckStatus(queryString, b -> b.value("class"));
+        return knowledge.selectOneAsList(queryString,"class");
     }
 
     public List<String> checkEntityAndCpAndDatatype(String entity, String datatype,String complex) {
@@ -2263,5 +2265,52 @@ public class KnowledgeQueryUtils {
                 "}";
         logger.debug("SPARQL {}", queryString);
         return knowledge.selectOneAsList(queryString,"p");
+    }
+
+    public List<EntityAndCpAndDatatypeAndValue> queryEntityAndCpAndDatatypeAndValueWithEntityAndDatatype(String entity,String datatype){
+        String queryString = "select distinct ?entityLabel ?cp ?dpLabel ?value where {\n" +
+                String.format("    values (?entityLabel ?dpLabel) { ('%s' '%s') }\n",entity,datatype) +
+                "    ?dp rdfs:label ?dpLabel.\n" +
+                "    {\n" +
+                "        ?entity rdfs:label ?entityLabel.\n" +
+                "        ?entity ?dp ?value.\n" +
+                "    } UNION {\n" +
+                "        ?entity rdfs:label ?entityLabel.\n" +
+                "        ?entity ?cp ?bn.\n" +
+                "        ?bn ?dp ?value.\n" +
+                "    }\n" +
+                "}";
+        return queryAndCheckStatus(queryString, b -> new EntityAndCpAndDatatypeAndValue(b.value("entityLabel"),
+                        b.value("cp"),
+                        new DatatypeAndValue(b.value("dpLabel"),b.value("value"))));
+    }
+
+
+    public List<EntityAndCpAndDatatypeAndValue> queryEntityAndCpAndDatatypeAndValueWithClass(String clazz){
+        String queryString = "select distinct ?entityLabel ?dpLabel ?value where {\n" +
+                String.format("?entity a ?eclass. ?elcass rdfs:subClassOf* ?superClass. ?superClass rdfs:label '%s'.\n",clazz) +
+                "    ?dp rdfs:label ?dpLabel.\n" +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                "        ?entity rdfs:label ?entityLabel.\n" +
+                "        ?entity ?dp ?value.\n" +
+                "}";
+
+        List<EntityAndCpAndDatatypeAndValue> result =  queryAndCheckStatus(queryString, b -> new EntityAndCpAndDatatypeAndValue(b.value("entityLabel"),
+                "",
+                new DatatypeAndValue(b.value("dpLabel"),b.value("value"))));
+
+        String queryString1 = "select distinct ?entityLabel ?cp ?dpLabel ?value where {\n" +
+                String.format("?entity a ?eclass. ?elcass rdfs:subClassOf* ?superClass. ?superClass rdfs:label '%s'.\n",clazz) +
+                "    ?dp rdfs:label ?dpLabel.\n" +
+                "    ?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                "        ?entity rdfs:label ?entityLabel.\n" +
+                "        ?entity ?cp ?bn.\n" +
+                "        ?cp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                "        ?bn ?dp ?value." +
+                "}";
+        result.addAll(queryAndCheckStatus(queryString, b -> new EntityAndCpAndDatatypeAndValue(b.value("entityLabel"),
+                b.value("cp"),
+                new DatatypeAndValue(b.value("dpLabel"),b.value("value")))));
+        return result;
     }
 }

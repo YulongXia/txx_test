@@ -4,6 +4,7 @@
     <list default="true" id="ca06feca-fcc5-4a0f-8513-b675fab1c706" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/responses/FAQResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/responses/FAQResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" afterDir="false" />
     </list>
@@ -36,52 +37,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file leaf-file-name="KnowledgeQueryProperty.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="KnowledgeQueryProperty.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20">
-              <caret line="310" column="39" selection-start-line="310" selection-start-column="39" selection-end-line="310" selection-end-column="39" />
+            <state relative-caret-position="458">
+              <caret line="812" column="48" lean-forward="true" selection-start-line="812" selection-start-column="48" selection-end-line="812" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BNAndDatatypeAndValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="21" selection-start-line="21" selection-end-line="21" />
-              <folding>
-                <element signature="e#503#504#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DatatypeAndValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/pojo/DatatypeAndValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="429">
-              <caret line="13" selection-start-line="13" selection-end-line="13" />
-              <folding>
-                <element signature="e#297#298#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BNAndDatatypeAndValueAndConditions.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValueAndConditions.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="726">
-              <caret line="27" selection-start-line="27" selection-end-line="27" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#595#596#0" expanded="true" />
-                <element signature="e#620#621#0" expanded="true" />
-                <element signature="e#779#780#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -90,8 +52,8 @@
       <file leaf-file-name="KnowledgeQueryExecution.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="70" selection-start-line="70" selection-end-line="70" />
+            <state relative-caret-position="293">
+              <caret line="125" selection-start-line="125" selection-end-line="125" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -99,20 +61,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CpContextConditionEntitiesUpdateStrategy.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java">
+      <file leaf-file-name="RefreshStrategy.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/slotUpdateStrategies/RefreshStrategy.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="759">
-              <caret line="32" selection-start-line="32" selection-end-line="32" />
+            <state relative-caret-position="340">
+              <caret line="83" selection-start-line="83" selection-end-line="83" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ConditionEntityUpdateStrategy.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java">
+      <file leaf-file-name="FAQResponse.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/responses/FAQResponse.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="31" column="28" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+            <state relative-caret-position="1042">
+              <caret line="103" selection-start-line="103" selection-end-line="103" />
             </state>
           </provider>
         </entry>
@@ -120,26 +82,56 @@
       <file leaf-file-name="KnowledgeQueryUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="1554" selection-start-line="1554" selection-end-line="1554" />
+            <state>
+              <caret column="6" selection-start-column="6" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KnowledgeQueryResponse.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ObjectProperty.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ObjectProperty.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="7" column="94" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="94" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KnowledgeQueryResponse.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="1108" column="91" selection-start-line="1108" selection-start-column="91" selection-end-line="1108" selection-end-column="91" />
+            <state relative-caret-position="227">
+              <caret line="354" column="49" selection-start-line="354" selection-start-column="37" selection-end-line="354" selection-end-column="49" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Simulator.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
+      <file leaf-file-name="DialogSystem.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dialog/DialogSystem.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3003">
-              <caret line="91" selection-start-line="91" selection-end-line="91" />
+            <state relative-caret-position="222">
+              <caret line="57" selection-start-line="57" selection-end-line="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DMSlot.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/java/DMSlot.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="156">
+              <caret line="55" selection-start-line="55" selection-end-line="55" />
+              <folding>
+                <element signature="e#2037#2038#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HSMDM.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/java/HSMDM.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="131" selection-start-line="131" selection-end-line="131" />
             </state>
           </provider>
         </entry>
@@ -155,21 +147,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>List&lt;String&gt; contents = entry.getValue().stream().map(x -&gt; x.keySet().iterator().next())</find>
-      <find>Map&lt;String,List&lt;Map&lt;String,String&gt;&gt;&gt; aggregate = tmp.stream().filter(x -&gt; x.values() != null &amp;&amp; x.values().size() != 0).collect(Collectors.groupingBy(x -&gt; x.values().iterator().next(),Collectors.toList()));</find>
-      <find>if(!items.containsKey(entry.getValue())){</find>
-      <find>items.get(entry.getValue()).contains(entry.getKey())</find>
-      <find>?entity {</find>
-      <find>response.answer(</find>
-      <find>items.containsKey(entry.getValue())</find>
-      <find>response.askWhichProperty(</find>
-      <find>askMultiAnswerWithEntityAndDp</find>
-      <find>conditions</find>
-      <find>String.format(</find>
-      <find>conds.put(e.get</find>
-      <find>items</find>
-      <find>List&lt;String&gt; items</find>
-      <find>&gt; rdfs:label ?label.</find>
       <find>conditions:</find>
       <find>map(x -&gt; x.getConditions())</find>
       <find>reswith</find>
@@ -185,6 +162,21 @@
       <find>logger.</find>
       <find>inva</find>
       <find>recommendation</find>
+      <find>properties</find>
+      <find>labrador.local.remoteLoader.api</find>
+      <find>queryBN</find>
+      <find>BNA</find>
+      <find>complexproperty</find>
+      <find>msginfo_faq_a</find>
+      <find>queryEntityAndCpAndDatatypeAndValu</find>
+      <find>COMPLEX</find>
+      <find>datatypeproperty</find>
+      <find>datatypepro</find>
+      <find>complex</find>
+      <find>queryEntityAndCpAndDatatypeAndValue</find>
+      <find>aggregate</find>
+      <find>info_card</find>
+      <find>input_button</find>
     </findStrings>
     <replaceStrings>
       <replace>e.getKey() != null</replace>
@@ -215,7 +207,6 @@
         <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQuerySubclasses.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/executions/UnknownExecution.java" />
-        <option value="$PROJECT_DIR$/src/main/java/responses/FAQResponse.java" />
         <option value="$PROJECT_DIR$/src/main/java/pojo/ObjectProperty.java" />
         <option value="$PROJECT_DIR$/src/main/java/pojo/ConditionEntitiesAndBNAndValue.java" />
         <option value="$PROJECT_DIR$/src/main/java/pojo/ConditionEntityAndValue.java" />
@@ -230,14 +221,17 @@
         <option value="$PROJECT_DIR$/src/main/java/pojo/ConditionClassesAndValues.java" />
         <option value="$PROJECT_DIR$/src/main/java/pojo/YshapeBNAndDPAndValue.java" />
         <option value="$PROJECT_DIR$/src/main/java/pojo/EntityAndBNAndDatatypeAndValue.java" />
-        <option value="$PROJECT_DIR$/labrador.properties" />
         <option value="$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValueAndConditions.java" />
         <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java" />
         <option value="$PROJECT_DIR$/src/test/java/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/remoteapiconfig.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/responses/FAQResponse.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pojo/EntityAndCpAndDatatypeAndValue.java" />
+        <option value="$PROJECT_DIR$/labrador.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" />
         <option value="$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java" />
-        <option value="$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java" />
       </list>
     </option>
   </component>
@@ -277,7 +271,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="561" />
     <option name="y" value="62" />
     <option name="width" value="1936" />
@@ -289,8 +283,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -332,52 +324,13 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="responses" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="slotUpdateStrategies" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="taikang_rs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="taikang_rs" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -530,11 +483,15 @@
       <workItem from="1551839186136" duration="21455000" />
       <workItem from="1552014363478" duration="5580000" />
       <workItem from="1552269268523" duration="9656000" />
+      <workItem from="1552457974189" duration="377000" />
+      <workItem from="1552472015257" duration="2618000" />
+      <workItem from="1552537124088" duration="23533000" />
+      <workItem from="1552614644700" duration="21823000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="536172000" />
+    <option name="totallyTimeSpent" value="584523000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -547,6 +504,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="5" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.32997763" />
@@ -557,20 +515,20 @@
       <window_info anchor="bottom" id="Event Log" order="0" side_tool="true" />
       <window_info anchor="right" x="651" y="73" width="617" height="894" id="Maven Projects" order="0" weight="0.32889125" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="8" visible="true" weight="0.14988814" />
       <window_info anchor="bottom" id="Version Control" order="3" weight="0.32997763" />
-      <window_info anchor="bottom" id="Run" order="8" weight="0.4340045" />
       <window_info anchor="bottom" id="Spring" order="2" />
       <window_info anchor="bottom" id="Terminal" order="4" weight="0.07606264" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="1" />
-      <window_info content_ui="combo" id="Project" order="4" visible="true" weight="0.19936034" />
+      <window_info active="true" content_ui="combo" id="Project" order="4" visible="true" weight="0.20788912" />
       <window_info anchor="right" id="Database" order="2" weight="0.32995737" />
       <window_info id="Structure" order="5" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="8" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="4" />
+      <window_info anchor="bottom" id="Debug" order="12" weight="0.36465323" />
       <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="12" weight="0.42281878" />
       <window_info anchor="right" id="Commander" order="6" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="right" id="Coverage" order="7" side_tool="true" weight="0.32995737" />
@@ -591,7 +549,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>790</line>
+          <line>794</line>
           <properties />
           <option name="timeStamp" value="385" />
         </line-breakpoint>
@@ -647,19 +605,19 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>1146</line>
+          <line>1150</line>
           <properties />
           <option name="timeStamp" value="395" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>1161</line>
+          <line>1165</line>
           <properties />
           <option name="timeStamp" value="396" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>1374</line>
+          <line>1378</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -679,13 +637,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>574</line>
+          <line>642</line>
           <properties />
           <option name="timeStamp" value="400" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>1157</line>
+          <line>1161</line>
           <properties />
           <option name="timeStamp" value="402" />
         </line-breakpoint>
@@ -703,13 +661,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>727</line>
+          <line>731</line>
           <properties />
           <option name="timeStamp" value="405" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>781</line>
+          <line>785</line>
           <properties />
           <option name="timeStamp" value="406" />
         </line-breakpoint>
@@ -729,25 +687,25 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>564</line>
+          <line>632</line>
           <properties />
           <option name="timeStamp" value="411" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1782</line>
+          <line>1850</line>
           <properties />
           <option name="timeStamp" value="412" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1818</line>
+          <line>1886</line>
           <properties />
           <option name="timeStamp" value="413" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1811</line>
+          <line>1879</line>
           <properties />
           <option name="timeStamp" value="416" />
         </line-breakpoint>
@@ -759,13 +717,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1045</line>
+          <line>1113</line>
           <properties />
           <option name="timeStamp" value="419" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
-          <line>1083</line>
+          <line>1151</line>
           <properties />
           <option name="timeStamp" value="420" />
         </line-breakpoint>
@@ -779,23 +737,76 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
-          <line>325</line>
+          <line>329</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
           <option name="timeStamp" value="422" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>1714</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="423" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/responses/FAQResponse.java</url>
+          <line>54</line>
+          <properties />
+          <option name="timeStamp" value="424" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/FAQExecution.java</url>
+          <line>55</line>
+          <properties />
+          <option name="timeStamp" value="425" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java</url>
+          <line>790</line>
+          <properties />
+          <option name="timeStamp" value="432" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dialog/DialogSystem.class</url>
+          <line>57</line>
+          <properties />
+          <option name="timeStamp" value="437" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/java/HSMDM.class</url>
+          <line>131</line>
+          <properties />
+          <option name="timeStamp" value="438" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
+          <line>2325</line>
+          <properties />
+          <option name="timeStamp" value="442" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java</url>
+          <line>2297</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="443" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java</url>
+          <line>374</line>
+          <properties />
+          <option name="timeStamp" value="445" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="423" />
+      <option name="time" value="446" />
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="String.format(&quot;%s%s&quot;,entity,String.join(&quot;,&quot;,cpces.keySet()))" language="JAVA" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -803,6 +814,42 @@
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>slotName</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>context.getSlots().get(&quot;class&quot;)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>entitiesAndBNsOfProperty.asMap().values().stream().filter(x -&gt; x.stream().anyMatch(y -&gt; y != null)).collect(Collectors.toList())</expression-string>
+        <language-id>JAVA</language-id>
+        <custom-info>java.util.stream.Collectors</custom-info>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>entitiesAndBNsOfProperty.asMap().values().stream().filter(x -&gt; x.stream().anyMatch(y -&gt; y != null))</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>entitiesAndBNsOfProperty.asMap().values().stream().anyMatch(x -&gt; x != null)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>entitiesAndBNsOfProperty.get(&quot;打卡&quot;)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>randoms</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>String.format(&quot;%s%s&quot;,entity,String.join(&quot;,&quot;,cpces.keySet()))</expression-string>
         <language-id>JAVA</language-id>
@@ -818,148 +865,9 @@
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>aggregate.keySet()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>findEntities(queryAct)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>queryAct.getSlots().entries()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>queryAct.getSlots()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryPropertyWithBN.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="627">
-          <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/executions/MCSExecution.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="19" column="32" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionEntityAndBN.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionAndDatatypeValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/kg/Binding.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/remote/RemoteKnowledgeAccessor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/remote/KnowledgeGraphDAO.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/remote/VirtuosoHTTPKnowledgeGraphDAO.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/kg/SelectResult.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1122">
-          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/kg/KnowledgeAccessor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionEntitiesAndBNAnddpAndValue.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionEntityAndBNAndValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="8" column="47" selection-start-line="8" selection-start-column="47" selection-end-line="8" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/DayUpdateStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConfirmationUpdateStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="13" column="69" selection-start-line="13" selection-start-column="51" selection-end-line="13" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ConditionEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="20" column="18" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/simplelogger.properties">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/taikang_rs.iml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/java/HSMPolicyManager.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ComplexPropertiesAndValues.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -985,13 +893,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="103">
           <caret line="94" column="44" lean-forward="true" selection-start-line="94" selection-start-column="44" selection-end-line="94" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/Context.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="819">
-          <caret line="89" selection-start-line="89" selection-end-line="89" />
         </state>
       </provider>
     </entry>
@@ -1023,13 +924,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ObjectProperty.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/nlu/SlotValue.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="33">
@@ -1055,20 +949,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="99">
           <caret line="3" selection-start-line="3" selection-end-line="56" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/EntityAndBNAndDatatypeAndValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="2" column="43" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/labrador.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="11" column="61" lean-forward="true" selection-start-line="11" selection-start-column="61" selection-end-line="11" selection-end-column="61" />
         </state>
       </provider>
     </entry>
@@ -1100,13 +980,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="759">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/ConditionEntityUpdateStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
@@ -1114,24 +987,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="29" column="28" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/utils/LimitSub.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3003">
-          <caret line="91" selection-start-line="91" selection-end-line="91" />
         </state>
       </provider>
     </entry>
@@ -1160,7 +1019,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/pojo/BNAndDatatypeAndValue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
+        <state relative-caret-position="561">
           <caret line="21" selection-start-line="21" selection-end-line="21" />
           <folding>
             <element signature="e#503#504#0" expanded="true" />
@@ -1168,37 +1027,241 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/Simulator.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
+        <state relative-caret-position="303">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/UnknownClazz.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-264">
+          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/UnknownExecution.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-33">
+          <caret line="55" column="62" selection-start-line="55" selection-start-column="62" selection-end-line="55" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dialog/accessors/RelatedQuestionAccessor.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/remote/ManageRelatedQuestionAccessor.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="62" column="17" lean-forward="true" selection-start-line="62" selection-start-column="17" selection-end-line="62" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/simplelogger.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="33">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/remoteapiconfig.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/kg/KnowledgeStatusAccessor.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/FAQExecution.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1122">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#1768#1769#0" expanded="true" />
+            <element signature="e#1838#1839#0" expanded="true" />
+            <element signature="e#2227#2228#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/EntityAndCpAndDatatypeAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="41" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="41" />
+          <folding>
+            <element signature="e#424#425#0" expanded="true" />
+            <element signature="e#453#454#0" expanded="true" />
+            <element signature="e#497#498#0" expanded="true" />
+            <element signature="e#533#534#0" expanded="true" />
+            <element signature="e#567#568#0" expanded="true" />
+            <element signature="e#597#598#0" expanded="true" />
+            <element signature="e#643#644#0" expanded="true" />
+            <element signature="e#681#682#0" expanded="true" />
+            <element signature="e#734#735#0" expanded="true" />
+            <element signature="e#773#774#0" expanded="true" />
+            <element signature="e#847#848#0" expanded="true" />
+            <element signature="e#903#904#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/EntityAndBNAndDatatypeAndValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="9" column="29" lean-forward="true" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/slotUpdateStrategies/CpContextConditionEntitiesUpdateStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="29" column="28" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/DM.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/local/remote/ManageDMClient.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="82" column="26" lean-forward="true" selection-start-line="82" selection-start-column="26" selection-end-line="82" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/SlotUpdateStrategy.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labrador.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="2" column="1" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/ContextedString.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/slotUpdateStrategies/OverwriteStrategy.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="92" selection-start-line="92" selection-end-line="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dialog/DialogSystem.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/java/HSMDM.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="131" selection-start-line="131" selection-end-line="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/java/DMSlot.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
+          <folding>
+            <element signature="e#2037#2038#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/slotUpdateStrategies/RefreshStrategy.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="83" selection-start-line="83" selection-end-line="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/ai/hual/labrador_algo/1.0.0-SNAPSHOT/labrador_algo-1.0.0-SNAPSHOT.jar!/ai/hual/labrador/dm/Context.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/responses/FAQResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1042">
+          <caret line="103" selection-start-line="103" selection-end-line="103" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pojo/ObjectProperty.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="7" column="94" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="94" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/utils/KnowledgeQueryUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="1554" selection-start-line="1554" selection-end-line="1554" />
+        <state>
+          <caret column="6" selection-start-column="6" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryExecution.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="1108" column="91" selection-start-line="1108" selection-start-column="91" selection-end-line="1108" selection-end-column="91" />
+        <state relative-caret-position="293">
+          <caret line="125" selection-start-line="125" selection-end-line="125" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/executions/KnowledgeQueryProperty.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="310" column="39" selection-start-line="310" selection-start-column="39" selection-end-line="310" selection-end-column="39" />
+        <state relative-caret-position="458">
+          <caret line="812" column="48" lean-forward="true" selection-start-line="812" selection-start-column="48" selection-end-line="812" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/responses/KnowledgeQueryResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="354" column="49" selection-start-line="354" selection-start-column="37" selection-end-line="354" selection-end-column="49" />
         </state>
       </provider>
     </entry>

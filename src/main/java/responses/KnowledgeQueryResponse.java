@@ -23,6 +23,8 @@ public class KnowledgeQueryResponse {
         put("公积金#联名卡", "公积金联名卡");
     }};
 
+    public static final String HOT_ISSUE = "热门问题";
+
     public KnowledgeQueryResponse(KnowledgeQueryUtils kgUtil, AccessorRepository accessorRepository) {
         this.kgUtil = kgUtil;
         this.accessorRepository = accessorRepository;
@@ -281,6 +283,43 @@ public class KnowledgeQueryResponse {
         context.getSlots().put("lastWhichEntity", entities);
 
         Set<String> ents = entities.stream().collect(Collectors.toSet());
+        Set<String> items = new HashSet<>();
+        String unique_answer = null;
+        String answer_entity = null;
+        String answer_cp = null;
+        String answer_dp = null;
+        for(String ent: ents){
+            if(items.size() > 3)
+                break;
+            List<EntityAndCpAndDatatypeAndValue> ecdvs = kgUtil.queryEntityAndCpAndDatatypeAndValueWithEntityAndDatatype(ent,datatype);
+            Map<String,List<EntityAndCpAndDatatypeAndValue>> aggregate = ecdvs.stream().collect(Collectors.groupingBy(x -> String.format("%s:%s:%s",x.getEntity(),x.getComplex(),
+                                x.getDatatypeAndValue().getDatatype()),Collectors.toList()));
+            List<List<EntityAndCpAndDatatypeAndValue>> candidates = aggregate.values().stream().filter(x -> x.size() == 1).collect(Collectors.toList());
+            if(candidates !=null && candidates.size() != 0){
+                for(List<EntityAndCpAndDatatypeAndValue> candidate: candidates){
+                    String complex = kgUtil.queryLabelWithIRI(candidate.get(0).getComplex());
+                    if(complex != null && complex.trim().length() != 0 && complex.equals("http://hual.ai/taikang/taikang_rs#with_bn"))
+                        continue;
+                    answer_entity = candidate.get(0).getEntity();
+                    answer_cp = complex;
+                    answer_dp = candidate.get(0).getDatatypeAndValue().getDatatype();
+                    unique_answer = candidate.get(0).getDatatypeAndValue().getValue();
+                    break;
+                }
+            }
+            for(EntityAndCpAndDatatypeAndValue ecdv:ecdvs){
+                String complex = kgUtil.queryLabelWithIRI(ecdv.getComplex());
+                if(complex != null && complex.trim().length() != 0 && complex.equals("http://hual.ai/taikang/taikang_rs#with_bn"))
+                    continue;
+                if(answer_entity != null && answer_cp != null && answer_dp != null
+                        && ecdv.getEntity().equals(answer_entity)
+                        && ecdv.getComplex().equals(answer_cp)
+                        && ecdv.getDatatypeAndValue().getDatatype().equals(answer_dp))
+                    continue;
+                items.add(String.format("%s%s的%s",ecdv.getEntity(),complex == null || complex.trim().length() == 0||complex.startsWith("http://")?"":complex,ecdv.getDatatypeAndValue().getDatatype()));
+            }
+
+        }
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setResponseAct(new ResponseAct("recommendation"));
 //        if(entities.size() > 5 ){
@@ -300,18 +339,39 @@ public class KnowledgeQueryResponse {
 //        for (int i = 0; i < ents5.size(); i++) {
 //            result.getResponseAct().put("entity" + i, ents5.get(i));
 //        }
-        result.setInstructions(Arrays.asList(
-                new Instruction("suggestion_kb_ents")
-                        .addParam("content", accessorRepository.getNLG().generate(result.getResponseAct()))
-                        .addParam("entities", null)
-                        .addParam("object", null)
-                        .addParam("bnlabel", null)
-                        .addParam("condition", null)
-                        .addParam("datatype", datatype)
-                        .addParam("suggestions", entities),
-                new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", datatype))
-                        .addParam("items", ents.stream().collect(Collectors.toList())),
-                new Instruction("feedback").addParam("display", "true")));
+        if(unique_answer != null) {
+            result.setInstructions(Arrays.asList(
+                    new Instruction("suggestion_kb_ents")
+                            .addParam("content", accessorRepository.getNLG().generate(result.getResponseAct()))
+                            .addParam("entities", null)
+                            .addParam("object", null)
+                            .addParam("bnlabel", null)
+                            .addParam("condition", null)
+                            .addParam("datatype", datatype)
+                            .addParam("suggestions", entities),
+                    new Instruction("info_card").addParam("title",String.format("%s%s的%s",answer_entity,answer_cp,answer_dp)).addParam("content",unique_answer),
+                    new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", datatype))
+                            .addParam("items", items.stream().collect(Collectors.toList())),
+                    new Instruction("input_button")
+                            .addParam("buttons",Arrays.asList(HOT_ISSUE)),
+                    new Instruction("feedback").addParam("display", "true")));
+        }else{
+            result.setInstructions(Arrays.asList(
+                    new Instruction("suggestion_kb_ents")
+                            .addParam("content", accessorRepository.getNLG().generate(result.getResponseAct()))
+                            .addParam("entities", null)
+                            .addParam("object", null)
+                            .addParam("bnlabel", null)
+                            .addParam("condition", null)
+                            .addParam("datatype", datatype)
+                            .addParam("suggestions", entities),
+                    new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", datatype))
+                            .addParam("items", items.stream().collect(Collectors.toList())),
+                    new Instruction("input_button")
+                            .addParam("buttons",Arrays.asList(HOT_ISSUE)),
+                    new Instruction("feedback").addParam("display", "true")));
+        }
+
         return result;
     }
 
@@ -325,16 +385,20 @@ public class KnowledgeQueryResponse {
 
         Set<String> ents = entities.stream().collect(Collectors.toSet());
         List<String> ents5 = LimitSub.get5(ents);
-
+        List<String> recommends ;
         ResponseExecutionResult result = new ResponseExecutionResult();
+        result.setResponseAct(new ResponseAct("recommendation"));
+        String label = kgUtil.queryLabelWithIRI(object);
         if (entities.size() > 5) {
-            result.setResponseAct(new ResponseAct("whichEntity")
-                    .put("property", objectLabel)
-                    .put("entities", ents5));
+//            result.setResponseAct(new ResponseAct("whichEntity")
+//                    .put("property", objectLabel)
+//                    .put("entities", ents5));
+            recommends = ents5.stream().map(x -> String.format("%s%s",x,label)).collect(Collectors.toList());
         } else {
-            result.setResponseAct(new ResponseAct("whichEntity")
-                    .put("property", objectLabel)
-                    .put("entities", entities));
+//            result.setResponseAct(new ResponseAct("whichEntity")
+//                    .put("property", objectLabel)
+//                    .put("entities", entities));
+            recommends = entities.stream().map(x -> String.format("%s%s",x,label)).collect(Collectors.toList());
         }
 
 
@@ -342,7 +406,7 @@ public class KnowledgeQueryResponse {
 //            result.getResponseAct().put("entity" + i, ents5.get(i));
 //        }
 
-        result.setInstructions(Collections.singletonList(
+        result.setInstructions(Arrays.asList(
                 new Instruction("suggestion_kb_ents")
                         .addParam("content", accessorRepository.getNLG().generate(result.getResponseAct()))
                         .addParam("entities", null)
@@ -350,7 +414,11 @@ public class KnowledgeQueryResponse {
                         .addParam("bnlabel", null)
                         .addParam("condition", null)
                         .addParam("datatype", null)
-                        .addParam("suggestions", entities)));
+                        .addParam("suggestions", entities),
+                new Instruction("recommendation").addParam("title",String.format("更多关于%s的问题",label)).addParam("items",recommends),
+                new Instruction("input_button")
+                    .addParam("buttons",Arrays.asList(HOT_ISSUE)),
+                new Instruction("feedback").addParam("display", "true")));
         return result;
     }
 
@@ -2254,4 +2322,30 @@ public class KnowledgeQueryResponse {
         return result;
     }
 
+    public ResponseExecutionResult askWhichEntityAndCpAndDp(String clazz, Context context) {
+        List<EntityAndCpAndDatatypeAndValue> ecdvs = kgUtil.queryEntityAndCpAndDatatypeAndValueWithClass(clazz);
+        Set<String> items = new HashSet<>();
+        for(EntityAndCpAndDatatypeAndValue ecda: ecdvs){
+            if(items.size() > 10)
+                break;
+            String complex = kgUtil.queryLabelWithIRI(ecda.getComplex());
+            if(complex != null && complex.trim().length() != 0 && complex.equals("http://hual.ai/taikang/taikang_rs#with_bn"))
+                continue;
+            items.add(String.format("%s%s的%s",ecda.getEntity(),complex == null || complex.trim().length() == 0||complex.startsWith("http://")?"":complex,ecda.getDatatypeAndValue().getDatatype()));
+        }
+        Set<String> buttons = ecdvs.stream().map(x -> x.getEntity()).collect(Collectors.toSet()).stream().limit(5).collect(Collectors.toSet());
+        buttons.add(HOT_ISSUE);
+
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        result.setResponseAct(new ResponseAct("recommendation"));
+        result.setInstructions(Arrays.asList(
+                new Instruction("recommendation")
+                        .addParam("title",String.format("更多关于%s的问题",clazz))
+                        .addParam("items",items.stream().collect(Collectors.toList())),
+                new Instruction("input_button")
+                        .addParam("buttons",buttons.stream().collect(Collectors.toList())),
+                new Instruction("feedback").addParam("display","true")
+        ));
+        return result;
+    }
 }
