@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -161,12 +162,10 @@ public class FAQResponse {
     }
 
     public static Properties getProperties() {
-        final String CONFIG_FILE_PATH = "remoteapiconfig.properties";
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        final String CONFIG_FILE_PATH = "/remoteapiconfig.properties";
         Properties prop = new Properties();
-        try (InputStreamReader input = new InputStreamReader(
-                loader.getResourceAsStream(CONFIG_FILE_PATH), StandardCharsets.UTF_8)) {
-            prop.load(input);
+        try (Reader reader = new InputStreamReader(FAQResponse.class.getResourceAsStream(CONFIG_FILE_PATH),StandardCharsets.UTF_8)) {
+            prop.load(reader);
         } catch (IOException ex) {
             System.out.println(ex.toString());
             System.out.println("Could not find file " + CONFIG_FILE_PATH);
