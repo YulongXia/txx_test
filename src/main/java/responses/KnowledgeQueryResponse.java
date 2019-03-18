@@ -695,10 +695,11 @@ public class KnowledgeQueryResponse {
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
-        result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity))
+        result.setInstructions(Arrays.asList(new Instruction("info_card").addParam("title", titleOfInfoCard).addParam("content", infoCard)
+                , new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity))
                         .addParam("items", sentences.stream().collect(Collectors.toList()))
-                , new Instruction("feedback").addParam("display", "true"), new Instruction("input_button").addParam("buttons", String.format("了解更多%s", parent.get(0)))
-                , new Instruction("info_card").addParam("title", titleOfInfoCard).addParam("content", infoCard)
+                , new Instruction("input_button").addParam("buttons", Arrays.asList(String.format("了解更多%s", parent.get(0))))
+                , new Instruction("feedback").addParam("display", "true")
         ));
 
 //        Set<String> bns = new LinkedHashSet<>();
@@ -2438,8 +2439,12 @@ public class KnowledgeQueryResponse {
         List<String> unasked_items = new ArrayList<>(recommdations);
         if(history_queries != null && history_queries.size()>0)
             unasked_items.removeAll(history_queries);
-        if(unasked_items.size() != 0)
-            return unasked_items.subList(0,3);
+        if(unasked_items.size() != 0){
+            if(unasked_items.size() <= 3)
+                return unasked_items;
+            else
+                return unasked_items.subList(0,3);
+        }
         return recommdations;
     }
 }

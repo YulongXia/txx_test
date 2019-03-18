@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HistoryQueriesUpdateStrategy implements SlotUpdateStrategy {
+    private final int MAX_SIZE = 10;
     @Override
     public void setUp(String s, Map<String, ContextedString> map, AccessorRepository accessorRepository) {
 
@@ -27,7 +28,7 @@ public class HistoryQueriesUpdateStrategy implements SlotUpdateStrategy {
         List<String> result = (List<String>)o;
         if(!result.contains(query))
         {
-            if(result.size() >= 20)
+            if(result.size() >= MAX_SIZE)
                 result.remove(0);
             result.add(query);
         }
