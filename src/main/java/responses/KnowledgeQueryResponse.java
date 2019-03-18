@@ -16,6 +16,7 @@ import utils.LimitSub;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import responses.FAQResponse;
 
 public class KnowledgeQueryResponse {
     private static final Logger logger = LoggerFactory.getLogger(KnowledgeQueryResponse.class);
@@ -291,7 +292,7 @@ public class KnowledgeQueryResponse {
         String answer_cp = null;
         String answer_dp = null;
         for(String ent: ents){
-            if(items.size() > 3)
+            if(items.size() > 10)
                 break;
             List<EntityAndCpAndDatatypeAndValue> ecdvs = kgUtil.queryEntityAndCpAndDatatypeAndValueWithEntityAndDatatype(ent,datatype);
             Map<String,List<EntityAndCpAndDatatypeAndValue>> aggregate = ecdvs.stream().collect(Collectors.groupingBy(x -> String.format("%s:%s:%s",x.getEntity(),x.getComplex(),
@@ -322,6 +323,7 @@ public class KnowledgeQueryResponse {
             }
 
         }
+        items = processRecommendations(items.stream().collect(Collectors.toList()), context).stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setResponseAct(new ResponseAct("recommendation"));
 //        if(entities.size() > 5 ){
@@ -403,6 +405,7 @@ public class KnowledgeQueryResponse {
             recommends = entities.stream().map(x -> String.format("%s%s",x,label)).collect(Collectors.toList());
         }
 
+        recommends = processRecommendations(recommends, context);
 
 //        for (int i = 0; i < ents5.size(); i++) {
 //            result.getResponseAct().put("entity" + i, ents5.get(i));
@@ -682,10 +685,13 @@ public class KnowledgeQueryResponse {
         logger.info("sentences {}", Arrays.asList(sentences));
         List<String> parent = kgUtil.queryParentClass(entity);
         logger.info("query parentClass {} of entity {}", parent, entity);
+
+        sentences = processRecommendations(sentences.stream().collect(Collectors.toList()), context).stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
-        result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity)).addParam("items", sentences.stream().collect(Collectors.toList()))
+        result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity))
+                        .addParam("items", sentences.stream().collect(Collectors.toList()))
                 , new Instruction("feedback").addParam("display", "true"), new Instruction("input_button").addParam("buttons", parent)
                 , new Instruction("info_card").addParam("title", null).addParam("content", infoCard)
         ));
@@ -1138,6 +1144,8 @@ public class KnowledgeQueryResponse {
                         .addParam("condition", null)
                         .addParam("datatype", datatype)
                         .addParam("relations", relations),
+                new Instruction("recommendation").addParam("title","您可能关注")
+                    .addParam("items",processRecommendations(FAQResponse.getRecommendations(),context)),
                 new Instruction("feedback")
                         .addParam("display", "true")));
 //        result.setInstructions(Collections.singletonList(
@@ -1180,6 +1188,8 @@ public class KnowledgeQueryResponse {
                 .put("datatype", datatype)
                 .put("result", value));
         result.setInstructions(Arrays.asList(
+                new Instruction("recommendation").addParam("title","您可能关注")
+                        .addParam("items",processRecommendations(FAQResponse.getRecommendations(),context)),
                 new Instruction("feedback")
                         .addParam("display", "true")));
 //        result.setInstructions(Collections.singletonList(
@@ -1222,6 +1232,8 @@ public class KnowledgeQueryResponse {
                 .put("datatype", datatype)
                 .put("result", value));
         result.setInstructions(Arrays.asList(
+                new Instruction("recommendation").addParam("title","您可能关注")
+                        .addParam("items",processRecommendations(FAQResponse.getRecommendations(),context)),
                 new Instruction("feedback")
                         .addParam("display", "true")));
 //        result.setInstructions(Collections.singletonList(
@@ -1677,6 +1689,10 @@ public class KnowledgeQueryResponse {
             else
                 items.add(String.format("%s%s的%s的%s", entity, conditionSentence.toString(), cpAnddp.getKey(), cpAnddp.getValue()));
         }
+
+        items = processRecommendations(items,context);
+
+
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setResponseAct(new ResponseAct("recommendation"));
         result.setInstructions(Arrays.asList(
@@ -1860,6 +1876,10 @@ public class KnowledgeQueryResponse {
             StringBuilder conditionSentence = genEntityAndCesPhrase(entity,conditions.stream().collect(Collectors.toList()));
             items.add(String.format("%s%s的%s的%s", entity, conditionSentence.toString(), complex, e.getDatatypeAndValue().getDatatype()));
         }
+
+        items = processRecommendations(items,context);
+
+
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
@@ -1927,6 +1947,9 @@ public class KnowledgeQueryResponse {
                         , r.getDatatypeAndValue().getDatatype());
             items.add(sentence);
         }
+
+        items = processRecommendations(items,context);
+
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
@@ -1996,6 +2019,7 @@ public class KnowledgeQueryResponse {
             items.add(sentence);
         }
 
+        items = processRecommendations(items,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
@@ -2035,6 +2059,8 @@ public class KnowledgeQueryResponse {
             StringBuilder conditionSentence = genEntityAndCesPhrase(entity,conditions.stream().collect(Collectors.toList()));
             items.add(String.format("%s%s的%s", entity, conditionSentence.toString(), datatype));
         }
+
+        items = processRecommendations(items,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
@@ -2100,6 +2126,7 @@ public class KnowledgeQueryResponse {
             items.add(String.format("%s%s%s的%s", entity, conditionSentence.toString(), cpsentence, datatype));
         }
         items.remove(String.format("%s的%s", entity, datatype));
+        items = processRecommendations(items,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
@@ -2123,6 +2150,7 @@ public class KnowledgeQueryResponse {
             StringBuilder conditionSentence = genEntityAndCesPhrase(entity,conditions.stream().collect(Collectors.toList()));
             items.add(String.format("%s%s的%s的%s", entity, conditionSentence.toString(), complex, datatype));
         }
+        items = processRecommendations(items,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
@@ -2230,6 +2258,7 @@ public class KnowledgeQueryResponse {
             }
         }
 
+        items = processRecommendations(items.stream().collect(Collectors.toList()), context).stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
@@ -2277,10 +2306,12 @@ public class KnowledgeQueryResponse {
         for (String entity : entities) {
             sentences.add(String.format("%s%s的%s的%s", kgUtil.queryLabelWithIRI(entity), ces.size() == 0 ? "" : String.join(",", ces), complex, datatype));
         }
+        sentences = processRecommendations(sentences,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
-        result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", "更多的问题").addParam("items", sentences)
+        result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", "更多的问题")
+                        .addParam("items", sentences)
                 , new Instruction("feedback").addParam("display", "true")
         ));
         return result;
@@ -2292,10 +2323,12 @@ public class KnowledgeQueryResponse {
         for (String entity : entities) {
             sentences.add(String.format("%s%s的%s", kgUtil.queryLabelWithIRI(entity), ces == null || ces.size() == 0 ? "" : String.join(",", ces), complex));
         }
+        sentences = processRecommendations(sentences,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
-        result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", "更多的问题").addParam("items", sentences)
+        result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", "更多的问题")
+                        .addParam("items", sentences)
                 , new Instruction("feedback").addParam("display", "true")
         ));
         return result;
@@ -2331,6 +2364,7 @@ public class KnowledgeQueryResponse {
         for(String subProperty:subProperties){
             items.add(String.format("%s%s",entity,subProperty));
         }
+        items = processRecommendations(items,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setResponseAct(new ResponseAct("recommendation"));
         result.setInstructions(Arrays.asList(
@@ -2354,6 +2388,7 @@ public class KnowledgeQueryResponse {
         for(String subProperty:subProperties){
             items.add(String.format("%s%s的%s",entity,subProperty,datatype));
         }
+        items = processRecommendations(items,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setResponseAct(new ResponseAct("recommendation"));
         result.setInstructions(Arrays.asList(
@@ -2369,7 +2404,7 @@ public class KnowledgeQueryResponse {
         List<EntityAndCpAndDatatypeAndValue> ecdvs = kgUtil.queryEntityAndCpAndDatatypeAndValueWithClass(clazz);
         Set<String> items = new HashSet<>();
         for(EntityAndCpAndDatatypeAndValue ecda: ecdvs){
-            if(items.size() > 10)
+            if(items.size() > 5)
                 break;
             String complex = kgUtil.queryLabelWithIRI(ecda.getComplex());
             if(complex != null && complex.trim().length() != 0 && complex.equals("http://hual.ai/taikang/taikang_rs#with_bn"))
@@ -2379,6 +2414,7 @@ public class KnowledgeQueryResponse {
         Set<String> buttons = ecdvs.stream().map(x -> x.getEntity()).collect(Collectors.toSet()).stream().limit(5).collect(Collectors.toSet());
         buttons.add(HOT_ISSUE);
 
+        items = processRecommendations(items.stream().collect(Collectors.toList()), context).stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setResponseAct(new ResponseAct("recommendation"));
         result.setInstructions(Arrays.asList(
@@ -2390,5 +2426,15 @@ public class KnowledgeQueryResponse {
                 new Instruction("feedback").addParam("display","true")
         ));
         return result;
+    }
+
+    public static List<String> processRecommendations(List<String> recommdations,Context context){
+        List<String> history_queries = (List<String>) context.getSlots().get("HistoryQueries");
+        List<String> unasked_items = new ArrayList<>(recommdations);
+        if(history_queries != null && history_queries.size()>0)
+            unasked_items.removeAll(history_queries);
+        if(unasked_items.size() != 0)
+            return unasked_items.subList(0,3);
+        return recommdations;
     }
 }
