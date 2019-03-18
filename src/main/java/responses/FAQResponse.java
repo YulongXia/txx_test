@@ -31,6 +31,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import responses.KnowledgeQueryResponse;
+
 public class FAQResponse {
 
     private static Logger logger = LoggerFactory.getLogger(FAQResponse.class);
@@ -39,7 +41,7 @@ public class FAQResponse {
 
     private final static List<String> DEFAULT_RECOMMEND = Arrays.asList("公积金提取的条件","门禁卡办理的操作方式","打卡查询的操作方式");
 
-    private final static int MAX_RECOMMENDS = 3;
+    private final static int MAX_RECOMMENDS = 10;
 
     public FAQResponse(AccessorRepository accessorRepository) {
         this.accessorRepository = accessorRepository;
@@ -52,6 +54,7 @@ public class FAQResponse {
     public ResponseExecutionResult faq(Context context, boolean useChatting) {
         logger.debug("FAQ response. useChatting: {}", useChatting);
         List<String> recommends = getRecommendations();
+        recommends = KnowledgeQueryResponse.processRecommendations(recommends,context);
         ResponseExecutionResult result = new ResponseExecutionResult();
         result.setInstructions(new ArrayList<>());
 
