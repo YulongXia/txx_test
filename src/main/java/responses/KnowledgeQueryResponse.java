@@ -653,7 +653,7 @@ public class KnowledgeQueryResponse {
             }
         }
 
-        if (getInfoCardOrNot) {     // there can not get value just from datatypes, so continue to try through objectproperty
+        if (!getInfoCardOrNot) {     // there can not get value just from datatypes, so continue to try through objectproperty
             Iterator itOfObjects = objects.iterator();
             while(itOfObjects.hasNext()) {
                 ObjectProperty op = (ObjectProperty)itOfObjects.next();
