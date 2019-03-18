@@ -8,6 +8,8 @@ import ai.hual.labrador.kg.KnowledgeStatus;
 import ai.hual.labrador.nlg.ResponseAct;
 import com.google.common.collect.*;
 import javafx.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pojo.*;
 import utils.KnowledgeQueryUtils;
 import utils.LimitSub;
@@ -16,7 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class KnowledgeQueryResponse {
-
+    private static final Logger logger = LoggerFactory.getLogger(KnowledgeQueryResponse.class);
     private KnowledgeQueryUtils kgUtil;
     private AccessorRepository accessorRepository;
     private Map<String, String> RECOMM = new HashMap<String, String>() {{
@@ -627,10 +629,48 @@ public class KnowledgeQueryResponse {
         context.getSlots().put("contextObject", null);
         context.getSlots().put("contextDatatype", null);
         context.getSlots().put("contextConditionEntity", null);
+        logger.info("In KnowledgeQueryResponse::askWhichProperty. datatypes {} of entity {}.", datatypes, entity);
 
+        String infoCard = null;
+        String markedDatatype = null;
+        ObjectProperty markedObject = null;
+        boolean getInfoCardOrNot = false;
+        Iterator itOfDatatypes = datatypes.iterator();
+        while(itOfDatatypes.hasNext()) {
+            String datatype = (String)itOfDatatypes.next();
+            List<String> value = kgUtil.queryValuewithEntityAndDatatype(entity, datatype);
+            if (value != null && value.size() == 1) {
+                infoCard = value.get(0);
+                logger.debug("infoCard get by dataProperty: {}", infoCard);
+                markedDatatype = datatype;
+                getInfoCardOrNot = true;
+                break;
+            }
+        }
+
+        if (getInfoCardOrNot) {     // there can not get value just from datatypes, so continue to try through objectproperty
+            Iterator itOfObjects = objects.iterator();
+            while(itOfObjects.hasNext()) {
+                ObjectProperty op = (ObjectProperty)itOfObjects.next();
+                logger.info("object: {}", op.getUri());
+                List<EntityAndCpAndDatatypeAndValue> ecdv = kgUtil.queryEntityAndCpAndDatatypeAndValueWithCp(entity, op);
+                Map<String, List<EntityAndCpAndDatatypeAndValue>> groupedecdv = ecdv.stream().collect(Collectors.groupingBy(x -> String.format("%s:%s", x.getEntity(), x.getComplex()), Collectors.toList()));
+                if (groupedecdv.values().size() == 1) {
+                    infoCard = groupedecdv.values().iterator().next().get(0).getDatatypeAndValue().getValue();
+                    logger.debug("infoCard get by objectProperty: {}", infoCard);
+                    markedObject = op;
+                    break;
+                }
+            }
+        }
+        final String filterDatatype = markedDatatype;
+        logger.debug("filterDatatype: {}", filterDatatype);
         Set<String> sentences = new HashSet<>();
-        sentences.addAll(datatypes.stream().map(x -> String.format("%s的%s", entity, x)).collect(Collectors.toList()));
+        sentences.addAll(datatypes.stream().filter(x -> !x.equals(filterDatatype)).map(x -> String.format("%s的%s", entity, x)).collect(Collectors.toList()));
         for (ObjectProperty object : objects) {
+            if (object == markedObject) {
+                continue;
+            }
             List<String> datatypesofbn = kgUtil.querydatatypeofBNWithCp(entity, object.getUri());
             for (String datatypeofbn : datatypesofbn) {
                 sentences.add(String.format("%s%s的%s", entity
@@ -639,12 +679,15 @@ public class KnowledgeQueryResponse {
                 ));
             }
         }
-
+        logger.info("sentences {}", Arrays.asList(sentences));
+        List<String> parent = kgUtil.queryParentClass(entity);
+        logger.info("query parentClass {} of entity {}", parent, entity);
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("recommendation");
         result.setResponseAct(ra);
         result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity)).addParam("items", sentences.stream().collect(Collectors.toList()))
-                , new Instruction("feedback").addParam("display", "true")
+                , new Instruction("feedback").addParam("display", "true"), new Instruction("input_button").addParam("buttons", parent)
+                , new Instruction("info_card").addParam("title", null).addParam("content", infoCard)
         ));
 
 //        Set<String> bns = new LinkedHashSet<>();

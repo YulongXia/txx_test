@@ -2172,6 +2172,29 @@ public class KnowledgeQueryUtils {
         return knowledge.selectOneAsList(queryString,"dpLabel");
     }
 
+    public List<EntityAndCpAndDatatypeAndValue> queryEntityAndCpAndDatatypeAndValueWithCp(String entity, ObjectProperty op) {
+        String queryString = "SELECT DISTINCT ?entity ?dpLabel ?value WHERE {\n" +
+                String.format("?entity rdfs:label '%s'.\n", entity) +
+                String.format("?entity <%s> ?bn.\n", op.getUri()) +
+                "?bn ?dp ?value.\n" +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                "}";
+        return queryAndCheckStatus(queryString, b -> new EntityAndCpAndDatatypeAndValue(b.value("entity"),
+                op.getUri(),
+                new DatatypeAndValue(b.value("dpLabel"),b.value("value"))));
+    }
+
+    public List<String> queryParentClass(String entity) {
+        String queryString = "SELECT DISTINCT ?parentLabel WHERE {\n" +
+                String.format("?entity rdfs:label '%s'.\n", entity) +
+                "?entity a/rdfs:subClassOf ?parent.\n" +
+                "?parent rdfs:label ?parentLabel.\n" +
+                "}";
+        logger.debug("query: {}", queryString);
+        return knowledge.selectOneAsList(queryString, "parentLabel");
+    }
+
     public List<String> queryAllProperties(List<String> entities) {
         StringBuilder entityValues = new StringBuilder();
         for(String entity:entities){
