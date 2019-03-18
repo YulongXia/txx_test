@@ -635,6 +635,7 @@ public class KnowledgeQueryResponse {
         logger.info("In KnowledgeQueryResponse::askWhichProperty. datatypes {} of entity {}.", datatypes, entity);
 
         String infoCard = null;
+        String titleOfInfoCard = null;
         String markedDatatype = null;
         ObjectProperty markedObject = null;
         boolean getInfoCardOrNot = false;
@@ -644,7 +645,8 @@ public class KnowledgeQueryResponse {
             List<String> value = kgUtil.queryValuewithEntityAndDatatype(entity, datatype);
             if (value != null && value.size() == 1) {
                 infoCard = value.get(0);
-                logger.debug("infoCard get by dataProperty: {}", infoCard);
+                titleOfInfoCard = String.format("%s的%s", entity, datatype);
+                logger.debug("infoCard get by dataProperty: {}, and title {}", infoCard, titleOfInfoCard);
                 markedDatatype = datatype;
                 getInfoCardOrNot = true;
                 break;
@@ -660,7 +662,10 @@ public class KnowledgeQueryResponse {
                 Map<String, List<EntityAndCpAndDatatypeAndValue>> groupedecdv = ecdv.stream().collect(Collectors.groupingBy(x -> String.format("%s:%s", x.getEntity(), x.getComplex()), Collectors.toList()));
                 if (groupedecdv.values().size() == 1) {
                     infoCard = groupedecdv.values().iterator().next().get(0).getDatatypeAndValue().getValue();
-                    logger.debug("infoCard get by objectProperty: {}", infoCard);
+                    titleOfInfoCard = String.format("%s%s的%s", entity
+                            , op.getLabel() != null && op.getLabel().length() != 0 ? String.format("的%s", op.getLabel()) : op.getBN().getLabel() == null || op.getBN().getLabel().length() == 0 ? "" : String.format("的%s", op.getBN().getLabel())
+                            , groupedecdv.values().iterator().next().get(0).getDatatypeAndValue().getDatatype());
+                    logger.debug("infoCard get by objectProperty: {} and title {}", infoCard, titleOfInfoCard);
                     markedObject = op;
                     break;
                 }
@@ -692,8 +697,8 @@ public class KnowledgeQueryResponse {
         result.setResponseAct(ra);
         result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity))
                         .addParam("items", sentences.stream().collect(Collectors.toList()))
-                , new Instruction("feedback").addParam("display", "true"), new Instruction("input_button").addParam("buttons", parent)
-                , new Instruction("info_card").addParam("title", null).addParam("content", infoCard)
+                , new Instruction("feedback").addParam("display", "true"), new Instruction("input_button").addParam("buttons", String.format("了解更多%s", parent.get(0)))
+                , new Instruction("info_card").addParam("title", titleOfInfoCard).addParam("content", infoCard)
         ));
 
 //        Set<String> bns = new LinkedHashSet<>();

@@ -2188,7 +2188,7 @@ public class KnowledgeQueryUtils {
     public List<String> queryParentClass(String entity) {
         String queryString = "SELECT DISTINCT ?parentLabel WHERE {\n" +
                 String.format("?entity rdfs:label '%s'.\n", entity) +
-                "?entity a/rdfs:subClassOf ?parent.\n" +
+                "?entity a ?parent.\n" +
                 "?parent rdfs:label ?parentLabel.\n" +
                 "}";
         logger.debug("query: {}", queryString);
