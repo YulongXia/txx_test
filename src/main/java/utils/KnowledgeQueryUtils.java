@@ -2311,7 +2311,7 @@ public class KnowledgeQueryUtils {
 
     public List<EntityAndCpAndDatatypeAndValue> queryEntityAndCpAndDatatypeAndValueWithClass(String clazz){
         String queryString = "select distinct ?entityLabel ?dpLabel ?value where {\n" +
-                String.format("?entity a ?eclass. ?elcass rdfs:subClassOf* ?superClass. ?superClass rdfs:label '%s'.\n",clazz) +
+                String.format("?entity a ?eclass. ?eclass rdfs:subClassOf* ?superClass. ?superClass rdfs:label '%s'.\n",clazz) +
                 "    ?dp rdfs:label ?dpLabel.\n" +
                 "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
                 "        ?entity rdfs:label ?entityLabel.\n" +
@@ -2323,7 +2323,7 @@ public class KnowledgeQueryUtils {
                 new DatatypeAndValue(b.value("dpLabel"),b.value("value"))));
 
         String queryString1 = "select distinct ?entityLabel ?cp ?dpLabel ?value where {\n" +
-                String.format("?entity a ?eclass. ?elcass rdfs:subClassOf* ?superClass. ?superClass rdfs:label '%s'.\n",clazz) +
+                String.format("?entity a ?eclass. ?eclass rdfs:subClassOf* ?superClass. ?superClass rdfs:label '%s'.\n",clazz) +
                 "    ?dp rdfs:label ?dpLabel.\n" +
                 "    ?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
                 "        ?entity rdfs:label ?entityLabel.\n" +
