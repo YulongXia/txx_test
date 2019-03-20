@@ -3,9 +3,11 @@ package executions;
 import ai.hual.labrador.dialog.AccessorRepository;
 import ai.hual.labrador.dm.Context;
 import ai.hual.labrador.dm.ExecutionResult;
+import ai.hual.labrador.dm.Instruction;
 import ai.hual.labrador.dm.ResponseExecutionResult;
 import ai.hual.labrador.exceptions.DMException;
 import ai.hual.labrador.kg.KnowledgeStatus;
+import ai.hual.labrador.nlg.ResponseAct;
 import ai.hual.labrador.nlu.constants.SystemIntents;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -36,7 +38,11 @@ class KnowledgeQueryProperty {
 
     private KnowledgeQueryUtils kgUtil;
 
-    private String CONDITION_BN_IRI = "http://hual.ai/taikang/taikang_rs#condition_bn";
+    private final String CONDITION_BN_IRI = "http://hual.ai/taikang/taikang_rs#condition_bn";
+
+    private final String WITH_BN = "http://hual.ai/taikang#with_bn";
+    private final String WITH_BN_CLASS = "http://hual.ai/taikang#with_bn_";
+    private static final String UNDERWRITTING_SCALE = "核保尺度";
 
     KnowledgeQueryProperty(AccessorRepository accessorRepository) {
         this.accessorRepository = accessorRepository;
@@ -301,6 +307,9 @@ class KnowledgeQueryProperty {
                     } else if (complex != null) {
                         return response.askWhichEntityOfCp(complex, context);
                     }
+                }
+                if(properties.get(0).equals(UNDERWRITTING_SCALE)){
+                    return response.answerUnderwrittingScale(UNDERWRITTING_SCALE,context);
                 }
                 return noEntityAndSingleProperty(yshape, diffusion, condition, object, datatype, complex, properties, context);
             } else if (entities.size() == 1) {
@@ -1016,7 +1025,7 @@ class KnowledgeQueryProperty {
         if (objectsOfDatatype.size() > 0) {
             Map<String, String> objectIRIsAndTypes = new HashMap<>();
             for (ObjectProperty objectProperty : objectsOfDatatype) {
-                //if(!objectProperty.getUri().equals("http://hual.ai/taikang/taikang_rs#with_bn"))
+                //if(!objectProperty.getUri().equals(WITH_BN))
                 objectIRIsAndTypes.put(objectProperty.getUri(), objectProperty.getType());
             }
             Map<String, String> tmp = null;
@@ -1374,11 +1383,15 @@ class KnowledgeQueryProperty {
                         }
                     }
                 }
-                // 只有一种condition_bn
-                String condition_bn = null;
+                // 只有一种bn
                 Map<String, List<ObjectProperty>> aggregate = objectsOfEntity.stream().collect(Collectors.groupingBy(x -> x.getUri(), Collectors.toList()));
+                if(kgUtil.CheckMedicalUnderwrittingEntity(entity).size()>0 && aggregate.keySet().stream().anyMatch(x -> WITH_BN.equals(x))){
+                    ResponseExecutionResult MedicalUnderwritting = response.answerMedicalUnderwritting(entity,objectsOfEntity);
+                    if(MedicalUnderwritting != null)
+                        return MedicalUnderwritting;
+                }
                 if(aggregate.size() > 0)
-                    aggregate.remove("http://hual.ai/taikang/taikang_rs#with_bn");
+                    aggregate.remove(WITH_BN);
                 if (aggregate.keySet().size() == 1 && COMPLEX_PROPERTY.equals(aggregate.values().iterator().next().get(0).getType())) {
                     List<String> bns = aggregate.values().iterator().next().stream().map(x -> x.getBN().getIri()).distinct().collect(Collectors.toList());
                     Map<String,String> cpces = (Map<String,String>)context.getSlots().get("cpContextConditionEntities");
@@ -1549,6 +1562,12 @@ class KnowledgeQueryProperty {
         // entity dp 不合法 或 entity dp 合法但是无值
         List<String> valid4 = kgUtil.checkEntityAndCpAndDatatype(entity, datatype);
         if (valid4.size() > 0) {
+            if (valid4.stream().anyMatch(x -> x.equals(WITH_BN_CLASS))){
+                List<ObjectProperty> objects = kgUtil.queryObjectsOfDatatype(entity,datatype);
+                ResponseExecutionResult medicalunderwritting = response.answerMedicalUnderwritting(entity,objects);
+                if (medicalunderwritting != null)
+                    return medicalunderwritting;
+            }
             // entity cp bn dp 合法
             Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
             if (cpces == null || cpces.size() == 0) {

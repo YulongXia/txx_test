@@ -26,7 +26,16 @@ public class KnowledgeQueryResponse {
         put("公积金#联名卡", "公积金联名卡");
     }};
 
+    private static final String DISEASE = "疾病";
+    private static final String TYPES_OF_INSURANCE = "险种";
+    private static final String SPECIAL_CROWD = "特殊人群";
+
+    private static final String UNDERWRITTING_SCALE = "核保尺度";
+    private static final String WITH_BN = "http://hual.ai/taikang#with_bn";
+
     public static final String HOT_ISSUE = "热门问题";
+
+    public static final String DEFINATION = "定义";
 
     public KnowledgeQueryResponse(KnowledgeQueryUtils kgUtil, AccessorRepository accessorRepository) {
         this.kgUtil = kgUtil;
@@ -632,11 +641,13 @@ public class KnowledgeQueryResponse {
         context.getSlots().put("contextObject", null);
         context.getSlots().put("contextDatatype", null);
         context.getSlots().put("contextConditionEntity", null);
+
+
+        ResponseExecutionResult medicalunderwritting = answerMedicalUnderwritting(entity,objects);
+        if (medicalunderwritting != null)
+            return medicalunderwritting;
+
         logger.info("In KnowledgeQueryResponse::askWhichProperty. datatypes {} of entity {}.", datatypes, entity);
-
-
-        
-
         String infoCard = null;
         String titleOfInfoCard = null;
         String markedDatatype = null;
@@ -2213,19 +2224,60 @@ public class KnowledgeQueryResponse {
 
 
     public ResponseExecutionResult answerWithYshapeEntitiesPair(List<YshapeBNAndDPAndValue> res, List<String> ces, Context context) {
-        // if ces
+        context.getSlots().put("contextEntity", null);
+        context.getSlots().put("contextBN", null);
+        context.getSlots().put("contextObject", null);
+        context.getSlots().put("contextDatatype", null);
+        context.getSlots().put("contextConditionEntity", null);
+        context.getSlots().put("cpContextConditionEntities", null);
+
         ResponseExecutionResult result = new ResponseExecutionResult();
         ResponseAct ra = new ResponseAct("answerYshape");
-        ra.put("entity1", kgUtil.queryLabelWithIRI(res.get(0).getEntity1()))
-                .put("entity2", kgUtil.queryLabelWithIRI(res.get(0).getEntity2()))
+        String entity1 = kgUtil.queryLabelWithIRI(res.get(0).getEntity1());
+        String entity2 = kgUtil.queryLabelWithIRI(res.get(0).getEntity2());
+        ra.put("entity1",entity1 )
+                .put("entity2", entity2 )
                 .put("datatype", res.get(0).getDatatype())
                 .put("value", res.get(0).getValue());
         if (ces != null && ces.size() != 0) {
             ra.put("ces", String.join(",", ces));
         }
+
+        List<Instruction> instructions = new ArrayList<>();
+        if(res.get(0).getDatatype().equals(UNDERWRITTING_SCALE)){
+            String entity = null;
+            String typesofinsurance = null;
+            for(String e: Arrays.asList(entity1,entity2)){
+                String clazz = kgUtil.queryClass(e);
+                if( clazz != null && ! clazz.equals(TYPES_OF_INSURANCE) ){
+                    entity = e;
+                }
+                if ( clazz != null && clazz.equals(TYPES_OF_INSURANCE) ){
+                    typesofinsurance = e;
+                }
+            }
+            if (entity != null && typesofinsurance != null) {
+                List<String> datatypes = kgUtil.queryDatatypesWithEntity(entity);
+                if(datatypes.stream().anyMatch(x -> x.equals(DEFINATION))){
+                    List<String> vals = kgUtil.queryValuewithEntityAndDatatype(entity,DEFINATION);
+                    if(vals.size() > 0)
+                        instructions.add(new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity))
+                                .addParam("items", Arrays.asList(String.format("%s的定义",entity))));
+                }
+                List<YshapeBNAndDPAndValue> ydvs = kgUtil.queryOtherMedicalUnderwrittingWithEntityAndtypeofinsurance(entity,typesofinsurance);
+                Set<String> items = new HashSet<>();
+                for (YshapeBNAndDPAndValue ydv : ydvs) {
+                    items.add(String.format("%s%s的%s", ydv.getEntity1(), ydv.getEntity2(), ydv.getDatatype()));
+                }
+                if(items.size() != 0){
+                    instructions.add(new Instruction("recommendation").addParam("title", String.format("更多关于%s的核保问题",entity)).addParam("items",items));
+                }
+            }
+        }
+
+        instructions.add(new Instruction("feedback").addParam("display", "true"));
         result.setResponseAct(ra);
-        result.setInstructions(Arrays.asList(
-                new Instruction("feedback").addParam("display", "true")));
+        result.setInstructions(instructions);
         return result;
     }
 
@@ -2449,5 +2501,109 @@ public class KnowledgeQueryResponse {
                 return unasked_items.subList(0,3);
         }
         return recommdations;
+    }
+
+
+    public ResponseExecutionResult answerMedicalUnderwritting(String entity,Collection<ObjectProperty> objects){
+        String clazz = kgUtil.queryClass(entity);
+        if(clazz != null && clazz.equals(DISEASE)){
+            List<ObjectProperty> hbs = objects.stream().filter(x -> x.getUri().equals(WITH_BN)).collect(Collectors.toList());
+            ResponseExecutionResult result = new ResponseExecutionResult();
+            List<Instruction> instructions = new ArrayList<>();
+            if(hbs.size() == 0){
+                result.setResponseAct(new ResponseAct("NoMedicalUnderwritting").put("entity",entity));
+            }else{
+                result.setResponseAct(new ResponseAct("AnswerMedicalUnderwritting"));
+                for(ObjectProperty hb:hbs) {
+                    List<YshapeBNAndDPAndValue> ydvs = kgUtil.queryYshapeBNLabelsAndDatatypes(entity, hb.getBN().getIri());
+                    for (YshapeBNAndDPAndValue ydv : ydvs) {
+                        instructions.add(new Instruction("info_card").addParam("title", String.format("%s%s的%s", ydv.getEntity1(), ydv.getEntity2(), ydv.getDatatype())).addParam("content", ydv.getValue()));
+                    }
+                }
+                if(instructions.size() == 0)
+                    result.setResponseAct(new ResponseAct("NoMedicalUnderwritting").put("entity",entity));
+            }
+            List<String> datatypes = kgUtil.queryDatatypesWithEntity(entity);
+            if(datatypes.stream().anyMatch(x -> x.equals(DEFINATION))){
+                List<String> vals = kgUtil.queryValuewithEntityAndDatatype(entity,DEFINATION);
+                if(vals.size() > 0)
+                    instructions.add(new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity))
+                            .addParam("items", Arrays.asList(String.format("%s的定义",entity))));
+            }
+            result.setInstructions(instructions);
+            return result;
+
+        }
+
+        if(clazz != null && clazz.equals(TYPES_OF_INSURANCE)){
+            List<ObjectProperty> hbs = objects.stream().filter(x -> x.getUri().equals(WITH_BN)).collect(Collectors.toList());
+            ResponseExecutionResult result = new ResponseExecutionResult();
+            result.setResponseAct(new ResponseAct("AnswerMedicalUnderwritting"));
+            List<String> datatypes = kgUtil.queryDatatypesWithEntity(entity);
+            List<Instruction> instructions = new ArrayList<>();
+            if(datatypes.stream().anyMatch(x -> x.equals(DEFINATION))){
+                List<String> vals = kgUtil.queryValuewithEntityAndDatatype(entity,DEFINATION);
+                if(vals.size() > 0)
+                    instructions.add(new Instruction("info_card").addParam("title", String.format("%s的%s", entity,DEFINATION))
+                            .addParam("items", Arrays.asList(vals.get(0))));
+            }
+            if(instructions.size() == 0)
+                result.setResponseAct(new ResponseAct("answerNoValue").put("entity",entity).put("datatype",DEFINATION));
+            if(hbs.size() > 0){
+                Set<String> items = new HashSet<>();
+                for(ObjectProperty hb:hbs) {
+                    List<YshapeBNAndDPAndValue> ydvs = kgUtil.queryYshapeBNLabelsAndDatatypes(entity, hb.getBN().getIri(),DISEASE);
+                    for (YshapeBNAndDPAndValue ydv : ydvs) {
+                        items.add(String.format("%s%s的%s",ydv.getEntity1(), ydv.getEntity2(), ydv.getDatatype()));
+                    }
+                }
+                if(items.size() > 0)
+                    instructions.add(new Instruction("recommendation").addParam("title", String.format("更多关于%s的内容",entity)).addParam("items",items.stream().collect(Collectors.toList())));
+            }
+            result.setInstructions(instructions);
+            return result;
+
+        }
+
+        if(clazz != null && clazz.equals(SPECIAL_CROWD)){
+            List<ObjectProperty> hbs = objects.stream().filter(x -> x.getUri().equals(WITH_BN)).collect(Collectors.toList());
+            ResponseExecutionResult result = new ResponseExecutionResult();
+            List<Instruction> instructions = new ArrayList<>();
+            if(hbs.size() == 0){
+                result.setResponseAct(new ResponseAct("NoMedicalUnderwritting").put("entity",entity));
+            }else{
+                result.setResponseAct(new ResponseAct("AnswerMedicalUnderwritting"));
+                for(ObjectProperty hb:hbs) {
+                    List<YshapeBNAndDPAndValue> ydvs = kgUtil.queryYshapeBNLabelsAndDatatypes(entity, hb.getBN().getIri(),TYPES_OF_INSURANCE);
+                    for (YshapeBNAndDPAndValue ydv : ydvs) {
+                        instructions.add(new Instruction("info_card").addParam("title", String.format("%s%s的%s", ydv.getEntity1(), ydv.getEntity2(), ydv.getDatatype())).addParam("content", ydv.getValue()));
+                    }
+                }
+                if(instructions.size() == 0)
+                    result.setResponseAct(new ResponseAct("NoMedicalUnderwritting").put("entity",entity));
+            }
+            List<String> datatypes = kgUtil.queryDatatypesWithEntity(entity);
+            if(datatypes.stream().anyMatch(x -> x.equals(DEFINATION))){
+                List<String> vals = kgUtil.queryValuewithEntityAndDatatype(entity,DEFINATION);
+                if(vals.size() > 0)
+                    instructions.add(new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity))
+                            .addParam("items", Arrays.asList(String.format("%s的定义",entity))));
+            }
+            result.setInstructions(instructions);
+            return result;
+
+        }
+
+
+        return null;
+    }
+
+
+    public ResponseExecutionResult answerUnderwrittingScale(String property,Context context){
+        ResponseExecutionResult result = new ResponseExecutionResult();
+        result.setResponseAct(new ResponseAct("answerUnderwrittingScale"));
+        result.setInstructions(Arrays.asList(new Instruction("recommendation").addParam("title","您可能关注")
+                .addParam("items",processRecommendations(FAQResponse.getRecommendations(property),context))));
+        return result;
     }
 }

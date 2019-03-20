@@ -1707,7 +1707,7 @@ public class KnowledgeQueryUtils {
                 "?entity a ?eclass." +
                 "?eclass rdfs:subClassOf* ?cpdomain.\n" +
                 "?cp rdfs:range ?cprange.\n" +
-                "?class rdfs:subClassOf ?cprange.\n" +
+                "?class rdfs:subClassOf* ?cprange.\n" +
                 "?bn a ?class.\n" +
                 String.format("?dp rdfs:domain ?clazz. ?dp rdfs:label '%s'.\n", datatype) +
                 "?class rdfs:subClassOf* ?clazz.\n" +
@@ -2335,5 +2335,91 @@ public class KnowledgeQueryUtils {
                 b.value("cp"),
                 new DatatypeAndValue(b.value("dpLabel"),b.value("value")))));
         return result;
+    }
+
+
+    public String queryClass(String e){
+        String queryString = "select distinct ?classLabel where {\n" +
+                String.format("?s rdfs:label '%s'.\n",e) +
+                "?s a ?class.\n" +
+                "?class rdfs:label ?classLabel.\n" +
+                "}";
+        List<String> result = knowledge.selectOneAsList(queryString,"classLabel");
+        return result.size() > 0 ? result.get(0) : null;
+    }
+
+
+    public List<YshapeBNAndDPAndValue>  queryYshapeBNLabelsAndDatatypes(String entity,String bnuri) {
+        String queryString = "select distinct ?s2Label ?yp ?dpLabel ?value where {\n" +
+                String.format("?s1 rdfs:label '%s'.\n",entity) +
+                "?s2 rdfs:label ?s2Label.\n" +
+                String.format("?s1 ?yp <%s>.\n",bnuri) +
+                "?yp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                String.format("?s2 ?yp <%s>.\n",bnuri) +
+                String.format("<%s> ?dp ?value.\n",bnuri) +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                String.format("filter (?s2Label != '%s')\n",entity) +
+                "}";
+        return queryAndCheckStatus(queryString, b -> new YshapeBNAndDPAndValue(entity, b.value("s2Label"), b.value("yp"),
+                        new BlankNode(bnuri, ""), b.value("dpLabel"),b.value("value")));
+    }
+
+    public List<YshapeBNAndDPAndValue>  queryYshapeBNLabelsAndDatatypes(String entity,String bnuri,String otherentityclass) {
+        // 限制YShape另一个otherentity的class
+        String queryString = "select distinct ?s2Label ?yp ?dpLabel ?value where {\n" +
+                String.format("?s1 rdfs:label '%s'.\n",entity) +
+                "?s2 rdfs:label ?s2Label.\n" +
+                String.format("?s2 a/rdfs:label '%s'.\n",otherentityclass) +
+                String.format("?s1 ?yp <%s>.\n",bnuri) +
+                "?yp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                String.format("?s2 ?yp <%s>.\n",bnuri) +
+                String.format("<%s> ?dp ?value.\n",bnuri) +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                String.format("filter (?s2Label != '%s')\n",entity) +
+                "}";
+        return queryAndCheckStatus(queryString, b -> new YshapeBNAndDPAndValue(entity, b.value("s2Label"), b.value("yp"),
+                new BlankNode(bnuri, ""), b.value("dpLabel"),b.value("value")));
+    }
+
+    public List<String> queryDatatypesWithEntity(String entity){
+        String queryString = "SELECT DISTINCT ?datatype where {\n" +
+                String.format("?entity rdfs:label '%s'.\n", entity )+
+                "?entity ?dp ?value.\n" +
+                "?dp rdfs:label ?datatype.\n" +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                "}";
+        List<String> result = knowledge.selectOneAsList(queryString,"datatype");
+        return result;
+    }
+
+    public List<String> CheckMedicalUnderwrittingEntity(String entity){
+        String queryString = "select distinct ?e where {\n" +
+                "values ?classLabel {'疾病' '险种' '特殊人群'}\n" +
+                String.format("?e rdfs:label '%s'.\n",entity) +
+                "?e a/rdfs:label ?classLabel.\n" +
+                "}";
+        return knowledge.selectOneAsList(queryString,"e");
+    }
+
+    public List<YshapeBNAndDPAndValue> queryOtherMedicalUnderwrittingWithEntityAndtypeofinsurance(String entity,String typeofinsurance){
+        // entity和除typeofinsurance以外的险种的Yshape
+        String queryString = "select distinct ?s2Label ?bn ?yp ?dpLabel ?value where {\n" +
+                "values ?s1ClassLabel { '特殊人群' '疾病' } " +
+                String.format("?s1 rdfs:label '%s'.\n",entity) +
+                "?s1 a/rdfs:label ?s1ClassLabel.\n" +
+                "?s2 rdfs:label ?s2Label.\n" +
+                "?s2 a/rdfs:label '险种'.\n" +
+                "?s1 ?yp ?bn.\n" +
+                "?yp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                "?s2 ?yp ?bn.\n" +
+                "?bn ?dp ?value.\n" +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                "?dp rdfs:label ?dpLabel.\n" +
+                String.format("filter (?s2Label != '%s' && ?s2Label != '%s' )\n",entity,typeofinsurance) +
+                "}";
+        return queryAndCheckStatus(queryString, b -> new YshapeBNAndDPAndValue(entity, b.value("s2Label"), b.value("yp"),
+                new BlankNode(b.value("bn"), ""), b.value("dpLabel"),b.value("value")));
     }
 }

@@ -40,7 +40,7 @@ public class FAQResponse {
 
     private AccessorRepository accessorRepository;
 
-    private final static List<String> DEFAULT_RECOMMEND = Arrays.asList("公积金提取的条件","门禁卡办理的操作方式","打卡查询的操作方式");
+    private final static List<String> DEFAULT_RECOMMEND = Arrays.asList("孕妇医疗险的核保尺度","高血压医疗险的核保尺度","重疾险");
 
     private final static int MAX_RECOMMENDS = 10;
 
@@ -171,6 +171,61 @@ public class FAQResponse {
             System.out.println("Could not find file " + CONFIG_FILE_PATH);
         }
         return prop;
+    }
+
+
+
+    public static List<String> getRecommendations(String query){
+        Properties prop = getProperties();
+        String recommend_url = (String)prop.get("recommend_url");
+        if(recommend_url == null){
+            return DEFAULT_RECOMMEND;
+        }
+        HttpPost post = null;
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+
+            post = new HttpPost(recommend_url);
+            // 构造消息头
+            post.setHeader("Content-type", "application/json; charset=utf-8");
+
+            // 构建消息实体
+            JsonObject jsonobj = new JsonObject();
+            jsonobj.put("botName" ,"taikang_rs_dev");
+            jsonobj.put("input",query);
+            StringEntity entity = new StringEntity(jsonobj.toString(), Charset.forName("UTF-8"));
+            entity.setContentEncoding("UTF-8");
+            // 发送Json格式的数据请求
+            entity.setContentType("application/json");
+            post.setEntity(entity);
+
+            HttpResponse response = httpClient.execute(post);
+
+            // 检验返回码
+            int statusCode = response.getStatusLine().getStatusCode();
+            if(statusCode == HttpStatus.SC_OK){
+                InputStream content = response.getEntity().getContent();
+                JsonObject json_content = JSON.parse(content);
+                JsonArray ja = json_content.get("msg").getAsObject().get("recommend").getAsArray();
+                List<String> recommends = ja.stream().map(x -> x.getAsString().value()).collect(Collectors.toList());
+                if(recommends.size() > MAX_RECOMMENDS)
+                {
+                    int i = 0;
+                    List<String> randoms = new ArrayList<>();
+                    while(i < MAX_RECOMMENDS){
+                        Random rand =new Random();
+                        int j = rand.nextInt(recommends.size());
+                        randoms.add(recommends.remove(j));
+                        i++;
+                    }
+                    return randoms;
+                }
+                return recommends;
+            }
+        } catch(Exception e) {
+            return DEFAULT_RECOMMEND;
+        }
+        return DEFAULT_RECOMMEND;
     }
 
 }
