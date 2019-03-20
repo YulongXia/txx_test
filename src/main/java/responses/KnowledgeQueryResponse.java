@@ -325,7 +325,7 @@ public class KnowledgeQueryResponse {
         }
         items = processRecommendations(items.stream().collect(Collectors.toList()), context).stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("recommendation"));
+        result.setResponseAct(new ResponseAct("AnswerAndRecommendation"));
 //        if(entities.size() > 5 ){
 //            List<String> ents5 = LimitSub.get5(ents);
 //
@@ -456,11 +456,40 @@ public class KnowledgeQueryResponse {
         context.getSlots().put("contextDatatype", null);
         context.getSlots().put("contextConditionEntity", null);
 
+        EntitiesAndTheirProperties entitiesAndTheirProperties = kgUtil.queryProperties(entity);
+        ListMultimap<String, String> entitiesAndTheirDatatypes = entitiesAndTheirProperties.getEntitiesAndTheirDatatypes();
+        ListMultimap<String, ObjectProperty> entitiesAndTheirObjects = entitiesAndTheirProperties.getEntitiesAndTheirObjects();
+        logger.debug("entity {} and its datatypes {}.", entity, entitiesAndTheirDatatypes.get(entity));
+        List<String> datatypes = entitiesAndTheirDatatypes.get(entity);
+        datatypes.removeAll(subProperties);
+        List<ObjectProperty> objects = entitiesAndTheirObjects.get(entity);
+
+        Set<String> sentences = new HashSet<>();
+        sentences.addAll(datatypes.stream().map(x -> String.format("%s的%s", entity, x)).collect(Collectors.toList()));
+        for (ObjectProperty object : objects) {
+            List<String> datatypesofbn = kgUtil.querydatatypeofBNWithCp(entity, object.getUri());
+            for (String datatypeofbn : datatypesofbn) {
+                sentences.add(String.format("%s%s的%s", entity
+                        , object.getLabel() != null && object.getLabel().length() != 0 ? String.format("的%s", object.getLabel()) : object.getBN().getLabel() == null || object.getBN().getLabel().length() == 0 ? "" : String.format("的%s", object.getBN().getLabel())
+                        , datatypeofbn
+                ));
+            }
+        }
+        sentences = processRecommendations(sentences.stream().collect(Collectors.toList()), context).stream().collect(Collectors.toSet());
+
         List<Instruction> instructions = new ArrayList<>();
         for (String subProperty : subProperties) {
             List<String> res = kgUtil.queryValuewithEntityAndDatatype(entity, subProperty);
             instructions.add(new Instruction("info_card").addParam("title", String.format("%s的%s", entity, subProperty)).addParam("content", res == null || res.size() == 0 ? "" : res.get(0)));
         }
+        if (sentences.size() > 0) {
+            instructions.add(new Instruction("recommendation").addParam("title", String.format("关于%s，您可以从更多方面了解：", entity))
+                    .addParam("items", sentences.stream().collect(Collectors.toList())));
+        }
+        List<String> parent = kgUtil.queryParentClass(entity);
+        logger.info("query parentClass {} of entity {}", parent, entity);
+        instructions.add(new Instruction("input_button").addParam("buttons", Arrays.asList(String.format("了解更多%s", parent.get(0)), HOT_ISSUE)));
+
 //        ResponseExecutionResult result = new ResponseExecutionResult();
 //        result.setResponseAct(new ResponseAct("whichSubProperties")
 //                .put("entity",entity)
@@ -475,6 +504,7 @@ public class KnowledgeQueryResponse {
 //                        .addParam("datatype", null)
 //                        .addParam("suggestions", subProperties)));
         ResponseExecutionResult result = new ResponseExecutionResult();
+
         result.setResponseAct(new ResponseAct("whichSubProperties")
                 .put("entity", entity)
                 .put("datatype", datatype));
@@ -693,7 +723,7 @@ public class KnowledgeQueryResponse {
 
         sentences = processRecommendations(sentences.stream().collect(Collectors.toList()), context).stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
-        ResponseAct ra = new ResponseAct("recommendation");
+        ResponseAct ra = new ResponseAct("AnswerAndRecommendation");
         result.setResponseAct(ra);
         result.setInstructions(Arrays.asList(new Instruction("info_card").addParam("title", titleOfInfoCard).addParam("content", infoCard)
                 , new Instruction("recommendation").addParam("title", String.format("更多关于%s的问题", entity))
@@ -1133,11 +1163,12 @@ public class KnowledgeQueryResponse {
         relations = relations.isEmpty() ? null : relations;
 
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("kg")
-                .put("entity", entity)
-                .put("datatype", datatype)
-                .put("result", value)
-                .put("relations", relations));
+//        result.setResponseAct(new ResponseAct("kg")
+//                .put("entity", entity)
+//                .put("datatype", datatype)
+//                .put("result", value)
+//                .put("relations", relations));
+        result.setResponseAct(new ResponseAct("AnswerAndRecommendation"));
         result.setInstructions(Arrays.asList(
                 new Instruction("msginfo_kb_a")
                         .addParam("title", accessorRepository.getNLG().generate(new ResponseAct("kg")
@@ -1150,8 +1181,11 @@ public class KnowledgeQueryResponse {
                         .addParam("condition", null)
                         .addParam("datatype", datatype)
                         .addParam("relations", relations),
-                new Instruction("recommendation").addParam("title","您可能关注")
-                    .addParam("items",processRecommendations(FAQResponse.getRecommendations(),context)),
+                new Instruction("info_card").addParam("title",String.format("%s%s",entity,datatype)).addParam("content",value),
+//                new Instruction("recommendation").addParam("title","您可能关注")
+//                    .addParam("items",processRecommendations(FAQResponse.getRecommendations(),context)),
+                new Instruction("input_button")
+                        .addParam("buttons",Arrays.asList(HOT_ISSUE)),
                 new Instruction("feedback")
                         .addParam("display", "true")));
 //        result.setInstructions(Collections.singletonList(
@@ -1739,6 +1773,7 @@ public class KnowledgeQueryResponse {
     }
 
     public ResponseExecutionResult askMultiAnswerWithDp(String entity, String datatype, Map<String, String> cpces, List<BNAndDatatypeAndValueAndConditions> restConds, Context context) {
+        logger.debug("In KnowledgeQueryResponse::askMultiAnswerWithDp. entity {} datatype {}");
         List<Map<String, String>> tmp = restConds.stream().map(x -> x.getConditions()).collect(Collectors.toList());
         Set<String> conditionClasses = new HashSet<>();
         List<List<String>> y = tmp.stream().map(x -> x.values().stream().collect(Collectors.toList())).collect(Collectors.toList());
@@ -2079,6 +2114,7 @@ public class KnowledgeQueryResponse {
     }
 
     public ResponseExecutionResult askMultiAnswerInEntityCpDpWithEntityAndDp(String entity, String datatype, List<BNAndDatatypeAndValueAndConditions> res, Context context) {
+        logger.debug("In KnowledgeQueryResponse::askMultiAnswerInEntityCpDpWithEntityAndDp.");
         List<BNAndDatatypeAndValueAndConditions> reswithoutConds = res.stream().filter(x -> x.getConditions() == null || x.getConditions().isEmpty()).collect(Collectors.toList());
         if (reswithoutConds.size() == 1) {
             return answer(entity, kgUtil.queryCpWithEntityAndBN(entity, reswithoutConds.get(0).getBn().getIri()), reswithoutConds.get(0).getDatatypeAndValue().getDatatype(), reswithoutConds.get(0).getDatatypeAndValue().getValue(), context);
@@ -2114,7 +2150,7 @@ public class KnowledgeQueryResponse {
             result.setResponseAct(ra);
             result.setInstructions(Collections.singletonList(
                     new Instruction("multiple_condition")
-                            .addParam("title", String.format("更多关于%s的%s的情况", entity, datatype))
+//                            .addParam("title", String.format("更多关于%s的%s的情况", entity, datatype))
                             .addParam("items", items)));
             return result;
         }
@@ -2407,6 +2443,7 @@ public class KnowledgeQueryResponse {
     }
 
     public ResponseExecutionResult askWhichEntityAndCpAndDp(String clazz, Context context) {
+        logger.debug("In KnowledgeQueryResponse::askWhichEntityAndCpAndDp.");
         List<EntityAndCpAndDatatypeAndValue> ecdvs = kgUtil.queryEntityAndCpAndDatatypeAndValueWithClass(clazz);
         Set<String> items = new HashSet<>();
         for(EntityAndCpAndDatatypeAndValue ecda: ecdvs){
@@ -2422,10 +2459,13 @@ public class KnowledgeQueryResponse {
 
         items = processRecommendations(items.stream().collect(Collectors.toList()), context).stream().collect(Collectors.toSet());
         ResponseExecutionResult result = new ResponseExecutionResult();
-        result.setResponseAct(new ResponseAct("recommendation"));
+        //result.setResponseAct(new ResponseAct("recommendation"));
+//        result.setResponseAct(new ResponseAct());
+        result.setResponseAct(new ResponseAct("EmptyAnswer"));
         result.setInstructions(Arrays.asList(
                 new Instruction("recommendation")
-                        .addParam("title",String.format("更多关于%s的问题",clazz))
+                        .addParam("title",String.format("%s包含多项概念, 您可能想了解",clazz))
+                        //.addParam("title",String.format("更多关于%s的问题",clazz))
                         .addParam("items",items.stream().collect(Collectors.toList())),
                 new Instruction("input_button")
                         .addParam("buttons",buttons.stream().collect(Collectors.toList())),
