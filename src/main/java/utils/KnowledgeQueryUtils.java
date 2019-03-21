@@ -2417,9 +2417,98 @@ public class KnowledgeQueryUtils {
                 "?bn ?dp ?value.\n" +
                 "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
                 "?dp rdfs:label ?dpLabel.\n" +
-                String.format("filter (?s2Label != '%s' && ?s2Label != '%s' )\n",entity,typeofinsurance) +
+                String.format("filter (?s2Label != '%s')\n",typeofinsurance) +
                 "}";
         return queryAndCheckStatus(queryString, b -> new YshapeBNAndDPAndValue(entity, b.value("s2Label"), b.value("yp"),
                 new BlankNode(b.value("bn"), ""), b.value("dpLabel"),b.value("value")));
+    }
+
+
+    public List<YshapeBNAndDPAndValue>  queryYshapeBNLabelsAndDatatypesWithEntityAndClass(String entity,String clazz,String datatype) {
+        String queryString = "select distinct ?s1Label ?s2Label ?yp ?value ?bn where {\n" +
+                String.format("?s1 rdfs:label '%s' .\n",entity)+
+                "?s2 rdfs:label ?s2Label.\n" +
+                String.format("?s2 a/rdfs:label '%s'.\n",clazz) +
+                "?s1 ?yp ?bn.\n" +
+                "?yp a <http://hual.ai/new_standard#ComplexProperty>.\n" +
+                "?s2 ?yp ?bn.\n" +
+                "?bn ?dp ?value.\n" +
+                "?dp a/rdfs:subClassOf* owl:DatatypeProperty.\n" +
+                String.format("?dp rdfs:label '%s'.\n",datatype) +
+                "filter (?s2Label != ?s1Label)\n" +
+                "}";
+        return queryAndCheckStatus(queryString, b -> new YshapeBNAndDPAndValue(entity, b.value("s2Label"), b.value("yp"),
+                new BlankNode(b.value("bn"), ""), datatype,b.value("value")));
+    }
+
+    public List<String> queryEntitiesDerivedFromClass(List<String> entities,String clazz){
+        String queryString = "select distinct ?s1Label {\n" +
+                String.format("values ?s1Label {%s}\n",String.join(" ",entities.stream().map(x -> String.format("'%s'",x)).collect(Collectors.toList()))) +
+                "?s1 rdfs:label ?s1Label .\n"+
+                String.format("?s1 a/rdfs:label '%s'.\n",clazz)+
+                "}";
+        return knowledge.selectOneAsList(queryString,"s1Label");
+    }
+
+    public List<String> queryEntitiesAndDatatypeThatHaveValue(List<String> entities,String datatype){
+        String queryString = "SELECT DISTINCT  ?s1Label WHERE {\n" +
+                String.format("values ?s1Label {%s}\n",String.join(" ",entities.stream().map(x -> String.format("'%s'",x)).collect(Collectors.toList()))) +
+                "?entity rdfs:label ?s1Label .\n" +
+                "?entity ?dp ?value.\n" +
+                String.format("?dp rdfs:label '%s'.\n" ,datatype)+
+                "\n" +
+                "}";
+        logger.debug("query: {}",queryString);
+        return knowledge.selectOneAsList(queryString,"s1Label");
+    }
+
+    public Pair<String,String> checkEntitiesPairSatisfyClasses(Pair<String,String> entitiesPair,Pair<String,String> clazzes){
+        // 检测entitiesPair是否满足clazzes 若满足,则按clazzes的顺序并调整entitiesPair,否则返回null
+        String entityofclazz1 = null;
+        String entityofclazz2 = null;
+        String queryString = "select distinct ?s1Label where {\n" +
+                String.format("values ?s1Label { '%s' '%s' }\n",queryLabelWithIRI(entitiesPair.getKey()),queryLabelWithIRI(entitiesPair.getValue())) +
+                "?s rdfs:label ?s1Label.\n" +
+                String.format("?s a/rdfs:label '%s'.\n", clazzes.getKey() )+
+                "\n" +
+                "}";
+        List<String> entitiesofclazz1 = knowledge.selectOneAsList(queryString,"s1Label");
+        if(entitiesofclazz1 == null || entitiesofclazz1.size() == 0){
+            return null;
+        }else{
+            entityofclazz1 = entitiesofclazz1.get(0);
+        }
+
+        String queryString1 = "select distinct ?s1Label where {\n" +
+                String.format("values ?s1Label { '%s' '%s' }\n",queryLabelWithIRI(entitiesPair.getKey()),queryLabelWithIRI(entitiesPair.getValue())) +
+                "?s rdfs:label ?s1Label.\n" +
+                String.format("?s a/rdfs:label '%s'.\n", clazzes.getValue() )+
+                "\n" +
+                "}";
+        List<String> entitiesofclazz2 = knowledge.selectOneAsList(queryString1,"s1Label");
+        if(entitiesofclazz2 == null || entitiesofclazz2.size() == 0){
+            return null;
+        }else{
+            entityofclazz2 = entitiesofclazz2.get(0);
+        }
+
+        if(entityofclazz1 != null && entityofclazz2 != null)
+        {
+            return new Pair<>(entityofclazz1,entityofclazz2);
+        }
+        return null;
+    }
+
+
+    public List<YshapeBNAndDPAndValue> queryYshapeBNLabelsAndDatatypesWithE1AndE2AndDatatype(String e1, String e2,String datatype) {
+        String queryString = "SELECT DISTINCT ?yp ?bn ?dp ?value WHERE{\n" +
+                String.format("?s1 rdfs:label '%s' . ?s2 rdfs:label '%s'.\n",e1,e2 )+
+                "?s1 ?yp ?bn . ?s2 ?yp ?bn .\n" +
+                String.format("?bn ?dp ?value . ?dp rdfs:label '%s' .\n",datatype) +
+                "?yp a <http://hual.ai/new_standard#ComplexProperty>." +
+                "?dp a/rdfs:subClassOf owl:DatatypeProperty." +
+                "}";
+        return queryAndCheckStatus(queryString, b -> new YshapeBNAndDPAndValue(e1, e2, b.value("yp"),
+                new BlankNode(b.value("bn"), ""), datatype,b.value("value")));
     }
 }

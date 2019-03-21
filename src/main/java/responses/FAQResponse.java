@@ -44,6 +44,8 @@ public class FAQResponse {
 
     private final static int MAX_RECOMMENDS = 10;
 
+    private final static String BOT_NAME = "taixingxiao_test";
+
     public FAQResponse(AccessorRepository accessorRepository) {
         this.accessorRepository = accessorRepository;
     }
@@ -125,7 +127,7 @@ public class FAQResponse {
 
             // 构建消息实体
             JsonObject jsonobj = new JsonObject();
-            jsonobj.put("botName" ,"taikang_rs_dev");
+            jsonobj.put("botName" ,BOT_NAME);
             StringEntity entity = new StringEntity(jsonobj.toString(), Charset.forName("UTF-8"));
             entity.setContentEncoding("UTF-8");
             // 发送Json格式的数据请求
@@ -191,7 +193,7 @@ public class FAQResponse {
 
             // 构建消息实体
             JsonObject jsonobj = new JsonObject();
-            jsonobj.put("botName" ,"taikang_rs_dev");
+            jsonobj.put("botName" ,BOT_NAME);
             jsonobj.put("input",query);
             StringEntity entity = new StringEntity(jsonobj.toString(), Charset.forName("UTF-8"));
             entity.setContentEncoding("UTF-8");

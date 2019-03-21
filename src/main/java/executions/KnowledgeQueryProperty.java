@@ -471,6 +471,10 @@ class KnowledgeQueryProperty {
                             }
                         }
                     } else if (datatype != null) {
+                        if(datatype.equals(UNDERWRITTING_SCALE)){
+                            ResponseExecutionResult result = processEntitiesAndUnderwrittingScale(entities,datatype,context);
+                            return result;
+                        }
                         List<Pair<String, String>> valid17 = kgUtil.checkEntitiesAndDp(entities, datatype);
                         if (valid17.size() > 0) {
                             //Map<String, String> cpces = (Map<String, String>) context.getSlots().get("cpContextConditionEntities");
@@ -1515,6 +1519,9 @@ class KnowledgeQueryProperty {
         } else if (datatypesOfYshape.size() == 1) {
             return response.answerWithYshapeEntitiesPair(datatypesOfYshape, null, context);
         } else {
+            if(datatype.equals(UNDERWRITTING_SCALE)){
+                return response.answerUnderwrittingScaleWithEntitiesPairs(entitiesPairs,datatype,context);
+            }
             return response.askMultiAnswerOfYshapeEntiesPair(datatypesOfYshape,  null, context);
         }
     }
@@ -1663,5 +1670,9 @@ class KnowledgeQueryProperty {
         } else {
             return response.askMultiAnswerWithEntityAndCp(entity, complex, context);
         }
+    }
+
+    private ResponseExecutionResult processEntitiesAndUnderwrittingScale(List<String> entities,String datatype,Context context){
+        return response.answerEntitiesAndUnderwrittingScale(entities,datatype,context);
     }
 }
