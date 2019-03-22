@@ -1707,7 +1707,7 @@ public class KnowledgeQueryUtils {
                 "?entity a ?eclass." +
                 "?eclass rdfs:subClassOf* ?cpdomain.\n" +
                 "?cp rdfs:range ?cprange.\n" +
-                "?class rdfs:subClassOf* ?cprange.\n" +
+                "?class rdfs:subClassOf ?cprange.\n" +
                 "?bn a ?class.\n" +
                 String.format("?dp rdfs:domain ?clazz. ?dp rdfs:label '%s'.\n", datatype) +
                 "?class rdfs:subClassOf* ?clazz.\n" +

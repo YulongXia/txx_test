@@ -45,7 +45,6 @@ public class FAQResponse {
     private final static int MAX_RECOMMENDS = 10;
 
     private final static String BOT_NAME = "taixingxiao_test";
-
     public FAQResponse(AccessorRepository accessorRepository) {
         this.accessorRepository = accessorRepository;
     }
@@ -174,7 +173,6 @@ public class FAQResponse {
         }
         return prop;
     }
-
 
 
     public static List<String> getRecommendations(String query){

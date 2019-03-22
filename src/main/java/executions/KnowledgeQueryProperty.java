@@ -276,6 +276,7 @@ class KnowledgeQueryProperty {
         } else {
             if (entities == null || entities.size() == 0) {
                 logger.debug("3. 只识别到1个意图");
+                logger.debug("properties {}", properties);
                 if (properties.size() > 1) {
                     if (complex != null && datatype != null) {
                         List<String> valid12 = kgUtil.checkCpAndDp(complex, datatype);
@@ -728,6 +729,7 @@ class KnowledgeQueryProperty {
 
     private ResponseExecutionResult noEntityAndSingleProperty(String yshape, String diffusion, String condition, String object, String datatype,
                                                               String complex, List<String> properties, Context context) {
+        logger.debug("In KnowledgeQueryProperty::noEntityAndSingleProperty. datatype {}", datatype);
         if (datatype != null) {
             // datatype
             String cls = (String) context.getSlots().get("class");
@@ -830,6 +832,7 @@ class KnowledgeQueryProperty {
 
     // 识别出1个实体1个属性处理
     private ResponseExecutionResult singleEntityAndSingleProperty(String entity, String yshape, String diffusion, String condition, String object, String datatype, List<String> properties, Context context, String complex) {
+        logger.debug("In KnowledgeQueryProperty::singleEntityAndSingleProperty. datatype {}", datatype);
         if (datatype == null) {
             logger.debug("4.0.OP，查OP接的BN实体的是否有条件，DP是1个还是多个？有1个就直接回答，有多个就反问，有条件的时候反问带有条件的");
             String propertyLabel = kgUtil.queryObjectLabel(properties.get(0));
@@ -1617,6 +1620,7 @@ class KnowledgeQueryProperty {
     }
 
     private ResponseExecutionResult processEntityAndCpAndDp(String entity, String datatype, Context context){
+        logger.debug("In KnowledgeQueryProperty::processEntityAndCpAndDp. entity {} datatype {}", entity, datatype);
         List<BNAndDatatypeAndValueAndConditions> datatypesOfComplexPropertyOfEntity = kgUtil.queryBNAndDatatypewithEntityAndDatatype(entity,  datatype);
         if (datatypesOfComplexPropertyOfEntity.size() == 0) {
             return response.answerNoValue(entity, null, datatype, null, context);
